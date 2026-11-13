@@ -28,6 +28,8 @@ export interface GisLayer {
   features: GisFeature[];
   /** true: the layer carries a height (m) in each point's 3rd value and is written as a Z shapefile (PolyLineZ / PointZ). */
   hasZ: boolean;
+  /** true: the layer may legitimately be empty (set by the rail layers). */
+  optional?: boolean;
 }
 
 export const PRJ_WKT = 'LOCAL_CS["EVCity local metric grid (x+5000 east, 5000-z north)",UNIT["metre",1],AXIS["Easting",EAST],AXIS["Northing",NORTH]]';
