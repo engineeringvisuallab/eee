@@ -1,4 +1,4 @@
-// STEP J1-a (headless): CALCULATION SHEET of the ground-level 8 x 8 signalised "+" J1 at C8 = (0, -250), yaw 17.6 deg east of north (15.8.4, 15.9).
+// STEP J1-a (headless): CALCULATION SHEET of the ground-level 8 x 8 signalised "+" J1 at C9 = (-117, -277), yaw 17.6 deg east of north (15.8.6, 15.9).
 // Reads the real world (natural ground, real rail plan, rivers, facilities, SITE0 city plan) and the project standards. Changes nothing.
 // (1) clear length of each of the 4 approaches, (2) ASSUMED design-hour flows, lanes, (3) layout per approach, (4) 4-phase signal (Webster),
 // (5) pocket and queue lengths cut to the clear length, (6) speed step-down 100 -> 60, (7) pedestrians.
@@ -14,7 +14,7 @@ import { SECTION_M8 } from '../src/roads/standards/SectionTable';
 import { RING_RADIAL_JOINS } from '../src/roads/alignment/RingAlignment';
 
 // ------------------------------------------------------------------ inputs
-const J1 = { x: 0, z: -250, yawDeg: 17.6 }; // decision 15.8.4
+const J1 = { x: Number(process.env.J1X ?? -117), z: Number(process.env.J1Z ?? -277), yawDeg: 17.6 }; // C9 = C8 (0, -250) moved 120 m west + 10 m south along its own axes, because the east approach of C8 was 104 m too short (user: do what is best, 2026-11-13); env J1X / J1Z test another point
 const W = DESIGN.laneWidth; // 3.65
 const PAVE_HALF = SECTION_M8.pavementEdge; // 22.1 m, one M8 carriageway edge from the centreline
 const ARM_STRAIGHT = 500; // m, straight perpendicular part of each arm (proposal 15.8.2, final in 6.1b)
@@ -67,7 +67,7 @@ const areaAt = (x: number, z: number): string => { for (const a of SITE0) if (in
 const inFacility = (x: number, z: number): boolean => FACILITIES.some((f) => x >= f.x0 && x <= f.x1 && z >= f.z0 && z <= f.z1);
 
 // ------------------------------------------------------------------ (1) clear length of each approach
-P('J1-a CALCULATION SHEET   J1 = C8 (0, -250), yaw 17.6 deg east of north, 8 lane x 8 lane, ground level, signalised "+"');
+P(`J1-a CALCULATION SHEET   J1 = C9 (${J1.x}, ${J1.z}), yaw ${J1.yawDeg} deg east of north, 8 lane x 8 lane, ground level, signalised "+"  (C8 (0, -250) failed on the east approach, see section 12)`);
 P(`inputs: lane ${W} m, M8 pavement edge ${PAVE_HALF} m from the centreline, arm straight ${ARM_STRAIGHT} m, rail buffer ${RAIL_BUFFER} m from the pavement edge, ground limit ${MAX_SLOPE} %`);
 P();
 P('=== (1) CLEAR LENGTH of each approach, along its axis from the J1 centre (ground flat <= 3 %, dry, rail >= 50 m from the pavement, no facility fence)');
@@ -247,7 +247,7 @@ for (const y of yaws) {
 
 // ------------------------------------------------------------------ (6c) shift scan: what if J1 moves a little along its own axes (information for the east approach)
 P();
-P('=== (6c) SHIFT SCAN (information only: the point C8 is a user decision): J1 moved along its own axes (e = along the E-W road, + = east; n = along the N-S road, + = north), yaw 17.6 deg kept');
+P('=== (6c) SHIFT SCAN (information only: around the chosen point): J1 moved along its own axes (e = along the E-W road, + = east; n = along the N-S road, + = north), yaw 17.6 deg kept');
 const needFrom: Record<string, number> = {}; for (const d of NAMES) needFrom[d] = dStop + fits[d].need;
 const eAx = { x: Math.sin((J1.yawDeg + 90) * rad), z: -Math.cos((J1.yawDeg + 90) * rad) }, nAx = { x: Math.sin(J1.yawDeg * rad), z: -Math.cos(J1.yawDeg * rad) };
 interface Shift { e: number; n: number; clear: Record<string, number>; fit: boolean; mag: number }

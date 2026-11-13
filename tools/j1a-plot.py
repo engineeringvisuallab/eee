@@ -24,7 +24,7 @@ for d in 'NESW':
     m.annotate(f"{d}: clear {L:.0f} m, need {N:.0f} m", (cx + ux * (L + 20), -(cz + uz * (L + 20))), color=cols[d], fontsize=9, ha='center')
 m.plot([cx], [-cz], 'k*', ms=14)
 m.set_xlim(cx - 650, cx + 650); m.set_ylim(-cz - 650, -cz + 650); m.set_aspect('equal'); m.grid(alpha=.3)
-m.set_title('J1 at C8 (0, -250), yaw 17.6 deg: clear length (thick) and needed length (dashed) per approach; brown = real rail'); m.set_xlabel('x east (m)'); m.set_ylabel('north (m)')
+m.set_title('J1 at C9 (-117, -277), yaw 17.6 deg: clear length (thick) and needed length (dashed) per approach; brown = real rail'); m.set_xlabel('x east (m)'); m.set_ylabel('north (m)')
 # right: bar chart of lengths from the stop line
 b = ax[1]
 dS = a['dStop']

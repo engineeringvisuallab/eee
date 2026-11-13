@@ -76,6 +76,7 @@ const CANDS: Cand[] = [
   { id: 'C6', name: 'NW (rejected in 15.3)', x: -500, z: -650 },
   { id: 'C7', name: 'flat pocket north of the centre (from the scan)', x: -50, z: -300 },
   { id: 'C8', name: 'flat pocket north of the centre, nearer the hub', x: 0, z: -250 },
+  { id: 'C9', name: 'C8 moved 120 m west and 10 m south along its own axes (J1-a: east approach needs it)', x: -117, z: -277 },
 ];
 
 interface ArmInfo { dir: string; len: number; bearing: number; bend: number; railX: Array<{ edge: string; dist: number }> }
