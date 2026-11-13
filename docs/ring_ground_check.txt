@@ -1,274 +1,252 @@
 [road fix RC03] skipped: road not found
-RING GROUND CHECK (Step 2.5)   ring length 20936.0 m, 4188 stations every 5.0 m, ROW +-40 m, ground = natural terrain (no roads, no rail earthworks)
+RING GROUND CHECK (Step 2.5)   ring length 19330.3 m, 3867 stations every 5.0 m, ROW +-40 m, ground = natural terrain (no roads, no rail earthworks)
 
 1. WATER ON THE CENTRELINE (a bridge or a new alignment is needed)
-  station    430 -    510      85 m   river / lake  max depth 7.8 m at 490
-  station   7444 -   7494      55 m   river / lake  max depth 2.7 m at 7479
-  station   8358 -   8388      35 m   river / lake  max depth 3.6 m at 8383
-  station  12503 -  12523      25 m   river / lake  max depth 2.9 m at 12518
-  station  12987 -  13007      25 m   river / lake  max depth 2.4 m at 13002
-  station  14897 -  14912      20 m   river / lake  max depth 2.4 m at 14912
-  station  16127 -  16147      25 m   river / lake  max depth 2.3 m at 16132
+  station    830 -    920      95 m   river / lake  max depth 7.8 m at 900
+  station   8198 -   8238      45 m   river / lake  max depth 4.3 m at 8228
+  station  12357 -  12392      40 m   river / lake  max depth 3.8 m at 12382
+  station  14047 -  14062      20 m   river / lake  max depth 2.2 m at 14052
+  station  15456 -  15471      20 m   river / lake  max depth 2.3 m at 15461
 
    Water inside the ROW but not on the centreline (edge of a lake / river bank)
-  station    405 -    425      25 m   water inside the ROW only
-  station    515 -    525      15 m   water inside the ROW only
-  station   7389 -   7439      55 m   water inside the ROW only
-  station   7499 -   7674     180 m   water inside the ROW only
-  station   8338 -   8353      20 m   water inside the ROW only
-  station   8393 -   8408      20 m   water inside the ROW only
-  station  12498 -  12498       5 m   water inside the ROW only
-  station  12528 -  12528       5 m   water inside the ROW only
-  station  12982 -  12982       5 m   water inside the ROW only
-  station  13012 -  13012       5 m   water inside the ROW only
-  station  14892 -  14892       5 m   water inside the ROW only
-  station  14917 -  14927      15 m   water inside the ROW only
-  station  16097 -  16122      30 m   water inside the ROW only
-  station  16152 -  16177      30 m   water inside the ROW only
+  station    805 -    825      25 m   water inside the ROW only
+  station    925 -    935      15 m   water inside the ROW only
+  station   4229 -   4489     265 m   water inside the ROW only
+  station   8183 -   8193      15 m   water inside the ROW only
+  station   8243 -   8248      10 m   water inside the ROW only
+  station  12337 -  12352      20 m   water inside the ROW only
+  station  12397 -  12407      15 m   water inside the ROW only
+  station  14037 -  14042      10 m   water inside the ROW only
+  station  14067 -  14067       5 m   water inside the ROW only
+  station  15446 -  15451      10 m   water inside the ROW only
+  station  15476 -  15476       5 m   water inside the ROW only
 
 2. RIVER SEGMENTS CROSSING THE CENTRELINE
-  station    469   x   -804 z   2389   channel width 85.6 m   water level 14.5 m   crossing angle 67 deg
-  station   7466   x  -2663 z  -3240   channel width 26.1 m   water level 32.1 m   crossing angle 24 deg
-  station   8375   x  -1793 z  -3486   channel width 37.2 m   water level 22.2 m   crossing angle 65 deg
-  station  12512   x   2241 z  -3347   channel width 28.9 m   water level 24.7 m   crossing angle 85 deg
-  station  12997   x   2541 z  -2969   channel width 22.7 m   water level 24.4 m   crossing angle 81 deg
-  station  14906   x   2690 z  -1083   channel width 22.9 m   water level 19.0 m   crossing angle 80 deg
-  station  16135   x   2696 z    145   channel width 21.6 m   water level 21.1 m   crossing angle 52 deg
+  station    877   x   -789 z   2355   channel width 85.1 m   water level 14.5 m   crossing angle 57 deg
+  station   8218   x  -1020 z  -2707   channel width 45.1 m   water level 43.5 m   crossing angle 67 deg
+  station  12373   x   2266 z  -2599   channel width 39.2 m   water level 22.2 m   crossing angle 68 deg
+  station  14055   x   2967 z  -1098   channel width 20.5 m   water level 19.0 m   crossing angle 78 deg
+  station  15462   x   2955 z    296   channel width 21.1 m   water level 42.1 m   crossing angle 81 deg
 
 3. TERRAIN CLASS (steepest 10 m step across the ROW)   [flat < 10 %, rolling 10-25, hilly 25-60, steep > 60]
-  flat       9303 m   44.4 %
-  rolling    7159 m   34.2 %
-  HILLY      2679 m   12.8 %
-  STEEP      1795 m   8.6 %
+  flat       8298 m   42.9 %
+  rolling    7083 m   36.6 %
+  HILLY      3604 m   18.6 %
+  STEEP       345 m   1.8 %
 
    Hilly or steep ranges
-  station    410 -    430      25 m   HILLY  max cross slope 30 % at 415
-  station   2609 -   2624      20 m   HILLY  max cross slope 28 % at 2614
-  station   2634 -   2739     110 m   HILLY  max cross slope 29 % at 2649
-  station   4049 -   4089      45 m   HILLY  max cross slope 31 % at 4059
-  station   4099 -   4104      10 m   HILLY  max cross slope 25 % at 4104
-  station   4124 -   4134      15 m   HILLY  max cross slope 26 % at 4129
-  station   4144 -   4149      10 m   HILLY  max cross slope 26 % at 4149
-  station   5519 -   5559      45 m   HILLY  max cross slope 28 % at 5549
-  station   5574 -   5719     150 m   HILLY  max cross slope 60 % at 5719
-  station   5724 -   5894     175 m   STEEP  max cross slope 93 % at 5794
-  station   5899 -   5949      55 m   HILLY  max cross slope 59 % at 5929
-  station   5954 -   6019      70 m   STEEP  max cross slope 91 % at 6004
-  station   6024 -   6039      20 m   HILLY  max cross slope 57 % at 6024
-  station   6044 -   6809     770 m   STEEP  max cross slope 211 % at 6669
-  station   6814 -   6959     150 m   HILLY  max cross slope 57 % at 6814
-  station   6974 -   7089     120 m   HILLY  max cross slope 45 % at 6989
-  station   7219 -   7229      15 m   HILLY  max cross slope 26 % at 7224
-  station   7394 -   7409      20 m   HILLY  max cross slope 33 % at 7394
-  station   7419 -   7669     255 m   HILLY  max cross slope 40 % at 7544
-  station   8373 -   8408      40 m   HILLY  max cross slope 31 % at 8373
-  station   8533 -   8533       5 m   HILLY  max cross slope 25 % at 8533
-  station   8603 -   8623      25 m   HILLY  max cross slope 27 % at 8613
-  station   8698 -   8703      10 m   HILLY  max cross slope 26 % at 8703
-  station   8728 -   8733      10 m   HILLY  max cross slope 30 % at 8728
-  station   8743 -   8953     215 m   HILLY  max cross slope 56 % at 8908
-  station   8958 -   9543     590 m   STEEP  max cross slope 184 % at 9238
-  station   9548 -   9573      30 m   HILLY  max cross slope 59 % at 9568
-  station   9578 -   9588      15 m   STEEP  max cross slope 76 % at 9588
-  station   9593 -   9593       5 m   HILLY  max cross slope 59 % at 9593
-  station   9598 -   9598       5 m   STEEP  max cross slope 68 % at 9598
-  station   9603 -   9643      45 m   HILLY  max cross slope 51 % at 9603
-  station   9648 -   9663      20 m   STEEP  max cross slope 80 % at 9648
-  station   9668 -   9733      70 m   HILLY  max cross slope 52 % at 9733
-  station   9738 -   9773      40 m   STEEP  max cross slope 86 % at 9748
-  station   9778 -   9818      45 m   HILLY  max cross slope 58 % at 9778
-  station   9823 -   9833      15 m   STEEP  max cross slope 62 % at 9828
-  station   9838 -   9953     120 m   HILLY  max cross slope 59 % at 9903
-  station   9958 -   9958       5 m   STEEP  max cross slope 61 % at 9958
-  station   9963 -   9963       5 m   HILLY  max cross slope 60 % at 9963
-  station   9968 -  10053      90 m   STEEP  max cross slope 82 % at 9998
-  station  10058 -  10198     145 m   HILLY  max cross slope 59 % at 10058
-  station  11263 -  11278      20 m   HILLY  max cross slope 29 % at 11268
-  station  11323 -  11328      10 m   HILLY  max cross slope 27 % at 11328
-  station  11498 -  11533      40 m   HILLY  max cross slope 33 % at 11518
-  station  12268 -  12398     135 m   HILLY  max cross slope 36 % at 12328
-  station  13252 -  13267      20 m   HILLY  max cross slope 28 % at 13257
-  station  13312 -  13687     380 m   HILLY  max cross slope 46 % at 13557
-  station  13702 -  13752      55 m   HILLY  max cross slope 38 % at 13732
-  station  13762 -  13772      15 m   HILLY  max cross slope 27 % at 13767
-  station  13947 -  13992      50 m   HILLY  max cross slope 29 % at 13967
-  station  14032 -  14037      10 m   HILLY  max cross slope 25 % at 14037
-  station  14147 -  14157      15 m   HILLY  max cross slope 26 % at 14152
-  station  14227 -  14237      15 m   HILLY  max cross slope 26 % at 14232
-  station  16097 -  16097       5 m   HILLY  max cross slope 28 % at 16097
-  station  16107 -  16112      10 m   HILLY  max cross slope 29 % at 16112
-  station  16122 -  16142      25 m   HILLY  max cross slope 29 % at 16142
-  station  16152 -  16157      10 m   HILLY  max cross slope 29 % at 16152
-  station  16167 -  16172      10 m   HILLY  max cross slope 29 % at 16167
-  station  17097 -  17112      20 m   HILLY  max cross slope 27 % at 17107
+  station    815 -    850      40 m   HILLY  max cross slope 31 % at 835
+  station    890 -    905      20 m   HILLY  max cross slope 31 % at 905
+  station   2819 -   3149     335 m   HILLY  max cross slope 58 % at 3069
+  station   4224 -   4359     140 m   HILLY  max cross slope 35 % at 4334
+  station   4369 -   4379      15 m   HILLY  max cross slope 25 % at 4374
+  station   4394 -   4459      70 m   HILLY  max cross slope 34 % at 4429
+  station   4469 -   4474      10 m   HILLY  max cross slope 27 % at 4474
+  station   5854 -   5989     140 m   HILLY  max cross slope 41 % at 5929
+  station   6099 -   6403     310 m   HILLY  max cross slope 55 % at 6403
+  station   6408 -   6423      20 m   STEEP  max cross slope 65 % at 6418
+  station   6428 -   6503      80 m   HILLY  max cross slope 57 % at 6428
+  station   6568 -   6573      10 m   HILLY  max cross slope 50 % at 6573
+  station   6578 -   6603      30 m   STEEP  max cross slope 75 % at 6593
+  station   6608 -   6648      45 m   HILLY  max cross slope 59 % at 6608
+  station   6743 -   6758      20 m   HILLY  max cross slope 29 % at 6753
+  station   8233 -   8248      20 m   HILLY  max cross slope 38 % at 8243
+  station   8273 -   8293      25 m   HILLY  max cross slope 56 % at 8293
+  station   8298 -   8333      40 m   STEEP  max cross slope 80 % at 8318
+  station   8338 -   8343      10 m   HILLY  max cross slope 47 % at 8338
+  station   8473 -   8608     140 m   HILLY  max cross slope 60 % at 8608
+  station   8613 -   8628      20 m   STEEP  max cross slope 68 % at 8623
+  station   8633 -   8638      10 m   HILLY  max cross slope 58 % at 8633
+  station   8643 -   8798     160 m   STEEP  max cross slope 76 % at 8668
+  station   8803 -   8938     140 m   HILLY  max cross slope 52 % at 8803
+  station   8973 -   9058      90 m   HILLY  max cross slope 31 % at 9033
+  station   9228 -   9268      45 m   HILLY  max cross slope 27 % at 9228
+  station  10068 -  10133      70 m   HILLY  max cross slope 31 % at 10108
+  station  10178 -  10223      50 m   HILLY  max cross slope 30 % at 10218
+  station  10303 -  10412     115 m   HILLY  max cross slope 33 % at 10337
+  station  12232 -  12257      30 m   HILLY  max cross slope 31 % at 12242
+  station  12372 -  12382      15 m   HILLY  max cross slope 27 % at 12372
+  station  13097 -  13097       5 m   HILLY  max cross slope 25 % at 13097
+  station  13117 -  13162      50 m   HILLY  max cross slope 28 % at 13137
+  station  13262 -  13317      60 m   HILLY  max cross slope 33 % at 13287
+  station  13342 -  13362      25 m   HILLY  max cross slope 26 % at 13347
+  station  13627 -  13632      10 m   HILLY  max cross slope 26 % at 13627
+  station  14651 -  14931     285 m   HILLY  max cross slope 56 % at 14931
+  station  14936 -  14996      65 m   STEEP  max cross slope 81 % at 14961
+  station  15001 -  15016      20 m   HILLY  max cross slope 59 % at 15016
+  station  15021 -  15021       5 m   STEEP  max cross slope 60 % at 15021
+  station  15026 -  15201     180 m   HILLY  max cross slope 59 % at 15201
+  station  15206 -  15206       5 m   STEEP  max cross slope 60 % at 15206
+  station  15211 -  15601     395 m   HILLY  max cross slope 59 % at 15211
+  station  15691 -  15991     305 m   HILLY  max cross slope 43 % at 15756
+  station  16316 -  16346      35 m   HILLY  max cross slope 28 % at 16326
+  station  18096 -  18151      60 m   HILLY  max cross slope 36 % at 18121
+  station  18231 -  18296      70 m   HILLY  max cross slope 45 % at 18271
+  station  18361 -  18361       5 m   HILLY  max cross slope 25 % at 18361
+  station  18386 -  18421      40 m   HILLY  max cross slope 30 % at 18406
+  station  18431 -  18466      40 m   HILLY  max cross slope 30 % at 18456
+  station  18486 -  18506      25 m   HILLY  max cross slope 27 % at 18501
 
    Grade along the ring above 4 % (motorway limit, desirable 3 %), 100 m window
-  station    240 -    285      50 m   down-slope of the ground rising  max 5.7 % at 270
-  station    340 -    455     120 m   ground falling  max 20.1 % at 395
-  station    480 -    590     115 m   down-slope of the ground rising  max 19.9 % at 540
-  station    635 -    665      35 m   ground falling  max 4.5 % at 645
-  station   1100 -   1200     105 m   down-slope of the ground rising  max 4.7 % at 1115
-  station   1575 -   1610      40 m   down-slope of the ground rising  max 5.5 % at 1590
-  station   1785 -   2050     270 m   ground falling  max 9.0 % at 1875
-  station   2270 -   2664     400 m   down-slope of the ground rising  max 13.6 % at 2535
-  station   2714 -   3019     310 m   ground falling  max 18.2 % at 2864
-  station   3769 -   4024     260 m   down-slope of the ground rising  max 7.9 % at 3899
-  station   4094 -   4209     120 m   ground falling  max 9.3 % at 4164
-  station   4389 -   4459      75 m   ground falling  max 6.2 % at 4434
-  station   4659 -   4664      10 m   down-slope of the ground rising  max 4.1 % at 4664
-  station   4709 -   4744      40 m   down-slope of the ground rising  max 4.6 % at 4719
-  station   5024 -   5079      60 m   ground falling  max 4.9 % at 5064
-  station   5374 -   5379      10 m   ground falling  max 4.1 % at 5379
-  station   5459 -   6164     710 m   down-slope of the ground rising  max 56.2 % at 6084
-  station   6204 -   6504     305 m   down-slope of the ground rising  max 45.3 % at 6334
-  station   6539 -   7139     605 m   ground falling  max 64.8 % at 6719
-  station   7164 -   7314     155 m   ground falling  max 20.9 % at 7249
-  station   7364 -   7464     105 m   ground falling  max 12.4 % at 7409
-  station   7629 -   7644      20 m   ground falling  max 4.0 % at 7639
-  station   8213 -   8293      85 m   down-slope of the ground rising  max 9.9 % at 8253
-  station   8313 -   8358      50 m   ground falling  max 9.0 % at 8333
-  station   8393 -   9133     745 m   down-slope of the ground rising  max 91.9 % at 8918
-  station   9143 -   9368     230 m   ground falling  max 82.2 % at 9233
-  station   9383 -   9448      70 m   down-slope of the ground rising  max 15.6 % at 9418
-  station   9458 -   9663     210 m   ground falling  max 49.8 % at 9618
-  station   9673 -   9728      60 m   down-slope of the ground rising  max 39.5 % at 9703
-  station   9743 -  10278     540 m   ground falling  max 55.7 % at 9803
-  station  11138 -  11208      75 m   down-slope of the ground rising  max 5.8 % at 11163
-  station  11223 -  11488     270 m   down-slope of the ground rising  max 14.2 % at 11453
-  station  11513 -  11738     230 m   ground falling  max 19.6 % at 11653
-  station  11773 -  11863      95 m   down-slope of the ground rising  max 10.9 % at 11808
-  station  11903 -  11993      95 m   ground falling  max 8.4 % at 11968
-  station  12058 -  12073      20 m   down-slope of the ground rising  max 4.5 % at 12068
-  station  12158 -  12228      75 m   ground falling  max 5.3 % at 12168
-  station  12258 -  12338      85 m   down-slope of the ground rising  max 8.3 % at 12288
-  station  12453 -  12483      35 m   ground falling  max 6.0 % at 12473
-  station  12518 -  12613     100 m   down-slope of the ground rising  max 18.8 % at 12568
-  station  12758 -  12803      50 m   ground falling  max 5.1 % at 12773
-  station  12908 -  12987      85 m   ground falling  max 14.5 % at 12953
-  station  13042 -  13047      10 m   down-slope of the ground rising  max 5.0 % at 13042
-  station  13087 -  13117      35 m   ground falling  max 5.5 % at 13102
-  station  13157 -  13332     180 m   down-slope of the ground rising  max 10.2 % at 13272
-  station  13402 -  13497     100 m   down-slope of the ground rising  max 13.6 % at 13452
-  station  13622 -  13782     165 m   ground falling  max 16.6 % at 13727
-  station  13882 -  13972      95 m   down-slope of the ground rising  max 9.2 % at 13947
-  station  14022 -  14067      50 m   ground falling  max 5.5 % at 14047
-  station  14107 -  14117      15 m   ground falling  max 4.1 % at 14112
-  station  14137 -  14207      75 m   ground falling  max 6.0 % at 14167
-  station  14227 -  14242      20 m   ground falling  max 4.5 % at 14237
-  station  14317 -  14332      20 m   ground falling  max 4.5 % at 14322
-  station  14387 -  14502     120 m   down-slope of the ground rising  max 12.4 % at 14452
-  station  14552 -  14697     150 m   ground falling  max 6.8 % at 14662
-  station  14777 -  14787      15 m   down-slope of the ground rising  max 4.2 % at 14782
-  station  14832 -  14887      60 m   ground falling  max 11.2 % at 14862
-  station  14917 -  14992      80 m   down-slope of the ground rising  max 16.9 % at 14952
-  station  15042 -  15062      25 m   ground falling  max 5.0 % at 15052
-  station  15127 -  15187      65 m   down-slope of the ground rising  max 6.4 % at 15152
-  station  15242 -  15282      45 m   ground falling  max 6.5 % at 15262
-  station  15357 -  15372      20 m   down-slope of the ground rising  max 4.5 % at 15362
-  station  15707 -  15782      80 m   ground falling  max 6.3 % at 15757
-  station  15937 -  16012      80 m   down-slope of the ground rising  max 6.3 % at 15992
-  station  16047 -  16122      80 m   ground falling  max 13.7 % at 16092
-  station  16157 -  16202      50 m   down-slope of the ground rising  max 8.5 % at 16177
-  station  16282 -  16397     120 m   down-slope of the ground rising  max 7.9 % at 16327
-  station  16487 -  16512      30 m   ground falling  max 5.1 % at 16502
-  station  16677 -  16682      10 m   down-slope of the ground rising  max 4.2 % at 16682
-  station  16842 -  16907      70 m   down-slope of the ground rising  max 5.7 % at 16882
-  station  16987 -  17092     110 m   ground falling  max 12.2 % at 17057
-  station  17122 -  17277     160 m   down-slope of the ground rising  max 11.8 % at 17157
-  station  17332 -  17337      10 m   down-slope of the ground rising  max 4.2 % at 17337
-  station  17462 -  17632     175 m   ground falling  max 9.9 % at 17522
-  station  17682 -  17737      60 m   down-slope of the ground rising  max 5.9 % at 17722
-  station  19436 -  19446      15 m   down-slope of the ground rising  max 4.1 % at 19441
-  station  20051 -  20071      25 m   ground falling  max 4.5 % at 20061
-   Natural ground grade along the ring: mean 8.3 %, max 91.9 %, share above 3 % = 54.6 %, above 4 % = 45.6 %
-   Ground height on the centreline: min 6.7 m (station 490), max 313.3 m (station 9143)
+  station    625 -    690      70 m   down-slope of the ground rising  max 5.2 % at 670
+  station    740 -    865     130 m   ground falling  max 19.4 % at 800
+  station    885 -   1000     120 m   down-slope of the ground rising  max 19.5 % at 950
+  station   1035 -   1090      60 m   ground falling  max 5.4 % at 1050
+  station   1540 -   1625      90 m   down-slope of the ground rising  max 5.2 % at 1565
+  station   1980 -   2025      50 m   down-slope of the ground rising  max 5.3 % at 2005
+  station   2204 -   2214      15 m   ground falling  max 4.4 % at 2209
+  station   2229 -   2469     245 m   ground falling  max 7.0 % at 2299
+  station   2694 -   3089     400 m   down-slope of the ground rising  max 15.1 % at 3039
+  station   3124 -   3494     375 m   ground falling  max 19.4 % at 3299
+  station   4139 -   4219      85 m   down-slope of the ground rising  max 6.8 % at 4174
+  station   4489 -   4559      75 m   ground falling  max 6.6 % at 4539
+  station   4784 -   4834      55 m   down-slope of the ground rising  max 5.8 % at 4809
+  station   5229 -   5249      25 m   down-slope of the ground rising  max 4.2 % at 5244
+  station   5269 -   5374     110 m   down-slope of the ground rising  max 7.1 % at 5319
+  station   5499 -   5539      45 m   down-slope of the ground rising  max 4.8 % at 5514
+  station   5709 -   5784      80 m   down-slope of the ground rising  max 6.5 % at 5769
+  station   5904 -   6054     155 m   down-slope of the ground rising  max 11.3 % at 5979
+  station   6149 -   6488     345 m   down-slope of the ground rising  max 39.8 % at 6388
+  station   6568 -   7033     470 m   ground falling  max 39.9 % at 6713
+  station   8013 -   8148     140 m   down-slope of the ground rising  max 23.3 % at 8093
+  station   8168 -   8193      30 m   ground falling  max 7.4 % at 8183
+  station   8228 -   8443     220 m   down-slope of the ground rising  max 30.6 % at 8283
+  station   8548 -   8713     170 m   down-slope of the ground rising  max 19.4 % at 8618
+  station   8723 -   8723       5 m   down-slope of the ground rising  max 4.1 % at 8723
+  station   8758 -   9273     520 m   ground falling  max 40.3 % at 8858
+  station   9983 -  10018      40 m   down-slope of the ground rising  max 5.1 % at 9998
+  station  10243 -  10293      55 m   down-slope of the ground rising  max 4.6 % at 10263
+  station  10617 -  10667      55 m   down-slope of the ground rising  max 5.2 % at 10632
+  station  10697 -  10717      25 m   down-slope of the ground rising  max 4.3 % at 10707
+  station  10752 -  10912     165 m   down-slope of the ground rising  max 7.1 % at 10782
+  station  10952 -  11137     190 m   ground falling  max 17.3 % at 11042
+  station  11187 -  11287     105 m   down-slope of the ground rising  max 7.1 % at 11222
+  station  11357 -  11512     160 m   down-slope of the ground rising  max 9.9 % at 11452
+  station  11592 -  11622      35 m   ground falling  max 5.2 % at 11607
+  station  11652 -  11677      30 m   ground falling  max 5.0 % at 11662
+  station  11727 -  11852     130 m   ground falling  max 12.6 % at 11802
+  station  12072 -  12122      55 m   ground falling  max 6.9 % at 12097
+  station  12222 -  12292      75 m   down-slope of the ground rising  max 8.4 % at 12252
+  station  12312 -  12357      50 m   ground falling  max 10.3 % at 12332
+  station  12397 -  12437      45 m   down-slope of the ground rising  max 8.1 % at 12412
+  station  12532 -  12687     160 m   down-slope of the ground rising  max 8.0 % at 12552
+  station  12747 -  12812      70 m   down-slope of the ground rising  max 7.6 % at 12777
+  station  12847 -  12967     125 m   ground falling  max 12.7 % at 12912
+  station  13057 -  13077      25 m   down-slope of the ground rising  max 5.3 % at 13067
+  station  13357 -  13437      85 m   ground falling  max 8.1 % at 13407
+  station  13552 -  13637      90 m   ground falling  max 7.9 % at 13582
+  station  13687 -  13762      80 m   down-slope of the ground rising  max 4.8 % at 13702
+  station  13977 -  14037      65 m   ground falling  max 12.5 % at 14007
+  station  14077 -  14122      50 m   down-slope of the ground rising  max 9.1 % at 14102
+  station  14162 -  14187      30 m   ground falling  max 4.7 % at 14177
+  station  14332 -  14856     530 m   down-slope of the ground rising  max 30.9 % at 14616
+  station  14931 -  15381     455 m   ground falling  max 30.3 % at 15251
+  station  15406 -  15411      10 m   ground falling  max 4.8 % at 15406
+  station  15441 -  15461      25 m   down-slope of the ground rising  max 5.2 % at 15451
+  station  15511 -  15606     100 m   ground falling  max 18.4 % at 15551
+  station  15681 -  15681       5 m   ground falling  max 4.0 % at 15681
+  station  15821 -  15896      80 m   ground falling  max 5.0 % at 15866
+  station  16006 -  16006       5 m   down-slope of the ground rising  max 4.0 % at 16006
+  station  16036 -  16146     115 m   down-slope of the ground rising  max 10.4 % at 16076
+  station  16196 -  16281      90 m   down-slope of the ground rising  max 7.9 % at 16256
+  station  16326 -  16411      90 m   ground falling  max 9.1 % at 16356
+  station  16626 -  16746     125 m   ground falling  max 16.6 % at 16701
+  station  16781 -  16861      85 m   down-slope of the ground rising  max 8.6 % at 16821
+  station  16971 -  17051      85 m   down-slope of the ground rising  max 7.2 % at 17031
+  station  17196 -  17271      80 m   ground falling  max 8.8 % at 17241
+  station  17316 -  17451     140 m   down-slope of the ground rising  max 11.0 % at 17361
+  station  17496 -  17661     170 m   ground falling  max 9.6 % at 17526
+  station  17851 -  18056     210 m   down-slope of the ground rising  max 13.7 % at 17991
+  station  18261 -  18281      25 m   down-slope of the ground rising  max 5.0 % at 18271
+  station  18361 -  18371      15 m   ground falling  max 4.7 % at 18366
+  station  18570 -  18830     265 m   ground falling  max 9.2 % at 18615
+  station  18870 -  18995     130 m   ground falling  max 7.5 % at 18945
+   Natural ground grade along the ring: mean 5.8 %, max 40.3 %, share above 3 % = 54.7 %, above 4 % = 46.1 %
+   Ground height on the centreline: min 6.7 m (station 900), max 117.9 m (station 14876)
 
 4. RAILWAY CROSSING THE RING (the railway of this game is planned on its own; X5 says road and rail never cross at grade)
-  station  12563   line airport-branch  x   2279 z  -3314   angle 31 deg   rail ballast top 32.2 m, ground 34.0 m  (rail near ground)
-  station  12707   line ring-northeast  x   2379 z  -3209   angle 48 deg   rail ballast top 32.2 m, ground 39.3 m  (rail in cut/tunnel)
+  station   6876   line ring-west       x  -2237 z  -2143   angle 53 deg   rail ballast top 26.2 m, ground 36.9 m  (rail in cut/tunnel)
+  station   7093   line west-nw         x  -2041 z  -2234   angle 64 deg   rail ballast top 24.2 m, ground 19.2 m  (rail on viaduct/embankment)
+  station   8840   line ring-north      x   -501 z  -3041   angle 31 deg   rail ballast top 38.1 m, ground 86.6 m  (rail in cut/tunnel)
+  station  11316   line airport-branch  x   1513 z  -3341   angle 45 deg   rail ballast top 28.9 m, ground 30.5 m  (rail near ground)
+  station  12596   line ring-northeast  x   2424 z  -2443   angle 37 deg   rail ballast top 31.0 m, ground 30.0 m  (rail near ground)
+  station  17340   line east-2          x   1925 z   1649   angle 44 deg   rail ballast top 29.6 m, ground 31.2 m  (rail near ground)
+  station  18909   line south-2         x    404 z   1900   angle 45 deg   rail ballast top 24.6 m, ground 29.8 m  (rail in cut/tunnel)
 
    Rail line closer than 60 m to the ring centreline (inside or touching the ROW)
-  station  12438 -  12643     210 m   airport-branch  closest 3 m
-  station  12648 -  12788     145 m   ring-northeast  closest 7 m
-  station  14697 -  15277     585 m   ring-northeast  closest 1 m
-  station  15312 -  15447     140 m   east-2  closest 39 m
-  station  18991 -  19261     275 m   south-2  closest 54 m
+  station   6803 -   6948     150 m   ring-west  closest 4 m
+  station   7028 -   7158     135 m   west-nw  closest 6 m
+  station   8713 -   8948     240 m   ring-north  closest 2 m
+  station  11232 -  11397     170 m   airport-branch  closest 4 m
+  station  12502 -  12702     205 m   ring-northeast  closest 3 m
+  station  17256 -  17421     170 m   east-2  closest 4 m
+  station  18800 -  18980     185 m   south-2  closest 5 m
    Railway stations within 500 m of the ring:
-    port               centre-to-ring 54 m (station radius 230 m) at ring station 18941
-    east-works         centre-to-ring 22 m (station radius 260 m) at ring station 15292
-    north-hub          centre-to-ring 455 m (station radius 330 m) at ring station 10448
-    airport            centre-to-ring 62 m (station radius 150 m) at ring station 12658
-    sw-newtown         centre-to-ring 241 m (station radius 220 m) at ring station 2200
+    south-interchange  centre-to-ring 341 m (station radius 220 m) at ring station 19015
+    port               centre-to-ring 407 m (station radius 230 m) at ring station 17771
+    east-works         centre-to-ring 369 m (station radius 260 m) at ring station 14427
+    north-hub          centre-to-ring 440 m (station radius 330 m) at ring station 9718
+    airport            centre-to-ring 579 m (station radius 150 m) at ring station 11977
+    nw-town            centre-to-ring 385 m (station radius 220 m) at ring station 7373
+    sw-newtown         centre-to-ring 332 m (station radius 220 m) at ring station 2554
 
 5. WORLD ZONE UNDER THE CENTRELINE (built-up kinds need a buffer of 30-50 m, rule 3.14)
-  station      0 -    300     305 m   river-delta (wetland)
-  station    305 -    935     635 m   south-utility (utility)   [built-up]
-  station    940 -   2889    1955 m   sw-newtown (residential)   [built-up]
-  station   2894 -   4094    1205 m   west-suburb (residential)   [built-up]
-  station   4099 -   4274     180 m   west-lake (wetland)
-  station   4279 -   4384     110 m   west-bazaar (commercial)   [built-up]
-  station   4389 -   5224     840 m   west-farms (farmland)
-  station   5229 -   5474     250 m   eng-rural (engineering)   [built-up]
-  station   5479 -   5559      85 m   west-farms (farmland)
-  station   5564 -   6449     890 m   village-west (village)   [built-up]
-  station   6454 -   7724    1275 m   nw-forest (forest)
-  station   7729 -   7953     230 m   nw-town (residential)   [built-up]
-  station   7958 -   8213     260 m   eng-campus (engineering)   [built-up]
-  station   8218 -   8288      75 m   nw-town (residential)   [built-up]
-  station   8293 -   9533    1245 m   nw-farms (farmland)
-  station   9538 -   9668     135 m   north-labour (residential)   [built-up]
-  station   9673 -  10563     895 m   north-power (utility)   [built-up]
-  station  10568 -  10988     425 m   north-heavy (industrial)   [built-up]
-  station  10993 -  11593     605 m   eng-steel (engineering)   [built-up]
-  station  11598 -  11878     285 m   north-heavy (industrial)   [built-up]
-  station  11883 -  12223     345 m   airport (airport)   [built-up]
-  station  12228 -  13697    1475 m   ne-forest (forest)
-  station  13702 -  14017     320 m   east-farms (farmland)
-  station  14022 -  14852     835 m   ne-farms (farmland)
-  station  14857 -  16037    1185 m   east-works (industrial)   [built-up]
-  station  16042 -  16537     500 m   east-logistics (logistics)   [built-up]
-  station  16542 -  16987     450 m   eng-automation (engineering)   [built-up]
-  station  16992 -  17112     125 m   east-logistics (logistics)   [built-up]
-  station  17117 -  17537     425 m   east-suburb (residential)   [built-up]
-  station  17542 -  18047     510 m   eng-transport (engineering)   [built-up]
-  station  18052 -  18052       5 m   safari-park (park)
-  station  18057 -  18117      65 m   east-suburb (residential)   [built-up]
-  station  18122 -  18491     375 m   eng-chemical (engineering)   [built-up]
-  station  18496 -  19561    1070 m   port-industry (industrial)   [built-up]
-  station  19566 -  19996     435 m   south-suburb (residential)   [built-up]
-  station  20001 -  20446     450 m   eng-grid (engineering)   [built-up]
-  station  20451 -  20551     105 m   south-suburb (residential)   [built-up]
-  station  20556 -  20931     380 m   river-delta (wetland)
+  station      0 -    140     145 m   south-bazaar (commercial)   [built-up]
+  station    145 -    380     240 m   south-utility (utility)   [built-up]
+  station    385 -    595     215 m   river-delta (wetland)
+  station    600 -   1350     755 m   south-utility (utility)   [built-up]
+  station   1355 -   3349    2000 m   sw-newtown (residential)   [built-up]
+  station   3354 -   4509    1160 m   west-suburb (residential)   [built-up]
+  station   4514 -   4679     170 m   west-lake (wetland)
+  station   4684 -   5039     360 m   west-bazaar (commercial)   [built-up]
+  station   5044 -   5889     850 m   west-farms (farmland)
+  station   5894 -   6518     630 m   village-west (village)   [built-up]
+  station   6523 -   7243     725 m   nw-solar (utility)   [built-up]
+  station   7248 -   7678     435 m   nw-town (residential)   [built-up]
+  station   7683 -   8053     375 m   nw-campus (education)   [built-up]
+  station   8058 -   8378     325 m   nw-lake (wetland)
+  station   8383 -   9293     915 m   north-labour (residential)   [built-up]
+  station   9298 -   9598     305 m   north-logistics (logistics)   [built-up]
+  station   9603 -  10053     455 m   north-power (utility)   [built-up]
+  station  10058 -  10447     395 m   north-heavy (industrial)   [built-up]
+  station  10452 -  11157     710 m   eng-steel (engineering)   [built-up]
+  station  11162 -  11417     260 m   north-heavy (industrial)   [built-up]
+  station  11422 -  11727     310 m   north-farms (farmland)
+  station  11732 -  11927     200 m   eng-aerospace (engineering)   [built-up]
+  station  11932 -  12737     810 m   ne-forest (forest)
+  station  12742 -  13167     430 m   east-farms (farmland)
+  station  13172 -  14162     995 m   ne-farms (farmland)
+  station  14167 -  14991     830 m   village-east (village)   [built-up]
+  station  14996 -  15126     135 m   east-works (industrial)   [built-up]
+  station  15131 -  15501     375 m   east-lake (wetland)
+  station  15506 -  16311     810 m   east-logistics (logistics)   [built-up]
+  station  16316 -  17376    1065 m   east-suburb (residential)   [built-up]
+  station  17381 -  18311     935 m   port-industry (industrial)   [built-up]
+  station  18316 -  19240     930 m   south-suburb (residential)   [built-up]
+  station  19245 -  19325      85 m   south-bazaar (commercial)   [built-up]
    Facilities / engineering areas / sea touching the ROW edges:
-    eng-vehicle (engineering)  stations 0-160, 20506-20931
-    eng-rural (engineering)  stations 5224-5479
-    eng-campus (engineering)  stations 7948-8388
-    eng-steel (engineering)  stations 10983-11603
-    airport (airport)  stations 11878-12298
-    eng-automation (engineering)  stations 16542-16987
-    eng-transport (engineering)  stations 17537-18087
-    eng-chemical (engineering)  stations 18082-18501
-    eng-grid (engineering)  stations 20001-20451
+    eng-steel (engineering)  stations 10447-11117
+    eng-aerospace (engineering)  stations 11692-11967
    Distance from the ring to facility fences:
-    airport      0 m (nearest ring station 11883)
-    airport-sea  849 m (nearest ring station 250)
-    army         450 m (nearest ring station 8303)
-    seaport      221 m (nearest ring station 19631)
+    airport      235 m (nearest ring station 11317)
+    airport-sea  886 m (nearest ring station 705)
+    army         268 m (nearest ring station 7883)
+    seaport      681 m (nearest ring station 17991)
    City sites (flat ground):
-    site at (0, 0) core R 600, blend R 1200: ring is 2378 m from the centre (outside), nearest station 20481
-    site at (-2023, -2835) core R 600, blend R 1200: ring is 583 m from the centre (INSIDE the flat core), nearest station 8003
-    site at (360, -3121) core R 600, blend R 1200: ring is 638 m from the centre (inside the blend skirt), nearest station 10468
+    site at (0, 0) core R 600, blend R 1200: ring is 1942 m from the centre (outside), nearest station 18865
+    site at (-2023, -2835) core R 600, blend R 1200: ring is 538 m from the centre (INSIDE the flat core), nearest station 7363
+    site at (360, -3121) core R 600, blend R 1200: ring is 610 m from the centre (inside the blend skirt), nearest station 9568
 
 6. COAST AND MAP EDGE
-  Nearest the coast: 547 m north of the shoreline at station 1245 (ROW half width 40 m)
-  Nearest the map edge: 1213 m at station 10803
+  Nearest the coast: 569 m north of the shoreline at station 1650 (ROW half width 40 m)
+  Nearest the map edge: 1179 m at station 10263
 
 7. THE FOUR RADIAL MEETING POINTS (proposal of 2.4): ground within 300 m each side
-  N station 10143   zone north-power   max cross slope 82 %   max grade 44.0 %   water in ROW no   ground 19.8 to 135.7 m
-  E station 15382   zone east-works   max cross slope 18 %   max grade 6.5 %   water in ROW no   ground 25.0 to 36.5 m
-  S station 500   zone south-utility   max cross slope 30 %   max grade 20.1 %   water in ROW YES   ground 6.6 to 27.6 m
-  W station 4709   zone west-farms   max cross slope 9 %   max grade 6.2 %   water in ROW no   ground 17.7 to 29.7 m
+  N station 10238   zone north-heavy   max cross slope 33 %   max grade 5.1 %   water in ROW no   ground 20.1 to 46.4 m
+  E station 14541   zone village-east   max cross slope 43 %   max grade 30.9 %   water in ROW no   ground 21.3 to 128.8 m
+  S station 240   zone south-utility   max cross slope 8 %   max grade 2.5 %   water in ROW no   ground 19.9 to 25.5 m
+  W station 5154   zone west-farms   max cross slope 20 %   max grade 7.1 %   water in ROW no   ground 16.1 to 27.5 m
 
-HARD STOPS: 7 wet stretch(es) on the centreline (270 m); 2 railway crossing(s); 1795 m of STEEP cross slope
+HARD STOPS: 5 wet stretch(es) on the centreline (220 m); 7 railway crossing(s); 345 m of STEEP cross slope
 
-written /home/claude/out/ring_ground.json
+written /home/claude/out/n/ring_ground.json

@@ -1,25 +1,27 @@
-// STEP 2.2  RING ALIGNMENT DATA (M8, 8 lane): the PI table of the closed ring, fitted to the shape of Roads.zip F3 (tools/ring-fit.py).
+// STEP 2.2b (2026-11-13) RING ALIGNMENT DATA (M8, 8 lane): the PI table of the closed ring, REFITTED round the mountains, airport and rail (tools/ring-route.py, ring-opt.py). Version 1 (shape of Roads.zip F3) is in docs/RingAlignment.v1.ts.
 // Game coordinates (x east, z south, metres). Design speed V100, R >= 1.5 x Rmin = 591 m, spiral Ls 100 m (needed: 70 m). Travel order = table order.
 // This is DATA: change a row only through a new CP; Checks and the sampled centreline are built from it (PiAlignment.ts).
 import type { Pi } from './PiAlignment';
 
 export const RING_DESIGN_SPEED = 100;
 export const RING_PIS: readonly Pi[] = [
-  { x: -4.70, z: 2384.16, R: 9260, Ls: 100 },
-  { x: -2099.10, z: 2396.16, R: 696, Ls: 100 },
-  { x: -2648.25, z: 830.19, R: 2354, Ls: 100 },
-  { x: -2992.28, z: -3212.06, R: 650, Ls: 100 },
-  { x: -1651.74, z: -3518.17, R: 1864, Ls: 100 },
-  { x: 636.72, z: -3796.60, R: 914, Ls: 100 },
-  { x: 2677.74, z: -3456.98, R: 1258, Ls: 100 },
-  { x: 2706.59, z: 2204.04, R: 820, Ls: 100 },
+  { x: 398.13, z: 1846.29, R: 1396, Ls: 100 },
+  { x: -459.03, z: 2348.47, R: 632, Ls: 100 },
+  { x: -2453.85, z: 2389.45, R: 929, Ls: 100 },
+  { x: -2658.75, z: -1947.51, R: 591, Ls: 100 },
+  { x: -600.49, z: -2901.43, R: 1272, Ls: 100 },
+  { x: 515.58, z: -4324.18, R: 1008, Ls: 100 },
+  { x: 2530.62, z: -2338.21, R: 595, Ls: 100 },
+  { x: 3082.78, z: -776.58, R: 1816, Ls: 100 },
+  { x: 2847.71, z: 1193.03, R: 591, Ls: 100 },
+  { x: 1495.26, z: 1861.91, R: 714, Ls: 100 },
 ];
 
-/** STEP 2.4  Where the four radials meet the ring (PROPOSAL, waits for OK): the nearest station to the end of the reference radial that has
- *  500 m of clear straight on both sides. Station 0 = ST of PI 0. N and S had to move because the reference ends fall inside a curve. */
+/** STEP 2.4 (REDO PENDING after the refit of 2.2b): the nearest ring station to the end of each reference radial. N and E fall inside a curve and S is only 99 m from a curve end,
+ *  so these four are NOT final: the ring has no 1 km straight near N, E, S. Step 2.4 must move the radial ends or add a straight (user decides). */
 export const RING_RADIAL_JOINS: ReadonlyArray<{ dir: 'N' | 'E' | 'S' | 'W'; station: number; x: number; z: number }> = [
-  { dir: 'N', station: 10143, x: -39.9, z: -3714.3 }, // reference end at station 10778 (635 m along the ring)
-  { dir: 'E', station: 15382, x: 2692.3, z: -607.7 }, // reference end at station 15382 (0 m along the ring)
-  { dir: 'S', station: 500, x: -835.4, z: 2388.9 }, // reference end at station 20696 (740 m along the ring)
-  { dir: 'W', station: 4709, x: -2768.7, z: -585.1 }, // reference end at station 4709 (0 m along the ring)
+  { dir: 'N', station: 10238, x: 588.7, z: -3821.0 }, // in an arc
+  { dir: 'E', station: 14541, x: 3044.5, z: -619.1 }, // in an arc
+  { dir: 'S', station: 240, x: -188.2, z: 2189.8 }, // straight 0-339 only
+  { dir: 'W', station: 5154, x: -2594.8, z: -594.8 }, // straight 3121-6060 (good)
 ];
