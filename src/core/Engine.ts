@@ -64,6 +64,7 @@ import { InputManager } from '../input/InputManager';
 import { VoiceManager } from '../audio/VoiceManager';
 import { Environment, LighthouseLight, StreetLights } from '../environment';
 import { RingStructureLayer } from '../roads/ring/RingStructureLayer';
+import { RingStructurePhysics } from '../roads/ring/RingStructurePhysics';
 import { SignPhysics } from '../signs/SignPhysics';
 import { Toast } from '../ui/Toast';
 import { SuprimHUD } from '../ui/SuprimHUD';
@@ -147,6 +148,8 @@ export class Engine {
   private streetLights: StreetLights;
   /** STEP 5.3c: ring structures (S1 cable-stayed, the rest plain girders until their designs come). */
   private ringStructures: RingStructureLayer;
+  /** STEP 5.3c-6: colliders of the ring structures (bodies only near the player). */
+  private ringStructurePhysics: RingStructurePhysics;
   /** STEP 3: colliders of the fuel stations / charge points (same class as the road signs' physics: bodies only near the player). */
   private stationPhysics: SignPhysics;
   /** Convex road mirrors at the junctions (2 draw calls for the whole map). */
@@ -419,6 +422,7 @@ export class Engine {
     this.stationStructures = new StationStructures({ root: this.world.root, terrain: this.world.terrain });
     // STEP 3: pumps, columns, kiosk, pylon, charger posts and cabinets are solid (cuboids), only near the player, floating-origin local coordinates
     this.stationPhysics = new SignPhysics(physics, this.world.origin, this.stationStructures.solidGroups);
+    this.ringStructurePhysics = new RingStructurePhysics(physics, this.world.origin, this.ringStructures.solids);
 
     // --- City Mall (always standing there when the game starts) ---
     this.mall = new MallManager({
@@ -1120,6 +1124,7 @@ export class Engine {
       const px = this.renderer.domElement.height;
       this.streetLights.update(lamp, fov, px);
       this.stationPhysics.update(dt, this.world.playerWorld.x, this.world.playerWorld.z);
+      this.ringStructurePhysics.update(dt, this.world.playerWorld.x, this.world.playerWorld.z);
       this.stationStructures.update(this.world.playerWorld.x, this.world.playerWorld.z, lamp); // builds the near sites, frees the far ones; canopy lights, kiosk windows, price displays and signs follow the day / night
       NightLamps.on = lamp; // vehicle headlights / tail lights
       this.lighthouseLight?.update(lamp, this.time.elapsed, fov, px);
@@ -1649,6 +1654,7 @@ export class Engine {
     this.streetLights.dispose();
     this.ringStructures.dispose();
     this.stationPhysics.dispose();
+    this.ringStructurePhysics.dispose();
     this.lighthouseLight?.dispose();
     this.trainRider.dispose();
     this.ridePrompt.dispose();

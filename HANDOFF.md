@@ -74,3 +74,9 @@ Read `ROAD_CORRECTION_SYSTEM.md` first. All corrections are data in `src/roads/R
 - No segment joints / haunches drawn (deck depth is the fixed STRUCT.deckDepth that the terrain carve uses).
 - All six ring structures now have their own design (S1 cable-stayed, S2 network arch, S3 extradosed, S4 bowstring, S5/S6 viaduct). Seen in the game so far: S1 only.
 - Check: `scripts/ring-bridge-mesh-check.ts` all pass, `tsc` clean.
+
+## Ring structures, Step 5.3c-6 (colliders) - DONE in code, NOT seen in a running game
+- Problem found in the game: cars drove INTO every ring structure (terrain physics is a heightfield carved under the deck; the deck had no collider, and the render mesh has no top face because the road ribbon draws the asphalt).
+- Fix: `RingStructurePhysics.ts` (fixed trimesh body per structure, only near the player, 5 Hz, like SignPhysics; hooked in `Engine.ts` next to `stationPhysics`: field, create, update, dispose). `RingStructureLayer.solids` gives the triangles. `MeshData.collider` = collision-only deck top face (2 cm under the road, NOT drawn, so no z-fight). Deck, parapets, abutments, piers, pylon / arch / truss / cables are all solid.
+- Check: `scripts/ring-bridge-physics-check.ts` (Rapier ball dropped on each deck rests on it, ALL PASS), mesh check all pass, `tsc` clean.
+- Not tested in the game: high-speed tunnelling through the thin deck trimesh (the top face is one thin surface), ride feel at the abutment joints, thin cables as colliders. If a car still falls through at speed, thicken the collider top (a box slab) instead of the single face.

@@ -12,6 +12,8 @@ export interface MeshData {
   positions: number[];
   colors: number[];
   indices: number[];
+  /** Collision-only triangles (NOT drawn): the deck top face lies under the road ribbon, which draws the asphalt, but a car needs a solid top. */
+  collider?: { positions: number[]; indices: number[] };
 }
 export type Rgb = readonly [number, number, number];
 
@@ -99,7 +101,7 @@ export const VI = {
 } as const;
 
 class Mesher {
-  readonly d: MeshData = { positions: [], colors: [], indices: [] };
+  readonly d: MeshData = { positions: [], colors: [], indices: [], collider: { positions: [], indices: [] } };
   vert(x: number, y: number, z: number, c: Rgb): number {
     const n = this.d.positions.length / 3;
     this.d.positions.push(x, y, z);
@@ -193,6 +195,14 @@ function deck(m: Mesher, roads: RoadNetwork, r: RoadSpec, b: BridgeSpec): void {
       ids.push(m.vert(f.x + f.nx * u, f.y + dy, f.z + f.nz * u, q >= 2 && q <= 4 ? COL.underside : COL.deck));
     }
     rows.push(ids);
+  }
+  // collision-only top face (the render mesh has none, the road ribbon covers it): 2 triangles per road step over the full deck width
+  const col = m.d.collider!;
+  for (let k = b.i0; k <= b.i1; k++) {
+    const f = frameAtPoint(r, k);
+    const n0 = col.positions.length / 3;
+    col.positions.push(f.x - f.nx * W, f.y - 0.02, f.z - f.nz * W, f.x + f.nx * W, f.y - 0.02, f.z + f.nz * W);
+    if (k > b.i0) col.indices.push(n0 - 2, n0 - 1, n0 + 1, n0 - 2, n0 + 1, n0);
   }
   for (let k = 0; k + 1 < rows.length; k++) for (let q = 1; q < sec.length; q++) m.quad(rows[k][q], rows[k][(q + 1) % sec.length], rows[k + 1][(q + 1) % sec.length], rows[k + 1][q]);
   // parapets: 1.1 m high, 0.5 m thick, both edges
