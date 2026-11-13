@@ -50,6 +50,8 @@ export interface RoadSpec {
   bridgeOf: Int16Array;
   /** Tier 4 only: id of the CityPlan area this street belongs to (connectors: the area of their first node). */
   areaId?: string;
+  /** STEP 5.2 (the ring): the terrain beside the road is cut / filled along straight DAYLIGHT slopes (cut 1:2, fill 1:3, see RoadNetwork.apply) instead of the old smooth embankment blend. */
+  daylight?: boolean;
 }
 
 export interface BridgeSpec {
