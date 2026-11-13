@@ -1,0 +1,19 @@
+J1-c ARM S PROFILE  s 0..500 m, V 60 km/h, pad plane to s 60 m (pad grade along arm 0.47 %)
+ground trend grade -0.28 %, design grade -0.30 %, vertical curve 8 m (K 10)
+centreline: max cut 0.50 m, max fill 0.33 m;  edges (+-25 m): max cut 0.53 m, max fill 0.54 m
+   s    ground   road
+   0   18.24   18.25
+  50   18.31   18.48
+ 100   18.41   18.44
+ 150   18.27   18.29
+ 200   18.09   18.14
+ 250   17.96   17.99
+ 300   17.93   17.84
+ 350   17.92   17.69
+ 400   17.55   17.54
+ 450   17.11   17.39
+ 500   17.74   17.24
+  PASS  grade <= 3 %                                 0.47 %
+  PASS  grade >= 0.3 % beyond the pad (drainage)     0.30 %
+  PASS  small cutting: edge cut <= 3 m               0.53 m
+  PASS  fill at edge <= 3 m (no viaduct)             0.54 m
