@@ -2,6 +2,8 @@ import { Config } from '../core/Config';
 import { Seed, mulberry32 } from '../world/Seed';
 import type { RiverNetwork } from './RiverNetwork';
 import type { CitySite } from './TerrainGenerator';
+import { buildAlignment, sampleAlignment } from '../roads/alignment/PiAlignment';
+import { RING_PIS } from '../roads/alignment/RingAlignment';
 
 /** Ground + water at one point. `water` is NaN when there is no water around. */
 export interface TerrainSample {
@@ -24,6 +26,15 @@ interface Lake {
   reject2: number;
   isPond: boolean;
 }
+
+/** RING 5.4: points of the ring centreline (every 20 m). A lake is never placed so that its water reaches the road (the road would hang over the lake). */
+let ringPts: { x: number; z: number }[] | null = null;
+const ringPoints = (): { x: number; z: number }[] => {
+  if (!ringPts) ringPts = sampleAlignment(buildAlignment([...RING_PIS]), 20).samples.map((p) => ({ x: p.x, z: p.z }));
+  return ringPts;
+};
+/** Distance (m) that the shore keeps from the ring centreline: biggest shoreline radius (R * 1.3 with the wobble) + the pavement half width + a margin. */
+const ringKeepOut = (R: number): number => R * 1.3 + 60;
 
 const smoothstep = (a: number, b: number, x: number): number => {
   const t = x <= a ? 0 : x >= b ? 1 : (x - a) / (b - a);
@@ -56,6 +67,10 @@ export class LakeSet {
       if (h0 < 6 || h0 > 120) continue;
       if (sites.some((s) => Math.hypot(s.x - x, s.z - z) < s.coreRadius + R * 1.6)) continue;
       if (this.lakes.some((l) => Math.hypot(l.x - x, l.z - z) < l.R + R + 500)) continue;
+      if (Config.roads.ring.enabled) {
+        const keep = ringKeepOut(R);
+        if (ringPoints().some((p) => Math.hypot(p.x - x, p.z - z) < keep)) continue; // RING 5.4: the water must stay clear of the ring
+      }
 
       let ok = !rivers.isNearRiver(x, z);
       const ring: number[] = [];
