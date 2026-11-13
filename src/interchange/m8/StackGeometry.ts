@@ -2,12 +2,23 @@
 // Road A stays on the ground (level 1). Road B is level 4 (20.7 m) over the crossing and falls to the ground at 4 %. 8 ramps = 2 shapes (left slip, right flyover) x 4 rotations.
 import { DEG, Turtle, minRadius as pathMinR, pathLength, resample, rot90, crossings, type P2 } from '../Geometry2D';
 import { DESIGN } from '../../roads/standards/Criteria';
-import { minRadius } from '../../roads/standards/Checks';
+import { laneDropTaper, minRadius } from '../../roads/standards/Checks';
 import { LEVEL_RISE } from './M8Designs';
 
 export const LANE_OFF = 12; // centre of a carriageway from the road axis (outer lane), m
 export const B_TOP = 3 * LEVEL_RISE; // road B over the crossing
 export const B_FLAT = 110; // road B stays at full height this far each side of the centre (the ramps pass under it)
+/** MEDIAN OPENING: the two carriageways of a road move apart by DELTA_F (full from the crossing out to U_FULL), then come back over a shift taper (lane-drop rule 0.62 W V per lane of shift).
+ * The directional ramps run in the opened median, 6 m clear of the pavement edge. */
+export const DELTA_F = 9.5;
+export const U_FULL = 400;
+export const SHIFT_LEN = laneDropTaper(DESIGN.ringSpeed) * (DELTA_F / DESIGN.laneWidth);
+const sm = (t: number): number => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
+/** Extra offset (m) of the carriageway centrelines at distance t (along the road) from the crossing. */
+export const spread = (t: number): number => DELTA_F * (1 - sm((Math.abs(t) - U_FULL) / SHIFT_LEN));
+/** Carriageway centre offset from the road axis at distance t. */
+export const cOff = (t: number): number => LANE_OFF + spread(t);
+export const RAMP_MED = 8.3; // ramp centre in the opened median (pavement edge 4.5 + DELTA_F = 14, minus 1.5 shoulder, minus 4.2 half ramp)
 export const yB = (v: number): number => Math.max(0, B_TOP - DESIGN.maxGrade.motorway * Math.max(0, Math.abs(v) - B_FLAT));
 
 export interface StackRamp {
@@ -31,13 +42,22 @@ export function buildStack(P = { Rleft: 175, Rright: 175, run: 100, tail: 300, p
     for (const shape of ['left', 'right'] as const) {
       const R = shape === 'left' ? P.Rleft : P.Rright;
       const V = 60;
-      // k = 0: starts on A going +u. left: leaves the OUTER side (v = +21) and turns left into B+ (u = -21, going +v). right: leaves the MEDIAN side (v = +6) and turns right into B- (u = +12, going -v).
-      const endU = shape === 'left' ? -21 : LANE_OFF;
-      const startV = shape === 'left' ? 21 : 6;
-      const sign = shape === 'left' ? 1 : -1;
+      // k = 0: starts on A going +u. left: leaves the OUTER side and turns left into B+ (going +v), then runs as the outer auxiliary lane of B+.
+      // right: leaves the opened MEDIAN (v = RAMP_MED) and turns right into B- (going -v), then runs in the median beside B- and converges to its inner auxiliary lane.
+      const outer = LANE_OFF + 9 + DELTA_F; // outer auxiliary lane centre at full spread
+      const startV = shape === 'left' ? outer : RAMP_MED;
+      const endU = shape === 'left' ? -outer : RAMP_MED;
       const startU = endU - P.run - R; // a quarter arc moves u by +R for a left AND a right turn
-      const t = new Turtle(startU - 0, startV, 0).straight(P.run).arc(R, sign * 90 * DEG).straight(P.tail);
-      const base = resample(t.pts, 8);
+      const t = new Turtle(startU, startV, 0).straight(P.run).arc(R, (shape === 'left' ? 1 : -1) * 90 * DEG);
+      const arcEnd = t.pts[t.pts.length - 1];
+      const dir = shape === 'left' ? 1 : -1; // tail runs along +v (left) or -v (right)
+      const tail: P2[] = [];
+      for (let d = 8; d <= P.tail + 1e-6; d += 8) {
+        const v = arcEnd.v + dir * d;
+        const sp = spread(v);
+        tail.push({ u: shape === 'left' ? -(LANE_OFF + 9 + sp) : RAMP_MED - (DELTA_F - sp) * ((RAMP_MED - 2.7) / DELTA_F), v });
+      }
+      const base = resample([...t.pts, ...tail], 8);
       const pts = base.map((p) => rot90(p, k));
       const L = pathLength(pts);
       const cum = [0];
@@ -73,9 +93,13 @@ const yAt = (r: StackRamp, f: number): number => lerpAt(r.ys, f);
 /** Every 2D crossing of two ramps, and of a ramp with the 4 carriageway centrelines; the height gap must be >= clearance + deck (LEVEL_RISE). */
 export function clearanceConflicts(ramps: StackRamp[], L = 800): Conflict[] {
   const roads: { id: string; pts: P2[]; y: (p: P2) => number }[] = [];
-  for (const [id, a, b] of [['A+', { u: -L, v: LANE_OFF }, { u: L, v: LANE_OFF }], ['A-', { u: -L, v: -LANE_OFF }, { u: L, v: -LANE_OFF }], ['B+', { u: -LANE_OFF, v: -L }, { u: -LANE_OFF, v: L }], ['B-', { u: LANE_OFF, v: -L }, { u: LANE_OFF, v: L }]] as const) {
+  for (const id of ['A+', 'A-', 'B+', 'B-']) {
     const pts: P2[] = [];
-    for (let i = 0; i <= 200; i++) pts.push({ u: a.u + ((b.u - a.u) * i) / 200, v: a.v + ((b.v - a.v) * i) / 200 });
+    for (let i = 0; i <= 400; i++) {
+      const t = -L + (2 * L * i) / 400;
+      const o = cOff(t) * (id[1] === '+' ? 1 : -1);
+      pts.push(id[0] === 'A' ? { u: t, v: o } : { u: -o, v: t });
+    }
     roads.push({ id, pts, y: id[0] === 'A' ? () => 0 : (p) => yB(p.v) });
   }
   const out: Conflict[] = [];
@@ -100,6 +124,30 @@ export function clearanceConflicts(ramps: StackRamp[], L = 800): Conflict[] {
       const gap = Math.abs(ya - yb);
       if (gap < need - 1e-6) out.push({ a: ramps[i].id, b: ramps[j].id, u: c.u, v: c.v, ya, yb, gap });
     }
+  }
+  return out;
+}
+
+/** The median opening check: a ramp must stay clear of the pavement of every carriageway (half pavement 7.3 + ramp half 4.2 + 1.0 m) unless it is at least a level above / below it.
+ * Its own source road is skipped for the diverge run and its target road along the merge tail (auxiliary lane beside the pavement). */
+export function medianConflicts(ramps: StackRamp[], tail = 300, run = 100): { ramp: string; road: string; u: number; v: number; d: number }[] {
+  const out: { ramp: string; road: string; u: number; v: number; d: number }[] = [];
+  const need = 7.3 + 4.2 + 1.0;
+  for (const r of ramps) {
+    r.pts.forEach((p, i) => {
+      for (const id of ['A+', 'A-', 'B+', 'B-']) {
+        const t = id[0] === 'A' ? p.u : p.v;
+        const sgn = id[1] === '+' ? 1 : -1;
+        const c = cOff(t) * sgn;
+        const d = id[0] === 'A' ? Math.abs(p.v - c) : Math.abs(p.u + c);
+        const yRoad = id[0] === 'A' ? 0 : yB(p.v);
+        if (Math.abs(r.ys[i] - yRoad) >= LEVEL_RISE) continue;
+        const own = id[0] === r.source && r.cum[i] < run + 60;
+        const ownT = id[0] === r.target && r.length - r.cum[i] < tail + 70; // + the last part of the arc, where the ramp converges on the auxiliary lane
+        if (own || ownT) continue;
+        if (d < need) out.push({ ramp: r.id, road: id, u: p.u, v: p.v, d });
+      }
+    });
   }
   return out;
 }
