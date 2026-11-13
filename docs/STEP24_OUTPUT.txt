@@ -1,14 +1,14 @@
-ring_samples_5m.csv: 4188 rows, ds 4.999 m, length 20936.0 m
+ring_samples_5m.csv: 3859 rows, ds 4.999 m, length 19292.8 m
 
 Radial meeting points on the new ring (nearest point to the end of the reference radial)
   dir  station   x        z        ring heading  approach   element      straight range (clear before / after)    ref end -> ring
-  N     10778    590.6  -3786.6      358.4 deg    58 deg   arc         in curve (arc)                                 14 m
-       suggested (>= 500 m clear straight each side): station 10143 at x -39.9, z -3714.3, shift along the ring 635 m
-  E     15382   2692.3   -607.7       89.7 deg    85 deg   straight    straight 13643-17372 (1739 / 1990)             66 m
-       suggested (>= 500 m clear straight each side): station 15382 at x 2692.3, z -607.7, shift along the ring 0 m
-  S     20696    -95.5   2382.7      178.5 deg    86 deg   arc         in curve (arc)                                 31 m
-       suggested (>= 500 m clear straight each side): station 500 at x -835.4, z 2388.9, shift along the ring 740 m
-  W      4709  -2768.7   -585.1      265.1 deg    88 deg   straight    straight 3637-6730 (1072 / 2021)               1 m
-       suggested (>= 500 m clear straight each side): station 4709 at x -2768.7, z -585.1, shift along the ring 0 m
+  N     10194    591.0  -3821.1      358.8 deg    58 deg   arc         in curve (arc)                                 49 m
+       suggested (>= 500 m clear straight each side): station 11549 at x 1711.6, z -3145.4, shift along the ring 1355 m
+  E     14498   3044.5   -616.2       88.6 deg    84 deg   arc         in curve (arc)                                 286 m
+       suggested (>= 500 m clear straight each side): station 15309 at x 2967.4, z 190.5, shift along the ring 811 m
+  S       235   -187.9   2200.1      148.9 deg    56 deg   straight    straight 0-255 (235 / 20)                      178 m
+       suggested (>= 500 m clear straight each side): station 1205 at x -1131.6, z 2301.8, shift along the ring 970 m
+  W      5104  -2595.0   -591.5      267.3 deg    85 deg   straight    straight 3031-6014 (2074 / 910)                173 m
+       suggested (>= 500 m clear straight each side): station 5104 at x -2595.0, z -591.5, shift along the ring 0 m
 
-  spacing between neighbouring junctions (m): 6069, 4604, 5314, 4949   (rule: >= 1600 m urban)
+  spacing between neighbouring junctions (m): 4869, 5089, 4305, 5029   (rule: >= 1600 m urban)
