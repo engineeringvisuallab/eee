@@ -22,7 +22,7 @@ check(worstY < 1e-9 && worstXZ < 1e-9, 'surface heights and positions are exactl
 check(Math.abs(ring.length - plan.length) < 1, 'road length equals the alignment length', `${ring.length.toFixed(1)} vs ${plan.length.toFixed(1)} m`);
 const st = net.stats;
 check(st.roads === 1 && Math.abs(st.highwayKm - plan.length / 1000) < 0.001 && st.localKm === 0, 'stats: 1 road, highwayKm = ring length', `${st.highwayKm.toFixed(3)} km`);
-check(net.bridges.length === 0 && net.pads.length === 0, 'bridges and pads: none yet (bridges are Step 5.3)', `${net.bridges.length} bridges, ${net.pads.length} pads`);
+check(net.bridges.length === 6 && net.pads.length === 0, 'bridges and pads: 6 structures of the ring (Step 5.3b, scripts/ring-structures-check.ts), no pads yet', `${net.bridges.length} bridges, ${net.pads.length} pads`);
 
 // surfaceAt on the ring at a quarter of the points: centreline, lane, outer shoulder = asphalt (1); just outside = gravel (2) or ground (0); far away = 0
 let bad = 0; const tried: string[] = [];

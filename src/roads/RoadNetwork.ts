@@ -12,6 +12,7 @@ import { DIVIDED_SECTIONS, sectionFor } from './RoadSection';
 import { buildInterchange, type InterchangeModel, type RoadSection as IcSection } from '../interchange';
 import type { LocalAreaStat } from './LocalRoads';
 import { planRing } from './ring/RingRoad';
+import { STRUCT, STRUCT_CARVE } from './ring/RingStructures';
 import { SCENARIOS, cutRange, nearestPoint, uvToWorld, type ScenarioSpec } from '../interchange/scenario/J6Scenario';
 
 /** Natural terrain WITHOUT roads (hills, rivers, lakes, sea). Roads are planned on top of this. */
@@ -53,6 +54,8 @@ const BRIDGE_MIN_WET = 1; // wet width (m) from which a bridge is built. Every r
 const VIADUCT_FILL = 7.5;
 /** How far (m) from the road a river still counts as 'beside the road' for the viaduct rule. */
 const VIADUCT_RIVER_REACH = 110;
+/** STEP 5.3b (the ring): a fill higher than this (m) is a viaduct even without a river beside it (user: the 41 m fill near station 15540 must become a viaduct, not a 120 m wide earth dam). */
+const RING_VIADUCT_TALL = 25;
 
 interface RawRoad {
   /** 1 = main, 2 = primary, 3 = secondary, 4 = tertiary (see RoadPlan.ts). */
@@ -232,6 +235,79 @@ export class RoadNetwork {
       section: plan.section,
       daylight: true,
     });
+    this.bridgeRing(this.roads[this.roads.length - 1]); // STEP 5.3b
+  }
+
+  /**
+   * STEP 5.3b: the structures of the ring. A stretch becomes a structure (BridgeSpec) when the centreline is WET (every river crossing is a bridge: no dam across a river)
+   * or when the fill is higher than VIADUCT_FILL beside a river valley (rule D4: viaduct instead of a huge earth dam). Each structure gets an approach slab (STRUCT.approach)
+   * at both ends, and neighbouring stretches are joined. This is data only (BridgeSpec + RoadSpec.bridgeOf): the terrain rule is in apply(), the designs / meshes follow in 5.3c+.
+   * The closed ring is not wrapped around its start point (no structure lies there: ground check, station 0).
+   */
+  private bridgeRing(r: RoadSpec): void {
+    const n = r.xs.length;
+    const step = r.step;
+    const flag = new Uint8Array(n);
+    const lev = new Float64Array(n).fill(NaN);
+    for (let i = 0; i < n; i++) {
+      this.natural(r.xs[i], r.zs[i], this.scratch);
+      const w = this.scratch.water;
+      if (!Number.isNaN(w) && this.scratch.h < w + 0.3 && this.scratch.h > 2) {
+        flag[i] = 1;
+        lev[i] = w;
+      } else if (r.ys[i] - r.hNat[i] > RING_VIADUCT_TALL || (r.ys[i] - r.hNat[i] > VIADUCT_FILL && this.riverBeside(r, i))) flag[i] = 2;
+    }
+    const appr = Math.ceil(STRUCT.approach / step);
+    const zones: { a: number; b: number }[] = [];
+    for (let i = 0; i < n; i++) {
+      if (!flag[i]) continue;
+      const a = Math.max(0, i - appr);
+      const b = Math.min(n - 1, i + appr);
+      const last = zones[zones.length - 1];
+      if (last && a - last.b <= 3) last.b = Math.max(last.b, b);
+      else zones.push({ a, b });
+    }
+    for (const z of zones) {
+      if (z.b - z.a < 4) continue;
+      let peak = -Infinity;
+      let wetN = 0;
+      let clear = Infinity;
+      let clearWet = Infinity;
+      for (let k = z.a; k <= z.b; k++) {
+        if (!Number.isNaN(lev[k])) {
+          peak = Math.max(peak, lev[k]);
+          wetN++;
+        }
+        // clear height of the underside: over the water on a wet point, over the ground on a dry one (deck depth taken off)
+        const c = r.ys[k] - (Number.isNaN(lev[k]) ? r.hNat[k] : lev[k]) - STRUCT.deckDepth;
+        if (!Number.isNaN(lev[k])) clearWet = Math.min(clearWet, c);
+        else clear = Math.min(clear, c);
+      }
+      if (Number.isFinite(clearWet)) clear = clearWet; // a river crossing: the clearance is the one over the water (the approach slabs lie on the embankment)
+      const lengthM = (z.b - z.a) * step;
+      if (!Number.isFinite(peak)) peak = Math.max(...Array.from({ length: z.b - z.a + 1 }, (_, q) => r.hNat[z.a + q]));
+      const spanM = Math.max(wetN * step, lengthM - 2 * STRUCT.approach);
+      const type = wetN * step < 60 ? 'beam' : 'arch';
+      const id = this.bridges.length;
+      for (let k = z.a; k <= z.b; k++) r.bridgeOf[k] = id;
+      this.bridges.push({
+        id,
+        roadId: r.id,
+        i0: z.a,
+        i1: z.b,
+        type,
+        spanM,
+        lengthM,
+        deckHalfWidth: r.halfWidth + r.shoulder + 0.3,
+        waterY: peak,
+        clearanceM: Math.max(0, clear),
+        material: type === 'beam' ? 'prestressed-concrete' : 'steel',
+        maxLoadT: type === 'beam' ? 40 : 60,
+        maxSpanM: spanM,
+        centerX: r.xs[(z.a + z.b) >> 1],
+        centerZ: r.zs[(z.a + z.b) >> 1],
+      });
+    }
   }
 
   get segmentCount(): number {
@@ -2375,7 +2451,7 @@ export class RoadNetwork {
     };
     const emb = (r: RoadSpec, i: number) => {
       if (r.daylight && r.bridgeOf[i] < 0) return day(r).reach[i];
-      return r.bridgeOf[i] >= 0 ? 6 : Math.min(MAX_EMB, Math.max(6, Math.abs(r.ys[i] - r.hNat[i]) * 2.4 + 5));
+      return r.bridgeOf[i] >= 0 ? (r.daylight ? STRUCT.protectReach : 6) : Math.min(MAX_EMB, Math.max(6, Math.abs(r.ys[i] - r.hNat[i]) * 2.4 + 5));
     };
     for (const r of this.roads) {
       const m = r.closed ? r.xs.length : r.xs.length - 1;
@@ -2400,12 +2476,19 @@ export class RoadNetwork {
         this.scity[s] = city ? 1 : 0;
         this.score[s] = r.halfWidth + (city ? Math.max(r.shoulder, walk) : r.shoulder);
         this.searth[s] = r.earth ? 1 : 0;
-        this.sday[s] = r.daylight && r.bridgeOf[i] < 0 && r.bridgeOf[j] < 0 ? 1 : 0;
+        // STEP 5.3b: the piece that joins the embankment to a structure (one end on the deck, one on the ground) is still a daylight piece (with the ordinary embankment it would pull the ground up under the slab)
+        this.sday[s] = r.daylight && !(r.bridgeOf[i] >= 0 && r.bridgeOf[i] === r.bridgeOf[j]) ? 1 : 0;
         if (this.sday[s]) {
           this.sca[s] = day(r).cut[i];
           this.scb[s] = day(r).cut[j];
         }
         this.sbridge[s] = r.bridgeOf[i] >= 0 && r.bridgeOf[i] === r.bridgeOf[j] ? 1 : 0;
+        if (this.sbridge[s] && r.daylight) {
+          // STEP 5.3b: 2 = the inner part of a ring structure (not the two approach slabs): no neighbouring embankment may raise the ground there
+          const bsp = this.bridges[r.bridgeOf[i]];
+          const endPts = Math.ceil(STRUCT.approach / r.step);
+          if (Math.min(i, j) >= bsp.i0 + endPts && Math.max(i, j) <= bsp.i1 - endPts) this.sbridge[s] = 2;
+        }
 
         const reach = this.score[s] + Math.max(this.sea[s], this.seb[s]) + 2;
         const x0 = Math.min(r.xs[i], r.xs[j]) - reach;
@@ -2480,8 +2563,12 @@ export class RoadNetwork {
     let bd = Infinity;
     let carve = Infinity;
     let carveW = 0;
+    let carveD = Infinity;
+    let nbD = Infinity; // STEP 5.3b: distance to the nearest slab piece, and whether the point lies beyond an end of its structure
+    let nbBeyond = false;
     // DAYLIGHT (ring, STEP 5.2): nearest daylight segment decides; its road surface height and where its flat platform ends
     let dd = Infinity;
+    let inner = Infinity; // STEP 5.3b: distance to the nearest INNER segment of a ring structure
     let dby = 0;
     let dcore = 0;
     let dcut = DAY_CUT;
@@ -2501,23 +2588,39 @@ export class RoadNetwork {
       }
     }
     for (let q = 0; q < segs.length; q++) {
-      const s = segs[q];
+      const s: number = segs[q];
       const abx = this.sbx[s] - this.sax[s];
       const abz = this.sbz[s] - this.saz[s];
       const l2 = abx * abx + abz * abz;
       let t = l2 > 0 ? ((x - this.sax[s]) * abx + (z - this.saz[s]) * abz) / l2 : 0;
+      const traw = t;
       t = t < 0 ? 0 : t > 1 ? 1 : t;
       const d = Math.hypot(x - (this.sax[s] + abx * t), z - (this.saz[s] + abz * t));
       const core = this.score[s];
       if (this.sbridge[s]) {
         // Under a bridge deck the ground is left alone (the valley / river stays) - but the ground may never touch the slab:
         // anything higher than 0.7 m below the deck surface is carved away (smoothly, over a few metres).
-        const deck = this.say[s] + (this.sby[s] - this.say[s]) * t - 0.7;
-        if (out.h > deck && d < core + 5) {
+        const rr = this.roads[this.segRoad[s]];
+        const ring = rr.daylight === true;
+        // STEP 5.3b: beyond the two ends of a structure the slab does not exist: no carving there (the platform of the embankment is the road surface).
+        // The NEAREST slab piece tells whether the point lies beyond an end (more than 4 m past the end point; a bend moves the foot of the perpendicular a little).
+        if (ring && d < nbD) {
+          const pi = this.segPt[s];
+          const len = Math.sqrt((this.sbx[s] - this.sax[s]) ** 2 + (this.sbz[s] - this.saz[s]) ** 2);
+          nbD = d;
+          nbBeyond = (traw * len < -4 && pi > 0 && rr.bridgeOf[pi - 1] !== rr.bridgeOf[pi]) || ((traw - 1) * len > 4 && rr.bridgeOf[pi + 2] !== rr.bridgeOf[pi]);
+        }
+        const deck = this.say[s] + (this.sby[s] - this.say[s]) * t - (ring ? STRUCT_CARVE : 0.7);
+        if (this.sbridge[s] === 2 && d < inner) inner = d;
+        // STEP 5.3b (ring): registered whatever the ground height is NOW; the lowering at the end of apply() uses the final height, so ground that a neighbouring
+        // daylight embankment raised under the approach slab is brought down to the slab as well
+        if ((ring || out.h > deck) && d < core + 5) {
           const cw = 1 - smoothstep(core + 0.5, core + 5, d);
-          if (cw > carveW) {
+          // STEP 5.3b: several slab pieces within the platform give the same weight 1: the NEAREST piece decides (its height, not that of a piece 16 m back along the road)
+          if (cw > carveW + 1e-6 || (cw > carveW - 1e-6 && d < carveD)) {
             carveW = cw;
             carve = deck;
+            carveD = d;
           }
         }
         continue;
@@ -2546,12 +2649,15 @@ export class RoadNetwork {
       const run = dd > dcore ? dd - dcore : 0;
       const lo = dby - run * DAY_FILL;
       const hi = dby + run * dcut;
-      if (out.h < lo) out.h = lo;
-      else if (out.h > hi) out.h = hi;
+      // STEP 5.3b: under the inner part of a structure the ground is never raised (a valley is not dammed); the nearest road piece decides
+      if (out.h < lo) {
+        if (!(inner < dd)) out.h = lo;
+      } else if (out.h > hi) out.h = hi;
     }
     if (bw > 0) out.h += (by - out.h) * bw;
     // where a normal (on-ground) road also claims the cell, that road wins: the abutment must meet the road surface exactly
     carveW *= 1 - bw;
+    if (nbBeyond) carveW = 0;
     if (carveW > 0 && out.h > carve) out.h -= (out.h - carve) * carveW;
   }
 

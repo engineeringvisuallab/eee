@@ -20,6 +20,7 @@ const OFFS: number[] = []; for (let u = 0; u <= 250; u += 2) OFFS.push(u);
 let nPts = 0, flatBad = 0, flatWorst = 0, envBad = 0, envWorst = 0, steepBad = 0, steepWorst = 0, wall = 0, wallWorst = 0, wet = 0;
 const wallAt: string[] = []; const envAt: string[] = [];
 for (let i = 0; i < ring.xs.length; i += stride) {
+  if (ring.bridgeOf[i] >= 0) continue; // STEP 5.3b: under a structure the ground is natural and lies below the slab (scripts/ring-structures-check.ts checks that)
   nPts++;
   for (const sd of SIDES) {
     const hs: number[] = [], ns: number[] = [], ws: boolean[] = [];
