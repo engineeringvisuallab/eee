@@ -23,10 +23,12 @@ export const COL = {
   pier: [0.7, 0.7, 0.68] as Rgb,
   mast: [0.88, 0.88, 0.86] as Rgb,
   cable: [0.96, 0.96, 0.98] as Rgb,
+  steel: [0.5, 0.58, 0.68] as Rgb,
+  hanger: [0.9, 0.9, 0.93] as Rgb,
 } as const;
 
 /** The design of structure number k (0-based, in station order). Anything not listed gets the plain girder. */
-export const RING_DESIGNS: readonly ('cable-stayed' | 'plain')[] = ['cable-stayed', 'plain', 'plain', 'plain', 'plain', 'plain'];
+export const RING_DESIGNS: readonly ('cable-stayed' | 'network-arch' | 'extradosed' | 'plain')[] = ['cable-stayed', 'network-arch', 'extradosed', 'plain', 'plain', 'plain'];
 
 /** Cable-stayed design numbers (S1). All lengths in metres. */
 export const CS = {
@@ -43,6 +45,31 @@ export const CS = {
   topAttach: 30, attachStep: 1.8,
   /** Cable thickness (square section). */
   cableT: 0.32,
+} as const;
+
+/** Network-arch design numbers (S2): two steel ribs standing in the median (nothing over the traffic lanes), the deck is the tie. */
+export const NA = {
+  /** Rib rise as a fraction of the span (network arches: about 1/6 to 1/7). */
+  rise: 0.16,
+  /** Lateral offset of the ribs (inside the 6 m median). */
+  ribU: 2.2,
+  /** Rib square section, hanger square section. */
+  ribT: 0.9, hangerT: 0.2,
+  /** Hangers: number of deck nodes per family, and how far along the span (fraction) the arch end of a hanger lies from its deck node. */
+  nodes: 11, shift: 0.17,
+  /** Cross struts between the two ribs at these span fractions. */
+  struts: [0.3, 0.5, 0.7],
+} as const;
+
+/** Extradosed design numbers (S3): one low pylon in the median at mid-span, shallow-angle cable fans (two planes) to both sides. */
+export const EX = {
+  /** Pylon height above the deck; section (along x across) at the deck and at the top. */
+  pylonH: 7.5, deckA: 2.6, deckB: 3.2, topA: 1.3, topB: 2.0,
+  /** Cable planes: lateral offset on the deck and on the pylon (inside the 6 m median). */
+  planeU: 2.2, pylonU: 1.2,
+  /** Cables per side: first anchor distance from the pylon, spacing, count; first attachment below the pylon top, step down. */
+  firstAnchor: 4.5, spacing: 3.4, n: 4, topDrop: 0.7, attachStep: 0.9,
+  cableT: 0.3,
 } as const;
 
 class Mesher {
@@ -212,10 +239,78 @@ export function cableStayed(roads: RoadNetwork, b: BridgeSpec): MeshData {
   return m.d;
 }
 
+/** S2: steel network arch. Two parabolic ribs in the median, crossing inclined hangers (network), cross struts between the ribs. */
+export function networkArch(roads: RoadNetwork, b: BridgeSpec): MeshData {
+  const r = roads.roads[b.roadId];
+  const m = new Mesher();
+  deck(m, roads, r, b);
+  const ap = Math.ceil(STRUCT.approach / r.step);
+  const s0 = r.cum[b.i0 + ap], s1 = r.cum[b.i1 - ap];
+  const L = s1 - s0;
+  const f = L * NA.rise;
+  const at = (t: number) => frameAt(r, s0 + L * t);
+  const archY = (t: number, fr: Frame): number => fr.y + 4 * f * t * (1 - t);
+  for (const side of [-1, 1]) {
+    // rib: polyline of straight square-section pieces
+    const N = 20;
+    for (let q = 0; q < N; q++) {
+      const ta = q / N, tb = (q + 1) / N;
+      const fa = at(ta), fb = at(tb);
+      cable(m, fa.x + fa.nx * NA.ribU * side, archY(ta, fa), fa.z + fa.nz * NA.ribU * side, fb.x + fb.nx * NA.ribU * side, archY(tb, fb), fb.z + fb.nz * NA.ribU * side, NA.ribT, COL.steel);
+    }
+    // hangers: two families, deck node j -> arch point at t_j +- shift
+    for (let j = 1; j <= NA.nodes; j++) {
+      const td = j / (NA.nodes + 1);
+      const fd = at(td);
+      for (const dir of [-1, 1]) {
+        const ta = td + dir * NA.shift;
+        if (ta < 0.04 || ta > 0.96) continue;
+        const fa = at(ta);
+        cable(m, fd.x + fd.nx * NA.ribU * side, fd.y + 0.15, fd.z + fd.nz * NA.ribU * side, fa.x + fa.nx * NA.ribU * side, archY(ta, fa), fa.z + fa.nz * NA.ribU * side, NA.hangerT, COL.hanger);
+      }
+    }
+  }
+  // cross struts between the two ribs
+  for (const t of NA.struts) {
+    const fr = at(t);
+    const y = archY(t, fr);
+    prism(m, fr, y - 0.3, y + 0.3, 0.6, 2 * NA.ribU, 0.6, 2 * NA.ribU, COL.steel);
+  }
+  return m.d;
+}
+
+/** S3: extradosed. One low pylon at mid-span in the median, shallow cable fans in two planes. The pylon stands on the deck (no pier in the river). */
+export function extradosed(roads: RoadNetwork, b: BridgeSpec): MeshData {
+  const r = roads.roads[b.roadId];
+  const m = new Mesher();
+  deck(m, roads, r, b);
+  const ap = Math.ceil(STRUCT.approach / r.step);
+  const s0 = r.cum[b.i0 + ap], s1 = r.cum[b.i1 - ap];
+  const sm = (s0 + s1) / 2;
+  const fm = frameAt(r, sm);
+  const deckY = fm.y;
+  prism(m, fm, deckY - 0.6, deckY + EX.pylonH, EX.deckA, EX.deckB, EX.topA, EX.topB, COL.mast);
+  for (const side of [-1, 1]) {
+    for (const dir of [-1, 1]) {
+      for (let q = 0; q < EX.n; q++) {
+        const s = sm + dir * (EX.firstAnchor + EX.spacing * q);
+        if (s < s0 + 0.5 || s > s1 - 0.5) break;
+        const fa = frameAt(r, s);
+        const my = deckY + EX.pylonH - EX.topDrop - EX.attachStep * q;
+        cable(m, fm.x + fm.nx * EX.pylonU * side, my, fm.z + fm.nz * EX.pylonU * side, fa.x + fa.nx * EX.planeU * side, fa.y + 0.15, fa.z + fa.nz * EX.planeU * side, EX.cableT, COL.cable);
+      }
+    }
+  }
+  return m.d;
+}
+
 /** Geometry of structure number `k` (0-based, station order) of the ring. */
 export function buildStructure(roads: RoadNetwork, b: BridgeSpec, k: number): MeshData {
   const design = RING_DESIGNS[k] ?? 'plain';
-  return design === 'cable-stayed' ? cableStayed(roads, b) : plainGirder(roads, b);
+  if (design === 'cable-stayed') return cableStayed(roads, b);
+  if (design === 'network-arch') return networkArch(roads, b);
+  if (design === 'extradosed') return extradosed(roads, b);
+  return plainGirder(roads, b);
 }
 
 /** The structures of the ring in station order. */

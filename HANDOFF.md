@@ -52,3 +52,13 @@ Read `ROAD_CORRECTION_SYSTEM.md` first. All corrections are data in `src/roads/R
 - Check: `npx tsx scripts/ring-bridge-mesh-check.ts` (all pass), `npx tsc --noEmit` clean.
 - Rules kept: S3 grade line unchanged; fill over 25 m becomes a viaduct.
 - Next: look at S1 in the game (mast position `CS.mastAt`, colours), then 5.3c-2 S2 steel network arch, S3 extradosed, S4 bowstring, S5/S6 box-girder viaducts.
+
+## Ring structures, Step 5.3c-2 (S2 steel network arch) - DONE in code, NOT seen in a running game
+- `RingBridgeGeometry.ts`: `networkArch()` + `NA` numbers. Two parabolic steel ribs inside the 6 m median (rise 0.16 x span), 2 x 11 crossing hangers (network), 3 cross struts between the ribs. `RING_DESIGNS[1] = 'network-arch'`. S1 was seen in the game and is good.
+- Check: `scripts/ring-bridge-mesh-check.ts` all pass, `tsc` clean.
+- Next: S3 extradosed (5.3c-3), S4 truss-bowstring, S5/S6 box-girder viaducts with slender piers.
+
+## Ring structures, Step 5.3c-3 (S3 extradosed) - DONE in code, NOT seen in a running game
+- `RingBridgeGeometry.ts`: `extradosed()` + `EX` numbers. One low pylon (7.5 m) in the median at mid-span, standing on the deck (no river pier), 2 planes x 2 sides x 4 shallow cables. `RING_DESIGNS[2] = 'extradosed'`. S2 not yet seen in the game.
+- Check: `scripts/ring-bridge-mesh-check.ts` all pass, `tsc` clean.
+- Next: S4 truss-bowstring (5.3c-4), S5/S6 box-girder viaducts with slender piers.
