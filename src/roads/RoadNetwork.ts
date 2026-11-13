@@ -11,6 +11,7 @@ import { CityPlan } from '../city/CityPlan';
 import { DIVIDED_SECTIONS, sectionFor } from './RoadSection';
 import { buildInterchange, type InterchangeModel, type RoadSection as IcSection } from '../interchange';
 import type { LocalAreaStat } from './LocalRoads';
+import { planRing } from './ring/RingRoad';
 import { SCENARIOS, cutRange, nearestPoint, uvToWorld, type ScenarioSpec } from '../interchange/scenario/J6Scenario';
 
 /** Natural terrain WITHOUT roads (hills, rivers, lakes, sea). Roads are planned on top of this. */
@@ -74,6 +75,8 @@ interface RawRoad {
   fixedY?: number[];
   /** PROVISIONAL grade limit of a scenario road (default: the class limit, KIND). */
   maxGrade?: number;
+  /** STEP 5.1 (the ring): own cross-section that replaces the Config section of the road kind (metres from the centreline, see roads/ring/RingRoad.ts). */
+  section?: { halfWidth: number; medianHalf: number; laneW: number; shyOuter: number; lanesPerDir: number };
 }
 
 /**
@@ -168,6 +171,7 @@ export class RoadNetwork {
         if (Config.roads.island) this.layoutIsland();
       }
     }
+    this.layoutRing(); // ROADS STEP 5.1: the 8-lane ring (Config.roads.ring), before the scenarios and the pads
     this.applyScenarios(); // after all tiers, BEFORE the pads: pads, median, bridges, traffic graph then see the edited network
     this.applyRoadFixes(); // RC03 (RoadCorrections.ts ROAD_FIXES): after the scenarios, before the pads and the railway
     const pr = buildJunctionPads(this.roads, this.natural);
@@ -189,6 +193,31 @@ export class RoadNetwork {
     this.layoutEarthen();
     this.layoutInterchanges();
     this.buildSegments();
+  }
+
+  /**
+   * ROADS STEP 5.1: the 8-lane RING ROAD (M8) as one closed highway road. Alignment (Step 2), height (Step 3) and cross-section (Step 4.1) come from
+   * roads/ring/RingRoad.ts; the surface heights are used exactly as designed (fixedY, like the interchange ramps). Nothing happens while Config.roads.ring.enabled is false.
+   * Bridges / viaducts / culverts of the ring are Step 5.3, the mesh and terrain cut Step 5.2 (until then the old road ribbon draws it).
+   */
+  private layoutRing(): void {
+    const C = Config.roads.ring;
+    if (!C.enabled) return;
+    const plan = planRing(C.step);
+    this.addRoad({
+      tier: 1,
+      kind: 'highway',
+      name: 'M8',
+      closed: true,
+      pts: plan.pts,
+      fixedY: plan.ys,
+      halfWidth: plan.section.halfWidth,
+      shoulder: plan.section.shoulder,
+      lanes: plan.section.lanesPerDir * 2,
+      speedKmh: plan.designKmh,
+      maxGrade: 0.04,
+      section: plan.section,
+    });
   }
 
   get segmentCount(): number {
@@ -1475,7 +1504,7 @@ export class RoadNetwork {
     }
     // ROADS STEP 1: the cross-section (median, lane width, half width) comes from Config.city.roadSections through roads/RoadSection.ts.
     const oldLanes = raw.lanes ?? K.lanes;
-    const sec = sectionFor(raw.kind, raw.tier, oldLanes, raw.earth);
+    const sec = raw.section ?? sectionFor(raw.kind, raw.tier, oldLanes, raw.earth);
     const road: RoadSpec = {
       id,
       tier: raw.tier,

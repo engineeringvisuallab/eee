@@ -65,6 +65,8 @@ export const Config = {
      * Stage 6A = 1, 6B = 2, 6C = 3.
      */
     activeTier: 0 as 0 | 1 | 2 | 3 | 4, // 0 = NO roads at all (roads removed; set 1-4 again when the new road design is ready)
+    /** ROADS STEP 5.1: the new 8-lane ring road (M8, roads/ring/RingRoad.ts). Works with activeTier 0. `step` = distance between centreline points (m). enabled = false: no ring. */
+    ring: { enabled: true as boolean, step: 8 },
     /** The long bridge to the island and the island's road network (RoadPlan.ISLAND_PLAN). */
     island: false,
     /**
