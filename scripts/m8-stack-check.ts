@@ -1,7 +1,7 @@
 // STEP 9.2 J1 stack check: ramp radius, grade, and vertical clearance at every crossing. Writes docs/m8_stack_plan.json for the plan picture.
 // Run: npx tsx scripts/m8-stack-check.ts
 import { writeFileSync } from 'node:fs';
-import { buildStack, clearanceConflicts, medianConflicts, DELTA_F, SHIFT_LEN, U_FULL, rampMaxGrade, rampMinRadius, rampRminLimit } from '../src/interchange/m8/StackGeometry';
+import { buildStack, clearanceConflicts, medianConflicts, DELTA_F, SHIFT_LEN, terminalLengths, U_FULL, rampMaxGrade, rampMinRadius, rampRminLimit } from '../src/interchange/m8/StackGeometry';
 
 const ramps = buildStack();
 let fails = 0;
@@ -18,5 +18,9 @@ const mc = medianConflicts(ramps);
 for (const c of mc.slice(0, 12)) console.log(`  MEDIAN ${c.ramp} too close to ${c.road} at (${c.u.toFixed(0)}, ${c.v.toFixed(0)}) d ${c.d.toFixed(1)} m < 13.5`);
 console.log(`  median opening: spread ${DELTA_F} m each carriageway, full to ${U_FULL} m, shift taper ${SHIFT_LEN.toFixed(0)} m; ${mc.length} ramp points too close to a pavement`);
 if (mc.length) fails++;
+const tl = terminalLengths();
+const okT = tl.exitHave >= tl.exitNeed && tl.entryHave >= tl.entryNeed;
+console.log(`  ${okT ? 'PASS' : 'FAIL'}  terminals: exit run ${tl.exitHave} m (need ${tl.exitNeed.toFixed(0)} = decel + taper), entry tail ${tl.entryHave} m (need ${tl.entryNeed.toFixed(0)} = accel + taper)`);
+if (!okT) fails++;
 writeFileSync('docs/m8_stack_plan.json', JSON.stringify(ramps.map((r) => ({ id: r.id, shape: r.shape, u: r.pts.map((p) => +p.u.toFixed(1)), v: r.pts.map((p) => +p.v.toFixed(1)), y: r.ys.map((y) => +y.toFixed(2)) }))));
 console.log(fails || cf.length ? `FAILED radius/grade ${fails}, clearance ${cf.length}` : 'ALL PASS');

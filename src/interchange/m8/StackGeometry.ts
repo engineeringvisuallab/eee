@@ -2,7 +2,7 @@
 // Road A stays on the ground (level 1). Road B is level 4 (20.7 m) over the crossing and falls to the ground at 4 %. 8 ramps = 2 shapes (left slip, right flyover) x 4 rotations.
 import { DEG, Turtle, minRadius as pathMinR, pathLength, resample, rot90, crossings, type P2 } from '../Geometry2D';
 import { DESIGN } from '../../roads/standards/Criteria';
-import { laneDropTaper, minRadius } from '../../roads/standards/Checks';
+import { accelLength, decelLength, entryTaperLength, exitTaperLength, laneDropTaper, minRadius } from '../../roads/standards/Checks';
 import { LEVEL_RISE } from './M8Designs';
 
 export const LANE_OFF = 12; // centre of a carriageway from the road axis (outer lane), m
@@ -36,7 +36,15 @@ export interface StackRamp {
 
 const roadY = (road: 'A' | 'B', p: P2): number => (road === 'A' ? 0 : yB(Math.abs(road === 'B' ? p.v : p.u)));
 
-export function buildStack(P = { Rleft: 175, Rright: 175, run: 100, tail: 300, plateauRight: 2 * LEVEL_RISE }): StackRamp[] {
+/** TERMINALS (lane level): the exit needs deceleration lane + taper, the entry acceleration lane + taper (Checks.ts, CRITERIA aDecel / aAccel). Ramp V60 from the road speed. */
+export const RAMP_V = 60;
+export const EXIT_NEED = decelLength(DESIGN.ringSpeed, RAMP_V) + exitTaperLength();
+export const ENTRY_NEED = accelLength(DESIGN.ringSpeed, RAMP_V) + entryTaperLength();
+const up10 = (x: number): number => Math.ceil(x / 10) * 10;
+export const RUN_LEN = up10(EXIT_NEED); // straight run of the ramp beside its source road (diverge: taper + deceleration lane)
+export const TAIL_LEN = up10(ENTRY_NEED); // run beside the target road (merge: acceleration lane + entry taper)
+
+export function buildStack(P = { Rleft: 175, Rright: 175, run: RUN_LEN, tail: TAIL_LEN, plateauRight: 2 * LEVEL_RISE }): StackRamp[] {
   const out: StackRamp[] = [];
   for (let k = 0; k < 4; k++) {
     for (const shape of ['left', 'right'] as const) {
@@ -48,7 +56,14 @@ export function buildStack(P = { Rleft: 175, Rright: 175, run: 100, tail: 300, p
       const startV = shape === 'left' ? outer : RAMP_MED;
       const endU = shape === 'left' ? -outer : RAMP_MED;
       const startU = endU - P.run - R; // a quarter arc moves u by +R for a left AND a right turn
-      const t = new Turtle(startU, startV, 0).straight(P.run).arc(R, (shape === 'left' ? 1 : -1) * 90 * DEG);
+      // the run follows the carriageway while it is still shifting back (beyond U_FULL), so the aux / diverge lane stays beside the pavement
+      const runPts: P2[] = [];
+      for (let d = 0; d < P.run - 1e-6; d += 8) {
+        const u = startU + d, sp = spread(u);
+        runPts.push({ u, v: shape === 'left' ? LANE_OFF + 9 + sp : RAMP_MED - (DELTA_F - sp) * ((RAMP_MED - 2.7) / DELTA_F) });
+      }
+      const t = new Turtle(startU + P.run, startV, 0).arc(R, (shape === 'left' ? 1 : -1) * 90 * DEG);
+      t.pts.unshift(...runPts);
       const arcEnd = t.pts[t.pts.length - 1];
       const dir = shape === 'left' ? 1 : -1; // tail runs along +v (left) or -v (right)
       const tail: P2[] = [];
@@ -130,7 +145,7 @@ export function clearanceConflicts(ramps: StackRamp[], L = 800): Conflict[] {
 
 /** The median opening check: a ramp must stay clear of the pavement of every carriageway (half pavement 7.3 + ramp half 4.2 + 1.0 m) unless it is at least a level above / below it.
  * Its own source road is skipped for the diverge run and its target road along the merge tail (auxiliary lane beside the pavement). */
-export function medianConflicts(ramps: StackRamp[], tail = 300, run = 100): { ramp: string; road: string; u: number; v: number; d: number }[] {
+export function medianConflicts(ramps: StackRamp[], tail = TAIL_LEN, run = RUN_LEN): { ramp: string; road: string; u: number; v: number; d: number }[] {
   const out: { ramp: string; road: string; u: number; v: number; d: number }[] = [];
   const need = 7.3 + 4.2 + 1.0;
   for (const r of ramps) {
@@ -155,3 +170,8 @@ export function medianConflicts(ramps: StackRamp[], tail = 300, run = 100): { ra
 export const rampMinRadius = (r: StackRamp): number => pathMinR(r.pts);
 export const rampMaxGrade = (r: StackRamp): number => Math.max(...r.ys.slice(1).map((y, i) => Math.abs(y - r.ys[i]) / (r.cum[i + 1] - r.cum[i])));
 export const rampRminLimit = (r: StackRamp): number => DESIGN.radiusMargin * minRadius(r.V);
+
+/** Lane-level terminal check: the run before the arc (exit) and the tail after it (entry) must give the standard length. Returns what is available vs needed. */
+export function terminalLengths(P = { run: RUN_LEN, tail: TAIL_LEN }): { exitHave: number; exitNeed: number; entryHave: number; entryNeed: number } {
+  return { exitHave: P.run, exitNeed: EXIT_NEED, entryHave: P.tail, entryNeed: ENTRY_NEED };
+}
