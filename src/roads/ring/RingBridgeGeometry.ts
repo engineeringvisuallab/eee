@@ -1,0 +1,226 @@
+// STEP 5.3c: GEOMETRY of the ring's structures (pure data: positions / colours / indices, no scene). Absolute world coordinates (the layer parents to world.root like StreetLights).
+// Every structure gets its OWN engineered design (user decision: not all the same, modern):
+//   S1  cable-stayed, one axial mast in the median, two cable planes inside the 6 m median (nothing hangs over the traffic lanes)   <- 5.3c-1 (this file)
+//   S2  steel network arch  /  S3 extradosed  /  S4 truss-bowstring  /  S5, S6 segmental box-girder viaducts with slender piers   <- next steps
+// Until a design exists, the structure gets the plain box girder + parapets + abutments (placeholder, `plainGirder`).
+// The road ribbon (RoadMesh) draws the asphalt on top of the deck; the deck body here lies 2 cm below it (no z-fight).
+import type { RoadNetwork } from '../RoadNetwork';
+import type { BridgeSpec, RoadSpec } from '../RoadTypes';
+import { STRUCT } from './RingStructures';
+
+export interface MeshData {
+  positions: number[];
+  colors: number[];
+  indices: number[];
+}
+export type Rgb = readonly [number, number, number];
+
+/** Colours (linear-ish, flat shaded). */
+export const COL = {
+  deck: [0.74, 0.74, 0.72] as Rgb,
+  underside: [0.52, 0.52, 0.52] as Rgb,
+  parapet: [0.66, 0.66, 0.65] as Rgb,
+  pier: [0.7, 0.7, 0.68] as Rgb,
+  mast: [0.88, 0.88, 0.86] as Rgb,
+  cable: [0.96, 0.96, 0.98] as Rgb,
+} as const;
+
+/** The design of structure number k (0-based, in station order). Anything not listed gets the plain girder. */
+export const RING_DESIGNS: readonly ('cable-stayed' | 'plain')[] = ['cable-stayed', 'plain', 'plain', 'plain', 'plain', 'plain'];
+
+/** Cable-stayed design numbers (S1). All lengths in metres. */
+export const CS = {
+  /** Mast height above the deck. */
+  mastH: 34,
+  /** Mast section (along the road x across) at the deck and at the top. */
+  deckA: 2.6, deckB: 3.4, topA: 1.4, topB: 2.2,
+  /** Cable planes: lateral offset on the deck (inside the median, which is 6 m wide) and on the mast. */
+  planeU: 2.2, mastU: 1.3,
+  /** Position of the mast along the main span (0 = start abutment, 1 = end abutment). */
+  mastAt: 0.3,
+  /** Cables: first anchor distance from the mast, spacing, count on the long and the short side; first / last attachment height above the deck and the mast. */
+  firstAnchor: 8, spacing: 6.2, nLong: 9, nShort: 4, spacingShort: 5.5,
+  topAttach: 30, attachStep: 1.8,
+  /** Cable thickness (square section). */
+  cableT: 0.32,
+} as const;
+
+class Mesher {
+  readonly d: MeshData = { positions: [], colors: [], indices: [] };
+  vert(x: number, y: number, z: number, c: Rgb): number {
+    const n = this.d.positions.length / 3;
+    this.d.positions.push(x, y, z);
+    this.d.colors.push(c[0], c[1], c[2]);
+    return n;
+  }
+  quad(a: number, b: number, c: number, e: number): void {
+    this.d.indices.push(a, b, c, a, c, e);
+  }
+}
+
+interface Frame {
+  x: number; y: number; z: number;
+  /** Unit tangent (x, z) and unit left normal (x, z). */
+  tx: number; tz: number; nx: number; nz: number;
+}
+
+/** Interpolated frame of the road at the arc length `s` (metres from the road's first point). */
+function frameAt(r: RoadSpec, s: number): Frame {
+  const n = r.xs.length;
+  let i = 0;
+  // binary search on cum
+  let lo = 0, hi = n - 1;
+  while (lo < hi - 1) {
+    const m = (lo + hi) >> 1;
+    if (r.cum[m] <= s) lo = m; else hi = m;
+  }
+  i = lo;
+  const j = Math.min(n - 1, i + 1);
+  const seg = Math.max(1e-6, r.cum[j] - r.cum[i]);
+  const t = Math.min(1, Math.max(0, (s - r.cum[i]) / seg));
+  const dx = r.xs[j] - r.xs[i], dz = r.zs[j] - r.zs[i];
+  const l = Math.hypot(dx, dz) || 1;
+  const nxm = r.nx[i] + (r.nx[j] - r.nx[i]) * t, nzm = r.nz[i] + (r.nz[j] - r.nz[i]) * t;
+  const nl = Math.hypot(nxm, nzm) || 1;
+  return { x: r.xs[i] + dx * t, y: r.ys[i] + (r.ys[j] - r.ys[i]) * t, z: r.zs[i] + dz * t, tx: dx / l, tz: dz / l, nx: nxm / nl, nz: nzm / nl };
+}
+
+/** Frame at road point k (exact). */
+const frameAtPoint = (r: RoadSpec, k: number): Frame => frameAt(r, r.cum[k]);
+
+/** A box: centre line from (x, y0, z) up to y1, section `a` along the tangent and `b` across, rotated with the frame. Tapered when a1 / b1 differ. */
+function prism(m: Mesher, f: Frame, y0: number, y1: number, a0: number, b0: number, a1: number, b1: number, c: Rgb): void {
+  const corner = (y: number, a: number, b: number, sa: number, sb: number): number =>
+    m.vert(f.x + f.tx * a * 0.5 * sa + f.nx * b * 0.5 * sb, y, f.z + f.tz * a * 0.5 * sa + f.nz * b * 0.5 * sb, c);
+  const lo = [corner(y0, a0, b0, -1, -1), corner(y0, a0, b0, 1, -1), corner(y0, a0, b0, 1, 1), corner(y0, a0, b0, -1, 1)];
+  const hi = [corner(y1, a1, b1, -1, -1), corner(y1, a1, b1, 1, -1), corner(y1, a1, b1, 1, 1), corner(y1, a1, b1, -1, 1)];
+  for (let q = 0; q < 4; q++) m.quad(lo[q], lo[(q + 1) % 4], hi[(q + 1) % 4], hi[q]);
+  m.quad(hi[0], hi[1], hi[2], hi[3]);
+  m.quad(lo[3], lo[2], lo[1], lo[0]);
+}
+
+/** A thin square-section cable between two points. */
+function cable(m: Mesher, ax: number, ay: number, az: number, bx: number, by: number, bz: number, t: number, c: Rgb): void {
+  const dx = bx - ax, dy = by - ay, dz = bz - az;
+  const l = Math.hypot(dx, dy, dz) || 1;
+  // a vector not parallel to the cable
+  let ux = 0, uy = 1, uz = 0;
+  if (Math.abs(dy / l) > 0.95) { ux = 1; uy = 0; }
+  // p = d x u, q = d x p (both unit)
+  let px = (dy * uz - dz * uy) / l, py = (dz * ux - dx * uz) / l, pz = (dx * uy - dy * ux) / l;
+  const pl = Math.hypot(px, py, pz) || 1; px /= pl; py /= pl; pz /= pl;
+  let qx = (dy * pz - dz * py) / l, qy = (dz * px - dx * pz) / l, qz = (dx * py - dy * px) / l;
+  const ql = Math.hypot(qx, qy, qz) || 1; qx /= ql; qy /= ql; qz /= ql;
+  const h = t / 2;
+  const ring = (x: number, y: number, z: number): number[] => [
+    m.vert(x + (px + qx) * h, y + (py + qy) * h, z + (pz + qz) * h, c),
+    m.vert(x + (-px + qx) * h, y + (-py + qy) * h, z + (-pz + qz) * h, c),
+    m.vert(x + (-px - qx) * h, y + (-py - qy) * h, z + (-pz - qz) * h, c),
+    m.vert(x + (px - qx) * h, y + (py - qy) * h, z + (pz - qz) * h, c),
+  ];
+  const A = ring(ax, ay, az), B = ring(bx, by, bz);
+  for (let q = 0; q < 4; q++) m.quad(A[q], A[(q + 1) % 4], B[(q + 1) % 4], B[q]);
+}
+
+/**
+ * The deck body of a structure: a box girder (trapezoid section, depth STRUCT.deckDepth) lofted along road points i0..i1, parapets on both edges,
+ * and two abutment walls at the ends of the main span (the approach slabs rest on the embankment). Shared by every design.
+ */
+function deck(m: Mesher, roads: RoadNetwork, r: RoadSpec, b: BridgeSpec): void {
+  void roads;
+  const W = b.deckHalfWidth;
+  const D = STRUCT.deckDepth;
+  const sec: [number, number][] = [[-W, -0.02], [W, -0.02], [W, -0.9], [0.55 * W, -D], [-0.55 * W, -D], [-W, -0.9]]; // (u, dy) top-left ... around
+  const rows: number[][] = [];
+  for (let k = b.i0; k <= b.i1; k++) {
+    const f = frameAtPoint(r, k);
+    const ids: number[] = [];
+    for (let q = 0; q < sec.length; q++) {
+      const [u, dy] = sec[q];
+      ids.push(m.vert(f.x + f.nx * u, f.y + dy, f.z + f.nz * u, q >= 2 && q <= 4 ? COL.underside : COL.deck));
+    }
+    rows.push(ids);
+  }
+  for (let k = 0; k + 1 < rows.length; k++) for (let q = 1; q < sec.length; q++) m.quad(rows[k][q], rows[k][(q + 1) % sec.length], rows[k + 1][(q + 1) % sec.length], rows[k + 1][q]);
+  // parapets: 1.1 m high, 0.5 m thick, both edges
+  for (const side of [-1, 1]) {
+    const pr: number[][] = [];
+    for (let k = b.i0; k <= b.i1; k++) {
+      const f = frameAtPoint(r, k);
+      const uo = side * W, ui = side * (W - 0.5);
+      pr.push([
+        m.vert(f.x + f.nx * ui, f.y, f.z + f.nz * ui, COL.parapet),
+        m.vert(f.x + f.nx * uo, f.y, f.z + f.nz * uo, COL.parapet),
+        m.vert(f.x + f.nx * uo, f.y + 1.1, f.z + f.nz * uo, COL.parapet),
+        m.vert(f.x + f.nx * ui, f.y + 1.1, f.z + f.nz * ui, COL.parapet),
+      ]);
+    }
+    for (let k = 0; k + 1 < pr.length; k++) for (let q = 0; q < 4; q++) m.quad(pr[k][q], pr[k][(q + 1) % 4], pr[k + 1][(q + 1) % 4], pr[k + 1][q]);
+  }
+  // abutments at the ends of the main span
+  const ap = Math.ceil(STRUCT.approach / r.step);
+  for (const k of [b.i0 + ap, b.i1 - ap]) {
+    const f = frameAtPoint(r, k);
+    const top = f.y - D;
+    const bottom = Math.min(top - 1, r.hNat[k] - 2);
+    prism(m, f, bottom, top, 3.2, 2 * W - 0.6, 3.2, 2 * W - 0.6, COL.pier);
+  }
+}
+
+/** Placeholder for a structure whose own design is not built yet: the plain girder with abutments. */
+export function plainGirder(roads: RoadNetwork, b: BridgeSpec): MeshData {
+  const m = new Mesher();
+  deck(m, roads, roads.roads[b.roadId], b);
+  return m.d;
+}
+
+/** S1: cable-stayed, one axial mast in the median, two cable planes (fan) in the median. */
+export function cableStayed(roads: RoadNetwork, b: BridgeSpec): MeshData {
+  const r = roads.roads[b.roadId];
+  const m = new Mesher();
+  deck(m, roads, r, b);
+  const ap = Math.ceil(STRUCT.approach / r.step);
+  const s0 = r.cum[b.i0 + ap], s1 = r.cum[b.i1 - ap];
+  const sm = s0 + (s1 - s0) * CS.mastAt; // the mast stands here
+  const fm = frameAt(r, sm);
+  const deckY = fm.y;
+  const bed = Math.min(...[b.i0 + ap, b.i1 - ap].map((k) => r.hNat[k]));
+  // pier under the deck (wider across than the mast, it carries it down to the river bed) ...
+  const kNear = Math.round((sm - r.cum[0]) / r.step);
+  const groundY = Math.min(r.hNat[Math.min(r.xs.length - 1, Math.max(0, kNear))], bed) - 2;
+  prism(m, fm, groundY, deckY - STRUCT.deckDepth, 3.8, 11, 3.0, 6, COL.pier);
+  // ... and the mast above the deck (tapering)
+  prism(m, fm, deckY - STRUCT.deckDepth, deckY + CS.mastH, CS.deckA, CS.deckB, CS.topA, CS.topB, COL.mast);
+  // cables: fan from the mast to the deck, long side (towards the end abutment) and short side
+  const attach = (q: number): number => deckY + CS.topAttach - CS.attachStep * q;
+  for (const side of [-1, 1]) {
+    for (let q = 0; q < CS.nLong; q++) {
+      const s = sm + CS.firstAnchor + CS.spacing * q;
+      if (s > s1) break;
+      const fa = frameAt(r, s);
+      const my = attach(q);
+      cable(m, fm.x + fm.nx * CS.mastU * side, my, fm.z + fm.nz * CS.mastU * side, fa.x + fa.nx * CS.planeU * side, fa.y + 0.15, fa.z + fa.nz * CS.planeU * side, CS.cableT, COL.cable);
+    }
+    for (let q = 0; q < CS.nShort; q++) {
+      const s = sm - (CS.firstAnchor - 2 + CS.spacingShort * q);
+      if (s < s0) break;
+      const fa = frameAt(r, s);
+      const my = attach(q);
+      cable(m, fm.x + fm.nx * CS.mastU * side, my, fm.z + fm.nz * CS.mastU * side, fa.x + fa.nx * CS.planeU * side, fa.y + 0.15, fa.z + fa.nz * CS.planeU * side, CS.cableT, COL.cable);
+    }
+  }
+  return m.d;
+}
+
+/** Geometry of structure number `k` (0-based, station order) of the ring. */
+export function buildStructure(roads: RoadNetwork, b: BridgeSpec, k: number): MeshData {
+  const design = RING_DESIGNS[k] ?? 'plain';
+  return design === 'cable-stayed' ? cableStayed(roads, b) : plainGirder(roads, b);
+}
+
+/** The structures of the ring in station order. */
+export function ringStructures(roads: RoadNetwork): BridgeSpec[] {
+  const ring = roads.roads.find((r) => r.name === 'M8');
+  if (!ring) return [];
+  return roads.bridges.filter((b) => b.roadId === ring.id).sort((a, c) => a.i0 - c.i0);
+}

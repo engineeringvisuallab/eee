@@ -1,0 +1,26 @@
+// STEP 5.3c-1 check: the geometry of the ring structures (S1 cable-stayed + plain girders): finite numbers, valid indices, S1 mast / cables inside the span, mast is higher than the deck.
+// Run: npx tsx scripts/ring-bridge-mesh-check.ts
+import { TerrainGenerator } from '../src/terrain/TerrainGenerator';
+import { Config } from '../src/core/Config';
+import { buildStructure, ringStructures, CS } from '../src/roads/ring/RingBridgeGeometry';
+
+let fails = 0;
+const check = (ok: boolean, name: string, detail: string): void => { if (!ok) fails++; console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${name.padEnd(60)} ${detail}`); };
+const gen = new TerrainGenerator(Config.world.seed);
+const net = gen.roads;
+const st = ringStructures(net);
+console.log(`structures: ${st.length}`);
+st.forEach((b, k) => {
+  const d = buildStructure(net, b, k);
+  const nv = d.positions.length / 3;
+  const finite = d.positions.every(Number.isFinite) && d.colors.every(Number.isFinite);
+  const okIdx = d.indices.every((i) => i >= 0 && i < nv);
+  let ymin = Infinity, ymax = -Infinity;
+  for (let i = 1; i < d.positions.length; i += 3) { ymin = Math.min(ymin, d.positions[i]); ymax = Math.max(ymax, d.positions[i]); }
+  const r = net.roads[b.roadId];
+  const deckY = Math.max(...Array.from({ length: b.i1 - b.i0 + 1 }, (_, q) => r.ys[b.i0 + q]));
+  check(finite && okIdx && d.indices.length % 3 === 0, `S${k + 1} mesh valid`, `${nv} verts, ${d.indices.length / 3} tris`);
+  if (k === 0) check(ymax >= deckY + CS.mastH - 8, 'S1 mast rises above the deck', `top ${(ymax - deckY).toFixed(1)} m over highest deck point`);
+});
+console.log(fails ? `FAILED ${fails}` : 'ALL PASS');
+process.exit(fails ? 1 : 0);

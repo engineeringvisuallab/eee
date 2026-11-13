@@ -63,6 +63,7 @@ import { GoldConfig } from '../economy/Gold';
 import { InputManager } from '../input/InputManager';
 import { VoiceManager } from '../audio/VoiceManager';
 import { Environment, LighthouseLight, StreetLights } from '../environment';
+import { RingStructureLayer } from '../roads/ring/RingStructureLayer';
 import { SignPhysics } from '../signs/SignPhysics';
 import { Toast } from '../ui/Toast';
 import { SuprimHUD } from '../ui/SuprimHUD';
@@ -144,6 +145,8 @@ export class Engine {
   private trafficLights: TrafficLightLayer;
   /** Day / night: street lights on every road + the lighthouse lantern (both follow environment.lampOn). */
   private streetLights: StreetLights;
+  /** STEP 5.3c: ring structures (S1 cable-stayed, the rest plain girders until their designs come). */
+  private ringStructures: RingStructureLayer;
   /** STEP 3: colliders of the fuel stations / charge points (same class as the road signs' physics: bodies only near the player). */
   private stationPhysics: SignPhysics;
   /** Convex road mirrors at the junctions (2 draw calls for the whole map). */
@@ -355,6 +358,7 @@ export class Engine {
     // --- roads & bridges (STAGE 6): the road network lives in TerrainGenerator; here are the bridge visuals/colliders and the debug overlay ---
     const roads = this.world.terrain.roads;
     this.streetLights = new StreetLights(this.world.root, roads);
+    this.ringStructures = new RingStructureLayer(this.world.root, roads);
     this.rail = this.world.terrain.rail;
     this.railDebug = new RailDebug(this.rail);
     this.railPhysics = new RailPhysics(physics, this.world.origin, this.rail, (x, z) => this.world.terrain.heightAt(x, z));
@@ -1643,6 +1647,7 @@ export class Engine {
     this.busStops.dispose();
     this.trafficLights.dispose();
     this.streetLights.dispose();
+    this.ringStructures.dispose();
     this.stationPhysics.dispose();
     this.lighthouseLight?.dispose();
     this.trainRider.dispose();

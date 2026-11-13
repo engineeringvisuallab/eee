@@ -44,3 +44,11 @@ Read `ROAD_CORRECTION_SYSTEM.md` first. All corrections are data in `src/roads/R
 
 ## Other docs
 `VEHICLE_ENERGY_HANDOFF_BN.md` (energy/station steps), `docs/CHARGING_POINTS.md`, `docs/ROAD_SIGNS_HANDOFF_BN.md`, `CHANGES_*.md`.
+
+## Ring structures, Step 5.3c-1 (S1 cable-stayed) - DONE in code, NOT seen in a running game
+- `src/roads/ring/RingBridgeGeometry.ts`: pure mesh data. Shared deck (box girder, parapets, abutments) + `cableStayed()` (one axial mast, tapered, pier to river bed, two cable fans inside the 6 m median). `RING_DESIGNS` picks the design per structure (S1 cable-stayed, S2-S6 plain girder placeholder). Numbers in `CS`.
+- `src/roads/ring/RingStructureLayer.ts`: 3D layer, one Mesh per structure, one vertex-colour material, parent = `world.root`. Hooked in `Engine.ts` next to `streetLights` (field, constructor, dispose; CRLF kept).
+- Lamps: the existing StreetLights already light the bridge decks (no extra lamps added in S1).
+- Check: `npx tsx scripts/ring-bridge-mesh-check.ts` (all pass), `npx tsc --noEmit` clean.
+- Rules kept: S3 grade line unchanged; fill over 25 m becomes a viaduct.
+- Next: look at S1 in the game (mast position `CS.mastAt`, colours), then 5.3c-2 S2 steel network arch, S3 extradosed, S4 bowstring, S5/S6 box-girder viaducts.
