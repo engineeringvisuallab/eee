@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { patchWet } from '../weather/WetSurface';
 import { Config } from '../core/Config';
 import { DIVIDED_SECTIONS } from './RoadSection';
+import { sectionGlslLine, edgesGlsl } from './section/ShaderSection';
 
 /**
  * Concrete-grey road surfaces, slab joints, and lane markings are drawn in the shader (no textures).
@@ -30,9 +31,11 @@ const SIDEWALK = Config.city.roadside.sidewalk.toFixed(3);
 // The shader finds the section from the road half width, so there are no magic half-width numbers for these roads any more.
 const SECTION_GLSL = `vec4 evcSection(float hw) {
 ${DIVIDED_SECTIONS.map((d) => `  if (abs(hw - ${d.halfWidth.toFixed(3)}) < 0.02) return vec4(${d.medianHalf.toFixed(3)}, ${d.laneW.toFixed(3)}, ${d.shyMedian.toFixed(3)}, ${d.lanesPerDir.toFixed(1)});`).join('\n')}
+${sectionGlslLine()}
   return vec4(0.0);
 }
-`;
+// ROADS STEP 5.2b: where the painted edge lines of the ring lie (vec3(0) = any other road: old positions)
+${edgesGlsl()}`;
 const PAVER = Config.city.roadside.paver.toFixed(3);
 const FRAG_HEADER = /* glsl */ `
 varying vec4 vRd;
@@ -116,11 +119,20 @@ const FRAG_COLOR = /* glsl */ `
     float v = (au - (medH + sec.z)) / laneW;
     float lc = abs(fract(v) - 0.5) * laneW;
     float lane = floor(v);
+    // ring (M8): paint positions from the Step 4.5 marking data; wheel wear only on the travel lanes, not on the paved shoulders
+    vec3 edg = evcEdges(hw);
+    bool ringM8 = edg.z > 0.0;
+    float onLanes = ringM8 ? step(0.0, v) * step(v, sec.w) : 1.0;
+    float yAt = ringM8 ? edg.x : medH + 0.35;
+    float wAt = ringM8 ? edg.y : hw - 0.45;
+    float yW = ringM8 ? edg.z : 0.09;
+    float wW = ringM8 ? edg.z : 0.1;
+    float lW = ringM8 ? edg.z : 0.08;
     float laneTone = (evcRdHash(vec2(lane, sign(u) + 3.0)) - 0.5) * 0.018;
     vec3 road = asphaltBase + laneTone;
     float track = 1.0 - smoothstep(0.0, 0.32, abs(lc - 0.85));
-    road *= 1.0 - track * 0.075;
-    road *= 1.0 - (1.0 - smoothstep(0.0, 0.3, lc)) * 0.035 * (0.5 + evcRdNoise(vec2(s * 0.3, lane)));
+    road *= 1.0 - track * 0.075 * onLanes;
+    road *= 1.0 - (1.0 - smoothstep(0.0, 0.3, lc)) * 0.035 * (0.5 + evcRdNoise(vec2(s * 0.3, lane))) * onLanes;
     // ROADS CLEANUP: the old sharp-edged "repair patches" and noise iso-line "cracks" drew swirly dark contour lines on the wide roads.
     // Now: very soft, faint tone drift (no hard edge) and a few thin, faint hairline cracks that run mostly ALONG the road.
     float pnD = evcRdNoise(vec2(u * 0.12 + 11.0, s * 0.05));
@@ -137,12 +149,12 @@ const FRAG_COLOR = /* glsl */ `
     col = mix(col, concrete, med);
     float wearD = 0.72 + 0.28 * evcRdNoise(vec2(u * 3.0, s * 1.3));
     // solid yellow line on the median side, solid white line on the kerb side, dashed white lines between the lanes of one direction
-    col = mix(col, vec3(0.88, 0.68, 0.08), evcLine(au - (medH + 0.35), 0.09) * inRoad * fadeMid * wearD);
-    col = mix(col, vec3(0.86), evcLine(au - (hw - 0.45), 0.1) * inRoad * fadeEdge * wearD);
+    col = mix(col, vec3(0.88, 0.68, 0.08), evcLine(au - yAt, yW) * inRoad * fadeMid * wearD);
+    col = mix(col, vec3(0.86), evcLine(au - wAt, wW) * inRoad * fadeEdge * wearD);
     float ldashD = step(fract(s / 12.0), 0.25);
     float bi = floor(v + 0.5);
     float onLaneLine = step(1.0, bi) * step(bi, sec.w - 1.0);
-    col = mix(col, vec3(0.86), evcLine((v - bi) * laneW, 0.08) * ldashD * onLaneLine * inRoad * fadeMid * wearD);
+    col = mix(col, vec3(0.86), evcLine((v - bi) * laneW, lW) * ldashD * onLaneLine * inRoad * fadeMid * wearD);
   } else if (isLocalRd) {
     // ---- LOCAL STREET: concrete carriageway, kerb, and lighter concrete footpath with joints ----
     float walk = smoothstep(hw - 0.12, hw + 0.12, au);
@@ -264,6 +276,6 @@ export class RoadMaterial extends THREE.MeshLambertMaterial {
       // RAIN: wet asphalt (darker, shiny, puddles, rain rings)
       patchWet(shader, { darken: 0.4, gloss: 1.0, puddle: 1.0 });
     };
-    this.customProgramCacheKey = () => 'evc-road-v16-soft-wear';
+    this.customProgramCacheKey = () => 'evc-road-v17-m8-section';
   }
 }
