@@ -1,0 +1,45 @@
+=== 2.2 RING ALIGNMENT (V100, 8 PIs, game coordinates) ===
+  length 20.936 km, 32 elements, Rmin(V100) 394 m, needed R >= 591 m
+
+  PI table
+   PI        x         z     turn    R    Ls     Ts    arc deg  arc m  straight after  needs   TS      SC      CS      ST   (stations, m)
+   0      -4.7    2384.2     3.47  9260   100   330.7     2.85    461        1217       600   20275   20375   20836   20936
+   1   -2099.1    2396.2    71.00   696   100   546.9    62.77    763         764       600    1217    1317    2079    2179
+   2   -2648.3     830.2    14.46  2354   100   348.7    12.03    494        3093       600    2943    3043    3537    3637
+   3   -2992.3   -3212.1    82.00   650   100   615.6    73.19    830         613       600    6730    6830    7660    7760
+   4   -1651.7   -3518.2     5.93  1864   100   146.5     2.85     93        1977       600    8373    8473    8566    8666
+   5     636.7   -3796.6    16.38   914   100   181.6    10.12    161         777       600   10643   10743   10905   11005
+   6    2677.7   -3457.0    80.26  1258   100  1110.8    75.71   1662        3729       600   11781   11881   13543   13643
+   7    2706.6    2204.0    86.49   820   100   821.7    79.50   1138        1565       600   17372   17472   18610   18710
+
+  Design checks per PI
+  PASS  PI 0: R 9260 (margin 23.52), Ls 100 >= 60, arc 2.9 deg, straight 1217 >= 600, e needed 0.0 % (normal crown)
+  PASS  PI 1: R 696 (margin 1.77), Ls 100 >= 60, arc 62.8 deg, straight 764 >= 600, e needed 0.0 % (normal crown)
+  PASS  PI 2: R 2354 (margin 5.98), Ls 100 >= 60, arc 12.0 deg, straight 3093 >= 600, e needed 0.0 % (normal crown)
+  PASS  PI 3: R 650 (margin 1.65), Ls 100 >= 60, arc 73.2 deg, straight 613 >= 600, e needed 0.1 % 
+  PASS  PI 4: R 1864 (margin 4.73), Ls 100 >= 60, arc 2.9 deg, straight 1977 >= 600, e needed 0.0 % (normal crown)
+  PASS  PI 5: R 914 (margin 2.32), Ls 100 >= 60, arc 10.1 deg, straight 777 >= 600, e needed 0.0 % (normal crown)
+  PASS  PI 6: R 1258 (margin 3.20), Ls 100 >= 60, arc 75.7 deg, straight 3729 >= 600, e needed 0.0 % (normal crown)
+  PASS  PI 7: R 820 (margin 2.08), Ls 100 >= 60, arc 79.5 deg, straight 1565 >= 600, e needed 0.0 % (normal crown)
+
+=== Closure test (dead reckoning around the loop) ===
+  PASS  position gap                                 4.05e-12 m (limit 0.01 m)
+  PASS  heading gap                                  1.02e-13 deg (limit 0.01 deg)
+  PASS  curvature gap                                0.00e+0 1/m (limit 0.000001)
+  PASS  total turning = 360 deg                      360.000000 deg
+
+=== 2.3 Smoothness report (section 3.12) on samples every 5 m ===
+  4188 samples, ds 4.999 m
+  PASS  1 only straight-spiral-arc (kinds present)   straight, spiral-in, arc, spiral-out
+  PASS  2 no kink (change of heading step)           0 kinks, max heading step 0.441 deg per 5.0 m
+  PASS  3 curvature continuous, dk/ds <= 1/(R Ls)    max dk/ds 1.54e-5 (largest allowed 1.54e-5)
+  PASS  4 radius margin R >= 1.5 x Rmin              smallest R 650 m, limit 591 m; smallest on 200 m arms 650 m at station 7204
+  PASS  5 compound curves: none (every curve has its own arc and the neighbours are separated by straights) smallest straight 613 m
+  PASS  6 broken-back: straight >= 6 V (600 m) between same-direction curves same-direction pairs 8 of 8
+  PASS  7 reverse curves: straight >= 2 V (200 m)    reverse pairs 0
+
+=== Fit to the reference shape (Roads.zip F3), distance in m ===
+  reference -> new line: mean 39.4, p95 142.4, max 203.0
+  new line -> reference: mean 37.7, p95 135.9, max 196.4
+
+ALL CHECKS PASS
