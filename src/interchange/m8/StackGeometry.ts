@@ -2,12 +2,13 @@
 // Road A stays on the ground (level 1). Road B is level 4 (20.7 m) over the crossing and falls to the ground at 4 %. 8 ramps = 2 shapes (left slip, right flyover) x 4 rotations.
 import { DEG, Turtle, minRadius as pathMinR, pathLength, resample, rot90, crossings, type P2 } from '../Geometry2D';
 import { DESIGN } from '../../roads/standards/Criteria';
+import { stoppingSight } from '../Standards';
 import { accelLength, decelLength, entryTaperLength, exitTaperLength, laneDropTaper, minRadius } from '../../roads/standards/Checks';
 import { LEVEL_RISE } from './M8Designs';
 
 export const LANE_OFF = 12; // centre of a carriageway from the road axis (outer lane), m
 export const B_TOP = 3 * LEVEL_RISE; // road B over the crossing
-export const B_FLAT = 110; // road B stays at full height this far each side of the centre (the ramps pass under it)
+export const B_FLAT = 110; // road B stays at full height this far each side of the centre (the ramps pass under it). Sweep (m8-stack-check): 85 m fails (R1 / R3 level-3 ramps come within 12.5 m of B pavement), 90 m is the minimum that passes, so 110 keeps 20 m margin
 /** MEDIAN OPENING: the two carriageways of a road move apart by DELTA_F (full from the crossing out to U_FULL), then come back over a shift taper (lane-drop rule 0.62 W V per lane of shift).
  * The directional ramps run in the opened median, 6 m clear of the pavement edge. */
 export const DELTA_F = 9.5;
@@ -174,4 +175,55 @@ export const rampRminLimit = (r: StackRamp): number => DESIGN.radiusMargin * min
 /** Lane-level terminal check: the run before the arc (exit) and the tail after it (entry) must give the standard length. Returns what is available vs needed. */
 export function terminalLengths(P = { run: RUN_LEN, tail: TAIL_LEN }): { exitHave: number; exitNeed: number; entryHave: number; entryNeed: number } {
   return { exitHave: P.run, exitNeed: EXIT_NEED, entryHave: P.tail, entryNeed: ENTRY_NEED };
+}
+
+// ---- lane-level gore spacing -------------------------------------------------------------------------------------------------------------------
+/** Gore events per carriageway: where each ramp leaves its source carriageway (exit, ramp start) and joins its target one (entry, ramp end), as a coordinate along the road. */
+export interface GoreEvent { ramp: string; carriageway: string; kind: 'exit' | 'entry'; s: number }
+/** Carriageway id + the side the ramp lane sits on (outer / median), because gores on opposite sides of one carriageway do not weave. */
+const cwOf = (road: 'A' | 'B', p: P2): string => {
+  const lat = road === 'A' ? p.v : -p.u; // + = the + carriageway
+  const t = road === 'A' ? p.u : p.v;
+  const side = Math.abs(lat) > cOff(t) ? 'outer' : 'median';
+  return `${road}${lat >= 0 ? '+' : '-'} ${side}`;
+};
+export function goreEvents(ramps: StackRamp[]): GoreEvent[] {
+  const out: GoreEvent[] = [];
+  for (const r of ramps) {
+    const a = r.pts[0], b = r.pts[r.pts.length - 1];
+    out.push({ ramp: r.id, carriageway: cwOf(r.source, a), kind: 'exit', s: r.source === 'A' ? a.u : a.v });
+    out.push({ ramp: r.id, carriageway: cwOf(r.target, b), kind: 'entry', s: r.target === 'A' ? b.u : b.v });
+  }
+  return out;
+}
+/** Smallest distance between two gores on the same carriageway (minimum wanted: the stopping sight distance of the road speed). */
+export function minGoreSpacing(ev: GoreEvent[]): { min: number; need: number; a: string; b: string } {
+  const need = stoppingSight(DESIGN.ringSpeed);
+  let min = Infinity, ea = '', eb = '';
+  for (const cw of new Set(ev.map((e) => e.carriageway))) {
+    const l = ev.filter((e) => e.carriageway === cw).sort((x, y) => x.s - y.s);
+    for (let i = 1; i < l.length; i++) if (l[i].s - l[i - 1].s < min) { min = l[i].s - l[i - 1].s; ea = `${l[i - 1].ramp} ${l[i - 1].kind}`; eb = `${l[i].ramp} ${l[i].kind} (${cw})`; }
+  }
+  return { min, need, a: ea, b: eb };
+}
+
+// ---- structure take-off (piers, abutments, retaining walls) -----------------------------------------------------------------------------------
+export const VIADUCT_FILL = 7.5; // m, same rule as RoadNetwork (a fill higher than this becomes a viaduct)
+export const PIER_SPAN = 40; // m, ramp viaduct span
+export const ABUT_FILL = 0.5; // m, below this the deck is on the ground
+export interface RampTakeoff { id: string; atGrade: number; embankment: number; viaduct: number; piers: number; maxPierH: number; abutments: number; wallLen: number }
+/** Splits each ramp by height above ground: embankment (0.5 .. 7.5 m) gets a retaining wall on both sides, viaduct (> 7.5 m) gets piers every PIER_SPAN (height = deck - STRUCT deck depth 2.2), every change gets an abutment. */
+export function structureTakeoff(ramps: StackRamp[], deckDepth = 2.2): RampTakeoff[] {
+  return ramps.map((r) => {
+    let atGrade = 0, emb = 0, via = 0, abut = 0, maxH = 0, prev = 0;
+    for (let i = 1; i < r.ys.length; i++) {
+      const ds = r.cum[i] - r.cum[i - 1];
+      const y = (r.ys[i] + r.ys[i - 1]) / 2;
+      const cls = y <= ABUT_FILL ? 0 : y <= VIADUCT_FILL ? 1 : 2;
+      if (cls === 0) atGrade += ds; else if (cls === 1) emb += ds; else { via += ds; maxH = Math.max(maxH, y - deckDepth); }
+      if (i > 1 && cls !== prev && (cls === 2 || prev === 2)) abut++;
+      prev = cls;
+    }
+    return { id: r.id, atGrade, embankment: emb, viaduct: via, piers: via > 0 ? Math.ceil(via / PIER_SPAN) - 1 : 0, maxPierH: maxH, abutments: abut, wallLen: 2 * emb };
+  });
 }

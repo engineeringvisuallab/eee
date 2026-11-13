@@ -1,7 +1,7 @@
 // STEP 9.2 J1 stack check: ramp radius, grade, and vertical clearance at every crossing. Writes docs/m8_stack_plan.json for the plan picture.
 // Run: npx tsx scripts/m8-stack-check.ts
 import { writeFileSync } from 'node:fs';
-import { buildStack, clearanceConflicts, medianConflicts, DELTA_F, SHIFT_LEN, terminalLengths, U_FULL, rampMaxGrade, rampMinRadius, rampRminLimit } from '../src/interchange/m8/StackGeometry';
+import { buildStack, clearanceConflicts, medianConflicts, DELTA_F, SHIFT_LEN, terminalLengths, goreEvents, minGoreSpacing, structureTakeoff, U_FULL, rampMaxGrade, rampMinRadius, rampRminLimit } from '../src/interchange/m8/StackGeometry';
 
 const ramps = buildStack();
 let fails = 0;
@@ -22,5 +22,13 @@ const tl = terminalLengths();
 const okT = tl.exitHave >= tl.exitNeed && tl.entryHave >= tl.entryNeed;
 console.log(`  ${okT ? 'PASS' : 'FAIL'}  terminals: exit run ${tl.exitHave} m (need ${tl.exitNeed.toFixed(0)} = decel + taper), entry tail ${tl.entryHave} m (need ${tl.entryNeed.toFixed(0)} = accel + taper)`);
 if (!okT) fails++;
+const gs = minGoreSpacing(goreEvents(ramps));
+const okG = gs.min >= gs.need;
+console.log(`  ${okG ? 'PASS' : 'FAIL'}  gore spacing: min ${gs.min.toFixed(0)} m (${gs.a} -> ${gs.b}), need >= SSD ${gs.need.toFixed(0)} m`);
+if (!okG) fails++;
+const tk = structureTakeoff(ramps);
+let tot = { v: 0, e: 0, p: 0, a: 0, w: 0 };
+for (const t of tk) { tot = { v: tot.v + t.viaduct, e: tot.e + t.embankment, p: tot.p + t.piers, a: tot.a + t.abutments, w: tot.w + t.wallLen }; console.log(`  take-off ${t.id}: ground ${t.atGrade.toFixed(0)} m, embankment ${t.embankment.toFixed(0)} m (walls ${t.wallLen.toFixed(0)} m), viaduct ${t.viaduct.toFixed(0)} m, piers ${t.piers} (max ${t.maxPierH.toFixed(1)} m), abutments ${t.abutments}`); }
+console.log(`  take-off total: viaduct ${tot.v.toFixed(0)} m, embankment ${tot.e.toFixed(0)} m, wall ${tot.w.toFixed(0)} m, piers ${tot.p}, abutments ${tot.a}`);
 writeFileSync('docs/m8_stack_plan.json', JSON.stringify(ramps.map((r) => ({ id: r.id, shape: r.shape, u: r.pts.map((p) => +p.u.toFixed(1)), v: r.pts.map((p) => +p.v.toFixed(1)), y: r.ys.map((y) => +y.toFixed(2)) }))));
 console.log(fails || cf.length ? `FAILED radius/grade ${fails}, clearance ${cf.length}` : 'ALL PASS');
