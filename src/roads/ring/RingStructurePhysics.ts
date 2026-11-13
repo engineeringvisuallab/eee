@@ -43,7 +43,7 @@ export class RingStructurePhysics {
     const v = new Float32Array(s.positions.length);
     for (let i = 0; i < v.length; i += 3) { v[i] = s.positions[i] - ox; v[i + 1] = s.positions[i + 1]; v[i + 2] = s.positions[i + 2] - oz; }
     const body = world.createRigidBody(R.RigidBodyDesc.fixed());
-    world.createCollider(R.ColliderDesc.trimesh(v, s.indices).setFriction(0.9), body);
+    world.createCollider(R.ColliderDesc.trimesh(v, s.indices, R.TriMeshFlags.FIX_INTERNAL_EDGES).setFriction(0.9), body);
     this.active.set(id, body);
   }
 

@@ -16,15 +16,27 @@ import { buildStructure, ringStructures } from '../src/roads/ring/RingBridgeGeom
     world.createCollider(RAPIER.ColliderDesc.trimesh(new Float32Array(d.positions.concat(d.collider!.positions)), new Uint32Array(d.indices.concat(d.collider!.indices.map((i) => i + base)))));
     const r = net.roads[b.roadId];
     const kk = (b.i0 + b.i1) >> 1;
-    // a point on the carriageway (offset 12 m from the axis, clear of median cables / pylon)
-    const x = r.xs[kk] + r.nx[kk] * 12, z = r.zs[kk] + r.nz[kk] * 12, roadY = r.ys[kk];
-    const ball = world.createRigidBody(RAPIER.RigidBodyDesc.dynamic().setTranslation(x, roadY + 3, z));
-    world.createCollider(RAPIER.ColliderDesc.ball(0.4), ball);
-    for (let i = 0; i < 240; i++) world.step();
-    const y = ball.translation().y;
-    const ok = Math.abs(y - (roadY + 0.4)) < 0.35;
-    if (!ok) fails++;
-    console.log(`  ${ok ? 'PASS' : 'FAIL'}  S${k + 1} ball rests on the deck   road ${roadY.toFixed(2)}  ball centre ${y.toFixed(2)}`);
+    // drop points on the carriageway (offset 12 m from the axis): mid-span, 8 m before the start, 8 m after the end, 4 m inside each end
+    const at = (kIdx: number, dk: number): [number, number, number] => {
+      const j = Math.min(r.xs.length - 1, Math.max(0, kIdx));
+      const t = dk / r.step; // dk in metres along the road
+      const j2 = Math.min(r.xs.length - 1, Math.max(0, j + Math.round(t)));
+      return [r.xs[j2] + r.nx[j2] * 12, r.ys[j2], r.zs[j2] + r.nz[j2] * 12];
+    };
+    const pts: [string, [number, number, number]][] = [
+      ['mid-span', at(kk, 0)], ['8 m before start', at(b.i0, -8)], ['8 m after end', at(b.i1, 8)],
+      ['4 m inside start', at(b.i0, 4)], ['4 m inside end', at(b.i1, -4)],
+    ];
+    for (const [name, [x, roadY, z]] of pts) {
+      const ball = world.createRigidBody(RAPIER.RigidBodyDesc.dynamic().setTranslation(x, roadY + 3, z));
+      world.createCollider(RAPIER.ColliderDesc.ball(0.4), ball);
+      for (let i = 0; i < 240; i++) world.step();
+      const y = ball.translation().y;
+      const ok = Math.abs(y - (roadY + 0.4)) < 0.35;
+      if (!ok) fails++;
+      console.log(`  ${ok ? 'PASS' : 'FAIL'}  S${k + 1} ${name.padEnd(17)} road ${roadY.toFixed(2)}  ball centre ${y.toFixed(2)}`);
+      world.removeRigidBody(ball);
+    }
   });
   console.log(fails ? `FAILED ${fails}` : 'ALL PASS');
   process.exit(fails ? 1 : 0);
