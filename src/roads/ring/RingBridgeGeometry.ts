@@ -28,7 +28,7 @@ export const COL = {
 } as const;
 
 /** The design of structure number k (0-based, in station order). Anything not listed gets the plain girder. */
-export const RING_DESIGNS: readonly ('cable-stayed' | 'network-arch' | 'extradosed' | 'bowstring' | 'plain')[] = ['cable-stayed', 'network-arch', 'extradosed', 'bowstring', 'plain', 'plain'];
+export const RING_DESIGNS: readonly ('cable-stayed' | 'network-arch' | 'extradosed' | 'bowstring' | 'viaduct' | 'plain')[] = ['cable-stayed', 'network-arch', 'extradosed', 'bowstring', 'viaduct', 'viaduct'];
 
 /** Cable-stayed design numbers (S1). All lengths in metres. */
 export const CS = {
@@ -84,6 +84,18 @@ export const BS = {
   panels: 14,
   /** Cross struts between the two chords at these span fractions. */
   struts: [0.15, 0.3, 0.5, 0.7, 0.85],
+} as const;
+
+/** Segmental box-girder viaduct numbers (S5, S6): slender twin-column piers (one column under each carriageway) with a cross-beam cap, evenly spaced. */
+export const VI = {
+  /** Target span between piers: short viaduct / long viaduct (main span longer than `longAbove`). */
+  spanShort: 36, spanLong: 48, longAbove: 200,
+  /** Column offset from the road axis, section at the foot (along x across) and at the top. */
+  colU: 12, footA: 2.2, footB: 2.4, topA: 1.6, topB: 2.0,
+  /** Cross-beam cap: height under the deck, length along the road, half length across. */
+  capH: 1.6, capA: 2.8, capHalf: 15.5,
+  /** The column goes this far below the lowest natural ground of the road points around it. */
+  embed: 6,
 } as const;
 
 class Mesher {
@@ -355,6 +367,32 @@ export function bowstring(roads: RoadNetwork, b: BridgeSpec): MeshData {
   return m.d;
 }
 
+/** S5 / S6: segmental box-girder viaduct = the shared deck on slender twin-column piers with cross-beam caps. */
+export function viaduct(roads: RoadNetwork, b: BridgeSpec): MeshData {
+  const r = roads.roads[b.roadId];
+  const m = new Mesher();
+  deck(m, roads, r, b);
+  const ap = Math.ceil(STRUCT.approach / r.step);
+  const s0 = r.cum[b.i0 + ap], s1 = r.cum[b.i1 - ap];
+  const L = s1 - s0;
+  const n = Math.max(1, Math.round(L / (L > VI.longAbove ? VI.spanLong : VI.spanShort)));
+  for (let i = 1; i < n; i++) {
+    const s = s0 + (L * i) / n;
+    const f = frameAt(r, s);
+    const k = Math.round(s / r.step);
+    let low = Infinity;
+    for (let q = k - 1; q <= k + 1; q++) low = Math.min(low, r.hNat[Math.min(r.xs.length - 1, Math.max(0, q))]);
+    const foot = low - VI.embed;
+    const under = f.y - STRUCT.deckDepth;
+    for (const side of [-1, 1]) {
+      const fc: Frame = { ...f, x: f.x + f.nx * VI.colU * side, z: f.z + f.nz * VI.colU * side };
+      prism(m, fc, foot, under - VI.capH, VI.footA, VI.footB, VI.topA, VI.topB, COL.pier);
+    }
+    prism(m, f, under - VI.capH, under, VI.capA, 2 * VI.capHalf, VI.capA, 2 * VI.capHalf, COL.pier);
+  }
+  return m.d;
+}
+
 /** Geometry of structure number `k` (0-based, station order) of the ring. */
 export function buildStructure(roads: RoadNetwork, b: BridgeSpec, k: number): MeshData {
   const design = RING_DESIGNS[k] ?? 'plain';
@@ -362,6 +400,7 @@ export function buildStructure(roads: RoadNetwork, b: BridgeSpec, k: number): Me
   if (design === 'network-arch') return networkArch(roads, b);
   if (design === 'extradosed') return extradosed(roads, b);
   if (design === 'bowstring') return bowstring(roads, b);
+  if (design === 'viaduct') return viaduct(roads, b);
   return plainGirder(roads, b);
 }
 

@@ -67,3 +67,10 @@ Read `ROAD_CORRECTION_SYSTEM.md` first. All corrections are data in `src/roads/R
 - `RingBridgeGeometry.ts`: `bowstring()` + `BS` numbers. Two steel trusses in the median (top chord rise 0.14 x span, 14 panels, verticals + Warren diagonals, 5 cross struts), deck = bottom chord. `RING_DESIGNS[3] = 'bowstring'`. S2, S3 not yet seen in the game.
 - Check: `scripts/ring-bridge-mesh-check.ts` all pass, `tsc` clean.
 - Next: S5 and S6 segmental box-girder viaducts with slender piers (5.3c-5; S6 is 800 m long, 100 points, needs a pier count/instancing decision).
+
+## Ring structures, Step 5.3c-5 (S5 + S6 box-girder viaducts) - DONE in code, NOT seen in a running game
+- `RingBridgeGeometry.ts`: `viaduct()` + `VI` numbers. Shared deck on slender twin-column piers (one column under each carriageway, tapering) with a cross-beam cap; span 36 m (S5: 1 pier) / 48 m (S6: 15 piers). `RING_DESIGNS[4..5] = 'viaduct'`.
+- Column foot = lowest natural ground of 3 road points around the pier minus `VI.embed` (6 m). Ground beside the road is not sampled (pure geometry), so on a steep valley side a column may stand a little high: check in the game and raise `embed` if a column floats.
+- No segment joints / haunches drawn (deck depth is the fixed STRUCT.deckDepth that the terrain carve uses).
+- All six ring structures now have their own design (S1 cable-stayed, S2 network arch, S3 extradosed, S4 bowstring, S5/S6 viaduct). Seen in the game so far: S1 only.
+- Check: `scripts/ring-bridge-mesh-check.ts` all pass, `tsc` clean.
