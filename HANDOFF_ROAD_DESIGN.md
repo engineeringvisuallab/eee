@@ -579,7 +579,9 @@ Road signs, traffic lights logic changes, new vehicle types, weather effects on 
 | 7 | All other classes (flat land) | not started | | |
 | 7H | Hill and mountain roads | not started | | |
 | 8 | At-grade junctions | not started | | |
-| 9 | Interchanges and flyovers | not started | | |
+| 9.1 | Interchange schedule, four M8 x M8 | proposal done, waiting OK | | User decision 2026-11-13: four junctions of 8 lane x 8 lane, each a DIFFERENT design. Proposed: J1 stack (4 level), J2 turbine (3 level), J3 full cloverleaf with collector-distributor roads (2 level), J4 hybrid (2 direct flyovers + 2 loops, 3 level). Sizing (pure math, assumed flows until 6.4): src/interchange/m8/M8Designs.ts, scripts/m8-interchange-sizing.ts ALL PASS (ramp R >= 1.5 x Rmin, lane capacity, lane balance). Locations NOT fixed: they need the outward M8 roads (6.3). Next 9.2: ramp centrelines + profile of J1, one type at a time |
+| 9.2 | Interchange geometry per type | not started | | |
+| 9.3-9.4 | Flyovers, service roads | not started | | |
 | 10 | Network and hierarchy | not started | | |
 | 11 | Traffic graph | not started | | |
 | 12 | Furniture and signs | not started | | |
