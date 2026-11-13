@@ -93,3 +93,6 @@ Read `ROAD_CORRECTION_SYSTEM.md` first. All corrections are data in `src/roads/R
 - Fix: the collision-only deck top (`MeshData.collider`) now runs `COLLIDER_EXT` = 2 road points past both ends, level with the road (-5 mm), faces up. `RingStructurePhysics` builds the trimesh with `TriMeshFlags.FIX_INTERNAL_EDGES` (same as TerrainPhysics) so seams do not push a wheel sideways.
 - Check: `scripts/ring-bridge-physics-check.ts` drops a ball mid-span, 8 m before the start, 8 m after the end and 4 m inside both ends of every structure: 30 balls, ALL PASS. `tsc` clean, mesh check ALL PASS. (The check uses the structure mesh only, not the terrain collider.)
 - If a car still jerks: tell which end / structure; next tools are a thicker slab (boxes) instead of the single top face, and a finer terrain collider cell size near the ring.
+
+- 2026-11-13: J1-c split into small steps (c1 pad plane DONE; c2..c5 one arm each N,E,S,W; c6 game pad + terrain). See HANDOFF_ROAD_DESIGN.md row J1-c.
+- NEXT (J1-c2): arm N profile, s 0..500 m from J1 pad (y 18.25 m, plane a -0.00342 b 0.00384 in docs/j1c1.json). Use probe: ground on N rises 18 -> 34 m at s 500 (W 17 -> 43 m). Vertical curve, grade <= 3 %, side-slope earthwork, one arm per step. User now wants CHANGED FILES ONLY in the zip (2026-11-13) and HANDOFF updated each step.
