@@ -46,7 +46,7 @@ export const M8_DESIGNS: readonly M8Design[] = [
     why: 'Highest demand: every movement direct, no loop, no weave. One road on level 1, ramps on levels 2 and 3, the other road on level 4.',
     quadrant: [
       { turn: 'left', shape: 'slip', V: 60, R: 175, flow: 1800, level: 2 },
-      { turn: 'right', shape: 'flyover', V: 80, R: 350, flow: 1400, level: 3 },
+      { turn: 'right', shape: 'flyover', V: 60, R: 175, flow: 1400, level: 3 },
     ],
   },
   {
