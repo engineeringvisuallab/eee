@@ -2,7 +2,7 @@
 // Run: npx tsx scripts/ring-bridge-mesh-check.ts
 import { TerrainGenerator } from '../src/terrain/TerrainGenerator';
 import { Config } from '../src/core/Config';
-import { buildStructure, ringStructures, CS, NA, EX } from '../src/roads/ring/RingBridgeGeometry';
+import { buildStructure, ringStructures, CS, NA, EX, BS } from '../src/roads/ring/RingBridgeGeometry';
 
 let fails = 0;
 const check = (ok: boolean, name: string, detail: string): void => { if (!ok) fails++; console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${name.padEnd(60)} ${detail}`); };
@@ -23,6 +23,7 @@ st.forEach((b, k) => {
   if (k === 0) check(ymax >= deckY + CS.mastH - 8, 'S1 mast rises above the deck', `top ${(ymax - deckY).toFixed(1)} m over highest deck point`);
   if (k === 1) check(ymax - deckY >= 0.8 * NA.rise * 40 && ymax - deckY < 12, 'S2 arch rises over the deck', `top ${(ymax - deckY).toFixed(1)} m over highest deck point`);
   if (k === 2) check(ymax - deckY >= EX.pylonH - 1 && ymax - deckY < EX.pylonH + 2, 'S3 pylon height over the deck', `top ${(ymax - deckY).toFixed(1)} m over highest deck point`);
+  if (k === 3) check(ymax - deckY >= 0.8 * BS.rise * 56 && ymax - deckY < 14, 'S4 top chord rises over the deck', `top ${(ymax - deckY).toFixed(1)} m over highest deck point`);
 });
 console.log(fails ? `FAILED ${fails}` : 'ALL PASS');
 process.exit(fails ? 1 : 0);

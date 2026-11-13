@@ -62,3 +62,8 @@ Read `ROAD_CORRECTION_SYSTEM.md` first. All corrections are data in `src/roads/R
 - `RingBridgeGeometry.ts`: `extradosed()` + `EX` numbers. One low pylon (7.5 m) in the median at mid-span, standing on the deck (no river pier), 2 planes x 2 sides x 4 shallow cables. `RING_DESIGNS[2] = 'extradosed'`. S2 not yet seen in the game.
 - Check: `scripts/ring-bridge-mesh-check.ts` all pass, `tsc` clean.
 - Next: S4 truss-bowstring (5.3c-4), S5/S6 box-girder viaducts with slender piers.
+
+## Ring structures, Step 5.3c-4 (S4 truss-bowstring) - DONE in code, NOT seen in a running game
+- `RingBridgeGeometry.ts`: `bowstring()` + `BS` numbers. Two steel trusses in the median (top chord rise 0.14 x span, 14 panels, verticals + Warren diagonals, 5 cross struts), deck = bottom chord. `RING_DESIGNS[3] = 'bowstring'`. S2, S3 not yet seen in the game.
+- Check: `scripts/ring-bridge-mesh-check.ts` all pass, `tsc` clean.
+- Next: S5 and S6 segmental box-girder viaducts with slender piers (5.3c-5; S6 is 800 m long, 100 points, needs a pier count/instancing decision).

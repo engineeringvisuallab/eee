@@ -28,7 +28,7 @@ export const COL = {
 } as const;
 
 /** The design of structure number k (0-based, in station order). Anything not listed gets the plain girder. */
-export const RING_DESIGNS: readonly ('cable-stayed' | 'network-arch' | 'extradosed' | 'plain')[] = ['cable-stayed', 'network-arch', 'extradosed', 'plain', 'plain', 'plain'];
+export const RING_DESIGNS: readonly ('cable-stayed' | 'network-arch' | 'extradosed' | 'bowstring' | 'plain')[] = ['cable-stayed', 'network-arch', 'extradosed', 'bowstring', 'plain', 'plain'];
 
 /** Cable-stayed design numbers (S1). All lengths in metres. */
 export const CS = {
@@ -70,6 +70,20 @@ export const EX = {
   /** Cables per side: first anchor distance from the pylon, spacing, count; first attachment below the pylon top, step down. */
   firstAnchor: 4.5, spacing: 3.4, n: 4, topDrop: 0.7, attachStep: 0.9,
   cableT: 0.3,
+} as const;
+
+/** Truss-bowstring design numbers (S4): two steel trusses in the median (parabolic top chord, verticals + Warren diagonals), the deck is the bottom chord. */
+export const BS = {
+  /** Rise of the top chord as a fraction of the span. */
+  rise: 0.14,
+  /** Truss plane offset (inside the 6 m median). */
+  trussU: 2.2,
+  /** Top chord section, web member section. */
+  chordT: 0.8, webT: 0.3,
+  /** Number of panels along the span. */
+  panels: 14,
+  /** Cross struts between the two chords at these span fractions. */
+  struts: [0.15, 0.3, 0.5, 0.7, 0.85],
 } as const;
 
 class Mesher {
@@ -304,12 +318,50 @@ export function extradosed(roads: RoadNetwork, b: BridgeSpec): MeshData {
   return m.d;
 }
 
+/** S4: truss-bowstring. Two steel trusses in the median: parabolic top chord, a vertical at every panel point, diagonals alternating (Warren). */
+export function bowstring(roads: RoadNetwork, b: BridgeSpec): MeshData {
+  const r = roads.roads[b.roadId];
+  const m = new Mesher();
+  deck(m, roads, r, b);
+  const ap = Math.ceil(STRUCT.approach / r.step);
+  const s0 = r.cum[b.i0 + ap], s1 = r.cum[b.i1 - ap];
+  const L = s1 - s0;
+  const f = L * BS.rise;
+  const at = (t: number): Frame => frameAt(r, s0 + L * t);
+  const archY = (t: number, fr: Frame): number => fr.y + 4 * f * t * (1 - t);
+  const P = BS.panels;
+  for (const side of [-1, 1]) {
+    const u = BS.trussU * side;
+    const top = (t: number): [number, number, number] => { const fr = at(t); return [fr.x + fr.nx * u, archY(t, fr), fr.z + fr.nz * u]; };
+    const bot = (t: number): [number, number, number] => { const fr = at(t); return [fr.x + fr.nx * u, fr.y + 0.15, fr.z + fr.nz * u]; };
+    for (let q = 0; q < P; q++) {
+      const a = top(q / P), c = top((q + 1) / P);
+      cable(m, a[0], a[1], a[2], c[0], c[1], c[2], BS.chordT, COL.steel);
+      // diagonal: alternates direction panel by panel
+      const d0 = q % 2 === 0 ? bot(q / P) : bot((q + 1) / P);
+      const d1 = q % 2 === 0 ? top((q + 1) / P) : top(q / P);
+      cable(m, d0[0], d0[1], d0[2], d1[0], d1[1], d1[2], BS.webT, COL.hanger);
+    }
+    for (let q = 1; q < P; q++) {
+      const a = bot(q / P), c = top(q / P);
+      cable(m, a[0], a[1], a[2], c[0], c[1], c[2], BS.webT, COL.hanger);
+    }
+  }
+  for (const t of BS.struts) {
+    const fr = at(t);
+    const y = archY(t, fr);
+    prism(m, fr, y - 0.3, y + 0.3, 0.6, 2 * BS.trussU, 0.6, 2 * BS.trussU, COL.steel);
+  }
+  return m.d;
+}
+
 /** Geometry of structure number `k` (0-based, station order) of the ring. */
 export function buildStructure(roads: RoadNetwork, b: BridgeSpec, k: number): MeshData {
   const design = RING_DESIGNS[k] ?? 'plain';
   if (design === 'cable-stayed') return cableStayed(roads, b);
   if (design === 'network-arch') return networkArch(roads, b);
   if (design === 'extradosed') return extradosed(roads, b);
+  if (design === 'bowstring') return bowstring(roads, b);
   return plainGirder(roads, b);
 }
 
