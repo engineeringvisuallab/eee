@@ -64,6 +64,7 @@ import { InputManager } from '../input/InputManager';
 import { VoiceManager } from '../audio/VoiceManager';
 import { Environment, LighthouseLight, StreetLights } from '../environment';
 import { RingStructureLayer } from '../roads/ring/RingStructureLayer';
+import { StackInterchangeLayer } from '../interchange/m8/StackInterchangeLayer';
 import { RingStructurePhysics } from '../roads/ring/RingStructurePhysics';
 import { SignPhysics } from '../signs/SignPhysics';
 import { Toast } from '../ui/Toast';
@@ -148,6 +149,7 @@ export class Engine {
   private streetLights: StreetLights;
   /** STEP 5.3c: ring structures (S1 cable-stayed, the rest plain girders until their designs come). */
   private ringStructures: RingStructureLayer;
+  private stackJ1: StackInterchangeLayer;
   /** STEP 5.3c-6: colliders of the ring structures (bodies only near the player). */
   private ringStructurePhysics: RingStructurePhysics;
   /** STEP 3: colliders of the fuel stations / charge points (same class as the road signs' physics: bodies only near the player). */
@@ -362,6 +364,7 @@ export class Engine {
     const roads = this.world.terrain.roads;
     this.streetLights = new StreetLights(this.world.root, roads);
     this.ringStructures = new RingStructureLayer(this.world.root, roads);
+    this.stackJ1 = new StackInterchangeLayer(this.world.root, Config.roads.interchangeJ1, (x, z) => this.world.terrain.heightAt(x, z));
     this.rail = this.world.terrain.rail;
     this.railDebug = new RailDebug(this.rail);
     this.railPhysics = new RailPhysics(physics, this.world.origin, this.rail, (x, z) => this.world.terrain.heightAt(x, z));
@@ -422,7 +425,7 @@ export class Engine {
     this.stationStructures = new StationStructures({ root: this.world.root, terrain: this.world.terrain });
     // STEP 3: pumps, columns, kiosk, pylon, charger posts and cabinets are solid (cuboids), only near the player, floating-origin local coordinates
     this.stationPhysics = new SignPhysics(physics, this.world.origin, this.stationStructures.solidGroups);
-    this.ringStructurePhysics = new RingStructurePhysics(physics, this.world.origin, this.ringStructures.solids);
+    this.ringStructurePhysics = new RingStructurePhysics(physics, this.world.origin, [...this.ringStructures.solids, ...this.stackJ1.solids]);
 
     // --- City Mall (always standing there when the game starts) ---
     this.mall = new MallManager({
@@ -1653,6 +1656,7 @@ export class Engine {
     this.trafficLights.dispose();
     this.streetLights.dispose();
     this.ringStructures.dispose();
+    this.stackJ1.dispose();
     this.stationPhysics.dispose();
     this.ringStructurePhysics.dispose();
     this.lighthouseLight?.dispose();

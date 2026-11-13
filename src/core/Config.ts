@@ -67,6 +67,8 @@ export const Config = {
     activeTier: 0 as 0 | 1 | 2 | 3 | 4, // 0 = NO roads at all (roads removed; set 1-4 again when the new road design is ready)
     /** ROADS STEP 5.1: the new 8-lane ring road (M8, roads/ring/RingRoad.ts). Works with activeTier 0. `step` = distance between centreline points (m). enabled = false: no ring. */
     ring: { enabled: true as boolean, step: 8 },
+    /** ROADS STEP 9.2: interchange J1 (stack, 4 level, src/interchange/m8). OFF until the outward M8 roads fix its place (6.3); x, z = world position of the crossing, y = height of road A, yaw = turn of road A. Terrain is not carved under it yet. */
+    interchangeJ1: { enabled: false as boolean, x: 0, z: 0, y: 0, yaw: 0 },
     /** The long bridge to the island and the island's road network (RoadPlan.ISLAND_PLAN). */
     island: false,
     /**

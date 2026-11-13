@@ -19,6 +19,9 @@ const sm = (t: number): number => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t)
 export const spread = (t: number): number => DELTA_F * (1 - sm((Math.abs(t) - U_FULL) / SHIFT_LEN));
 /** Carriageway centre offset from the road axis at distance t. */
 export const cOff = (t: number): number => LANE_OFF + spread(t);
+/** Lateral centre of a ramp while it runs as the auxiliary lane beside its own carriageway: its near lane overlaps the pavement edge by 2.5 m (outer side: LANE_OFF + 9 + spread; median side: AUX_LAT + spread, the ramp lies in the opened median). */
+export const AUX_LAT = LANE_OFF - 9;
+export const RAMP_AUX = AUX_LAT + DELTA_F; // = 12.5 at full spread
 export const RAMP_MED = 8.3; // ramp centre in the opened median (pavement edge 4.5 + DELTA_F = 14, minus 1.5 shoulder, minus 4.2 half ramp)
 export const yB = (v: number): number => Math.max(0, B_TOP - DESIGN.maxGrade.motorway * Math.max(0, Math.abs(v) - B_FLAT));
 
@@ -54,14 +57,14 @@ export function buildStack(P = { Rleft: 175, Rright: 175, run: RUN_LEN, tail: TA
       // k = 0: starts on A going +u. left: leaves the OUTER side and turns left into B+ (going +v), then runs as the outer auxiliary lane of B+.
       // right: leaves the opened MEDIAN (v = RAMP_MED) and turns right into B- (going -v), then runs in the median beside B- and converges to its inner auxiliary lane.
       const outer = LANE_OFF + 9 + DELTA_F; // outer auxiliary lane centre at full spread
-      const startV = shape === 'left' ? outer : RAMP_MED;
-      const endU = shape === 'left' ? -outer : RAMP_MED;
+      const startV = shape === 'left' ? outer : RAMP_AUX;
+      const endU = shape === 'left' ? -outer : RAMP_AUX;
       const startU = endU - P.run - R; // a quarter arc moves u by +R for a left AND a right turn
       // the run follows the carriageway while it is still shifting back (beyond U_FULL), so the aux / diverge lane stays beside the pavement
       const runPts: P2[] = [];
       for (let d = 0; d < P.run - 1e-6; d += 8) {
         const u = startU + d, sp = spread(u);
-        runPts.push({ u, v: shape === 'left' ? LANE_OFF + 9 + sp : RAMP_MED - (DELTA_F - sp) * ((RAMP_MED - 2.7) / DELTA_F) });
+        runPts.push({ u, v: shape === 'left' ? LANE_OFF + 9 + sp : AUX_LAT + sp });
       }
       const t = new Turtle(startU + P.run, startV, 0).arc(R, (shape === 'left' ? 1 : -1) * 90 * DEG);
       t.pts.unshift(...runPts);
@@ -71,7 +74,7 @@ export function buildStack(P = { Rleft: 175, Rright: 175, run: RUN_LEN, tail: TA
       for (let d = 8; d <= P.tail + 1e-6; d += 8) {
         const v = arcEnd.v + dir * d;
         const sp = spread(v);
-        tail.push({ u: shape === 'left' ? -(LANE_OFF + 9 + sp) : RAMP_MED - (DELTA_F - sp) * ((RAMP_MED - 2.7) / DELTA_F), v });
+        tail.push({ u: shape === 'left' ? -(LANE_OFF + 9 + sp) : AUX_LAT + sp, v });
       }
       const base = resample([...t.pts, ...tail], 8);
       const pts = base.map((p) => rot90(p, k));

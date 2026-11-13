@@ -1,6 +1,7 @@
 // STEP 9.2 J1 stack check: ramp radius, grade, and vertical clearance at every crossing. Writes docs/m8_stack_plan.json for the plan picture.
 // Run: npx tsx scripts/m8-stack-check.ts
 import { writeFileSync } from 'node:fs';
+import { gores, laneAudit } from '../src/interchange/m8/StackLanes';
 import { buildStack, clearanceConflicts, medianConflicts, DELTA_F, SHIFT_LEN, terminalLengths, goreEvents, minGoreSpacing, structureTakeoff, U_FULL, rampMaxGrade, rampMinRadius, rampRminLimit } from '../src/interchange/m8/StackGeometry';
 
 const ramps = buildStack();
@@ -22,6 +23,11 @@ const tl = terminalLengths();
 const okT = tl.exitHave >= tl.exitNeed && tl.entryHave >= tl.entryNeed;
 console.log(`  ${okT ? 'PASS' : 'FAIL'}  terminals: exit run ${tl.exitHave} m (need ${tl.exitNeed.toFixed(0)} = decel + taper), entry tail ${tl.entryHave} m (need ${tl.entryNeed.toFixed(0)} = accel + taper)`);
 if (!okT) fails++;
+const gn = gores(ramps);
+for (const g of gn) { if (!g.ok) fails++; console.log(`  ${g.ok ? 'PASS' : 'FAIL'}  gore nose ${g.ramp} ${g.kind.padEnd(5)} on ${g.carriageway}: ${g.have.toFixed(0)} m run (need ${g.need.toFixed(0)}) at (${g.u.toFixed(0)}, ${g.v.toFixed(0)})`); }
+const la = laneAudit(ramps);
+if (!la.ok) fails++;
+console.log(`  ${la.ok ? 'PASS' : 'FAIL'}  lane balance: exit needs ${la.upstreamNeed} lanes upstream, has ${la.upstreamHave}; entry leaves ${la.downstreamLanes} lanes, lane drop needs ${la.dropNeed.toFixed(0)} m, available ${la.dropHave.toFixed(0)} m`);
 const gs = minGoreSpacing(goreEvents(ramps));
 const okG = gs.min >= gs.need;
 console.log(`  ${okG ? 'PASS' : 'FAIL'}  gore spacing: min ${gs.min.toFixed(0)} m (${gs.a} -> ${gs.b}), need >= SSD ${gs.need.toFixed(0)} m`);
