@@ -33,46 +33,41 @@
   PASS  N: no facility fence (airport / seaport / army) or sea inside the ROW          nearest fence airport 744 m
   PASS  N: ROW stays inside the map (>= 100 m from the edge)                           2238 m
 
-==================== E ARM: s 340..3181 (2841 m), 570 stations every 5 m, ROW +-40 m, ground = natural terrain ====================
+==================== E ARM: s 340..2812 (2472 m), 496 stations every 5 m, ROW +-40 m, ground = natural terrain ====================
 1. WATER ON THE CENTRELINE
-  s   804-  874    75 m  river / lake  (inside a structure)
-  s  2547- 2562    20 m  river / lake  (inside a structure)
-  s  2917- 2947    35 m  river / lake  (inside a structure)
-   water inside the ROW but not on the centreline: s 794-799 (10 m), s 879-899 (25 m), s 2522-2542 (25 m), s 2567-2587 (25 m), s 2847-2912 (70 m), s 2952-3022 (75 m)
+  s   809-  879    75 m  river / lake  (inside a structure)
+   water inside the ROW but not on the centreline: s 799-804 (10 m), s 884-889 (10 m)
 2. RIVER SEGMENTS CROSSING THE CENTRELINE
-  s   839  channel width 76.4 m  water level 14.9 m  angle 72 deg  (inside a structure)
-  s  2555  channel width 21.1 m  water level 14.9 m  angle 61 deg  (inside a structure)
-  s  2933  channel width 21.5 m  water level 21.1 m  angle 31 deg  (inside a structure)
-3. TERRAIN CLASS (steepest 10 m step across the ROW)   flat 1280 m (45.1 %), rolling 1350 m (47.5 %), HILLY 220 m (7.7 %), STEEP 0 m (0.0 %)
-   earthwork against the natural ground: max cut on the centreline 2.8 m, max cut at the formation edge (+-24.2 m) 2.8 m, max fill at the edge 54.2 m
+  s   843  channel width 76.5 m  water level 14.9 m  angle 74 deg  (inside a structure)
+3. TERRAIN CLASS (steepest 10 m step across the ROW)   flat 1280 m (51.8 %), rolling 950 m (38.4 %), HILLY 250 m (10.1 %), STEEP 0 m (0.0 %)
+   earthwork against the natural ground: max cut on the centreline 7.1 m, max cut at the formation edge (+-24.2 m) 7.6 m, max fill at the edge 25.9 m
    edge cut over 12 m (side slopes steeper than 1:2 are ROCK CUT up to 4:1, user decision 5.2a): none
-   fill over 7 m on the centreline outside a structure: none
+   fill over 7 m on the centreline outside a structure: s 555-680, s 760-779, s 904-969, s 994-1184
 4. RAILWAY CROSSINGS (the railway cannot change; every one must be road OVER rail, inside a structure)
-  s   423  line north-1     angle 67 deg  profile gap -14.43 m  (OUTSIDE a structure)
-  s  1346  line east-1      angle 16 deg  profile gap 7.67 m  (inside a structure)
-  s  2648  line east-2      angle 80 deg  profile gap 36.99 m  (inside a structure)
-   rail closer than 60 m to the centreline away from a crossing (parallel running): none
+  s   424  line north-1     angle 65 deg  profile gap -12.65 m  (OUTSIDE a structure)
+  s   919  line east-1      angle 49 deg  profile gap 9.56 m  (OUTSIDE a structure)
+   rail closer than 60 m to the centreline away from a crossing (parallel running): east-2 s 2762-2812
 5. WORLD ZONE UNDER THE CENTRELINE
   s   340- 1099    764 m  metro-core (urban-core)
-  s  1104- 1159     60 m  central-lake (park)
-  s  1164- 2347   1189 m  east-homes (residential)
-  s  2352- 3141    794 m  east-logistics (logistics)
-  s  3146- 3181     40 m  east-lake (wetland)
+  s  1104- 1389    290 m  central-lake (park)
+  s  1394- 2517   1129 m  se-dense (residential)
+  s  2522- 2812    295 m  east-suburb (residential)
    facility fence / sea touching the ROW edges: none
 6. CITY PLAN AREAS UNDER THE CENTRELINE (re-zoning list for J1-f / 6.2b; crossing is allowed, user 2026-11-14)
-  s   340-  670    335 m  site 0 s0-arm-e (mixed)
-  s   675-  954    285 m  site 0 s0-suburb (residential)
-  s   959- 1144    190 m  site 0 s0-green (green)
-7. nearest facility fence: seaport 2385 m; nearest map edge: 2033 m
+  s   340-  620    285 m  site 0 s0-arm-e (mixed)
+  s   625-  695     75 m  site 0 s0-flats (residential)
+  s   700-  974    280 m  site 0 s0-suburb (residential)
+  s   979- 1169    195 m  site 0 s0-green (green)
+7. nearest facility fence: seaport 876 m; nearest map edge: 3104 m
    CHECKS
-  PASS  E: every wet centreline point is inside a structure                            130 m wet
+  PASS  E: every wet centreline point is inside a structure                            75 m wet
   PASS  E: no sea on the centreline                                                    sea m = 0
-  PASS  E: every river crossing is inside a structure                                  3 crossings
-  PASS  E: every rail crossing is inside a road structure, or the rail passes over the road with >= 7.0 m, and is in the profile list (X5) 3 from the world, 3 in the profile, 1 of them rail over the road on the ground
-  PASS  E: fill over 7 m only inside a structure (D4)                                  0 ranges outside
-  PASS  E: max cut on the centreline <= 12 m (3.7)                                     max 2.8 m
-  PASS  E: no facility fence (airport / seaport / army) or sea inside the ROW          nearest fence seaport 2385 m
-  PASS  E: ROW stays inside the map (>= 100 m from the edge)                           2033 m
+  PASS  E: every river crossing is inside a structure                                  1 crossings
+  FAIL  E: every rail crossing is inside a road structure, or the rail passes over the road with >= 7.0 m, and is in the profile list (X5) 2 from the world, 2 in the profile, 1 of them rail over the road on the ground
+  FAIL  E: fill over 7 m only inside a structure (D4)                                  4 ranges outside
+  PASS  E: max cut on the centreline <= 12 m (3.7)                                     max 7.1 m
+  PASS  E: no facility fence (airport / seaport / army) or sea inside the ROW          nearest fence seaport 876 m
+  PASS  E: ROW stays inside the map (>= 100 m from the edge)                           3104 m
 
 ==================== S ARM: s 340..2826 (2486 m), 499 stations every 5 m, ROW +-40 m, ground = natural terrain ====================
 1. WATER ON THE CENTRELINE
@@ -144,11 +139,11 @@
   PASS  W: ROW stays inside the map (>= 100 m from the edge)                           2444 m
 
 ARMS AGAINST EACH OTHER (s >= 600 on both): smallest centreline distance
-  PASS  N x E: centrelines at least 80 m apart (two ROWs)                              837 m (s 605 / 605)
+  PASS  N x E: centrelines at least 80 m apart (two ROWs)                              856 m (s 605 / 605)
   PASS  N x S: centrelines at least 80 m apart (two ROWs)                              1209 m (s 605 / 605)
   PASS  N x W: centrelines at least 80 m apart (two ROWs)                              912 m (s 605 / 605)
-  PASS  E x S: centrelines at least 80 m apart (two ROWs)                              870 m (s 605 / 605)
-  PASS  E x W: centrelines at least 80 m apart (two ROWs)                              1106 m (s 605 / 610)
+  PASS  E x S: centrelines at least 80 m apart (two ROWs)                              854 m (s 605 / 605)
+  PASS  E x W: centrelines at least 80 m apart (two ROWs)                              1104 m (s 605 / 635)
   PASS  S x W: centrelines at least 80 m apart (two ROWs)                              429 m (s 605 / 1034)
 
-SUMMARY: 38 PASS, 0 FAIL
+SUMMARY: 36 PASS, 2 FAIL

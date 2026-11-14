@@ -45,7 +45,7 @@
   {
    "name": "E: every wet centreline point is inside a structure",
    "pass": true,
-   "detail": "130 m wet"
+   "detail": "75 m wet"
   },
   {
    "name": "E: no sea on the centreline",
@@ -55,32 +55,32 @@
   {
    "name": "E: every river crossing is inside a structure",
    "pass": true,
-   "detail": "3 crossings"
+   "detail": "1 crossings"
   },
   {
    "name": "E: every rail crossing is inside a road structure, or the rail passes over the road with >= 7.0 m, and is in the profile list (X5)",
-   "pass": true,
-   "detail": "3 from the world, 3 in the profile, 1 of them rail over the road on the ground"
+   "pass": false,
+   "detail": "2 from the world, 2 in the profile, 1 of them rail over the road on the ground"
   },
   {
    "name": "E: fill over 7 m only inside a structure (D4)",
-   "pass": true,
-   "detail": "0 ranges outside"
+   "pass": false,
+   "detail": "4 ranges outside"
   },
   {
    "name": "E: max cut on the centreline <= 12 m (3.7)",
    "pass": true,
-   "detail": "max 2.8 m"
+   "detail": "max 7.1 m"
   },
   {
    "name": "E: no facility fence (airport / seaport / army) or sea inside the ROW",
    "pass": true,
-   "detail": "nearest fence seaport 2385 m"
+   "detail": "nearest fence seaport 876 m"
   },
   {
    "name": "E: ROW stays inside the map (>= 100 m from the edge)",
    "pass": true,
-   "detail": "2033 m"
+   "detail": "3104 m"
   },
   {
    "name": "S: every wet centreline point is inside a structure",
@@ -165,7 +165,7 @@
   {
    "name": "N x E: centrelines at least 80 m apart (two ROWs)",
    "pass": true,
-   "detail": "837 m (s 605 / 605)"
+   "detail": "856 m (s 605 / 605)"
   },
   {
    "name": "N x S: centrelines at least 80 m apart (two ROWs)",
@@ -180,12 +180,12 @@
   {
    "name": "E x S: centrelines at least 80 m apart (two ROWs)",
    "pass": true,
-   "detail": "870 m (s 605 / 605)"
+   "detail": "854 m (s 605 / 605)"
   },
   {
    "name": "E x W: centrelines at least 80 m apart (two ROWs)",
    "pass": true,
-   "detail": "1106 m (s 605 / 610)"
+   "detail": "1104 m (s 605 / 635)"
   },
   {
    "name": "S x W: centrelines at least 80 m apart (two ROWs)",
@@ -225,7 +225,7 @@
    ]
   },
   "E": {
-   "length": 3181.276837740561,
+   "length": 2811.893095090821,
    "structs": [
     {
      "id": "E2",
