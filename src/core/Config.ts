@@ -69,9 +69,9 @@ export const Config = {
     ring: { enabled: true as boolean, step: 8 },
     /** ROADS STEP 9.2: interchange J1 (stack, 4 level, src/interchange/m8). OFF until the outward M8 roads fix its place (6.3); x, z = world position of the crossing, y = height of road A, yaw = turn of road A. Terrain is not carved under it yet. */
     interchangeJ1: { enabled: false as boolean, x: 0, z: 0, y: 0, yaw: 0 },
-    /** STEP J1-e1: the GROUND-LEVEL J1 (src/roads/junction): x, z = centre, yawDeg = turn of the N axis, y, a, b = pad plane (J1-c1, docs/j1c1.json), rCore / emb = flat core radius and skirt (m). enabled = false: no J1, no terrain change. */
-    junctionJ1: { enabled: true as boolean, x: -87, z: -277, yawDeg: 37.5, y: 18.19311912937595, a: -0.0010220450179961758, b: 0.00623096742143054, rCore: 60, emb: 20 },
-    /** STEP J1-e2: the four M8 arms of J1 (src/roads/junction/J1ArmData.ts, made by tools/j1-arm-data.py) from s = 270 m to the T on the ring, as game roads J1-N / J1-E / J1-S / J1-W with their structures. false = no arm roads. */
+    /** STEP J1-e1: the GROUND-LEVEL J1 (src/roads/junction): x, z = centre, yawDeg = turn of the N axis, y, a, b = pad plane (J1-g3 fit over the open star, docs/j1g3_pad.json; old J1-c1 fit is docs/j1c1.json), rCore = half size of the flat square (= J1_SA 100 m), emb = skirt (m, 30: arm fill up to 5.2 m needs a skirt of at least 24 m for slope 1:3). enabled = false: no J1, no terrain change. */
+    junctionJ1: { enabled: true as boolean, x: -87, z: -277, yawDeg: 37.5, y: 18.213952768488063, a: -0.0007693744942258208, b: 0.003387472903877177, rCore: 100, emb: 30 },
+    /** STEP J1-e2: the four M8 arms of J1 (src/roads/junction/J1ArmData.ts, made by tools/j1-arm-data.py) from s = 315 m to the T on the ring, as game roads J1-N / J1-E / J1-S / J1-W with their structures. false = no arm roads. */
     junctionJ1Arms: { enabled: true as boolean },
     /**
      * STEP RAIL-B2: ONE place for the road / rail buffer (m). Used by scripts/road-rail-buffer-check.ts (measure only; the design code does not read it yet).

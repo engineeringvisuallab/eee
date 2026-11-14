@@ -42,7 +42,7 @@ for (const arm of ['N', 'E', 'S', 'W'] as const) {
     const d = t.levelAt(x, z) - nat(x, z);
     if (d > fill) fill = d; if (-d > cut) cut = -d;
   }
-  console.log(`  arm ${arm}: lane zone s 60..270: max fill ${fill.toFixed(1)} m, max cut ${cut.toFixed(1)} m; level at s 270 = ${t.armLevel(arm, 270).toFixed(2)} m, natural on axis ${nat(...t.axisPoint(arm, 270)).toFixed(2)} m`);
+  console.log(`  arm ${arm}: lane zone s 60..${J1_S_END}: max fill ${fill.toFixed(1)} m, max cut ${cut.toFixed(1)} m; level at s ${J1_S_END} = ${t.armLevel(arm, J1_S_END).toFixed(2)} m, natural on axis ${nat(...t.axisPoint(arm, J1_S_END)).toFixed(2)} m`);
 }
 
 // 4. what natural things are inside the footprint (EVLab plot, lake / river water)

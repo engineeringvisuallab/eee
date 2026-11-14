@@ -29,7 +29,7 @@ for (const d of J1_ARM_DATA) {
   const n = r.xs.length;
   const [ax, az] = t.axisPoint(arm, J1_S_END);
   const dist = Math.hypot(r.xs[0] - ax, r.zs[0] - az), dy = Math.abs(r.ys[0] - t.armLevel(arm, J1_S_END));
-  ok(dist < 0.05 && dy < 0.03, `${d.name}: starts on the J1 axis at s 270 (offset ${f2(dist)} m) at the lane-zone level (diff ${f2(dy)} m)`);
+  ok(dist < 0.05 && dy < 0.03, `${d.name}: starts on the J1 axis at s ${J1_S_END} (offset ${f2(dist)} m) at the lane-zone level (diff ${f2(dy)} m)`);
   let gmax = 0;
   for (let i = 1; i < n; i++) gmax = Math.max(gmax, Math.abs(r.ys[i] - r.ys[i - 1]) / Math.hypot(r.xs[i] - r.xs[i - 1], r.zs[i] - r.zs[i - 1]));
   ok(gmax <= 0.0415, `${d.name}: ${n} points, length ${f1(r.length)} m, max grade between points ${f2(gmax * 100)} % (limit 4 %, curve overshoot)`);

@@ -302,7 +302,7 @@ export class RoadNetwork {
 
   /**
    * STEP J1-e2: the four M8 arms of J1 as game roads (J1-N, J1-E, J1-S, J1-W). Centreline and finished heights come from the design files of J1-c (J1ArmData.ts), they start where the lane zone of J1 ends
-   * (s = 270 m) and end in the T on the ring. Resampled to the highway step, heights used exactly (fixedY), terrain follows daylight slopes like the ring. Structures: the stretches of 6.1d.
+   * (s = 315 m, J1_S_END) and end in the T on the ring. Resampled to the highway step, heights used exactly (fixedY), terrain follows daylight slopes like the ring. Structures: the stretches of 6.1d.
    */
   private layoutJ1Arms(): void {
     if (!Config.roads.junctionJ1Arms.enabled || !Config.roads.junctionJ1.enabled) return;
