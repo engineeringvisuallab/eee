@@ -71,6 +71,8 @@ export const Config = {
     interchangeJ1: { enabled: false as boolean, x: 0, z: 0, y: 0, yaw: 0 },
     /** STEP J1-e1: the GROUND-LEVEL J1 (src/roads/junction): x, z = centre, yawDeg = turn of the N axis, y, a, b = pad plane (J1-c1, docs/j1c1.json), rCore / emb = flat core radius and skirt (m). enabled = false: no J1, no terrain change. */
     junctionJ1: { enabled: true as boolean, x: -87, z: -277, yawDeg: 37.5, y: 18.19311912937595, a: -0.0010220450179961758, b: 0.00623096742143054, rCore: 60, emb: 20 },
+    /** STEP J1-e2: the four M8 arms of J1 (src/roads/junction/J1ArmData.ts, made by tools/j1-arm-data.py) from s = 270 m to the T on the ring, as game roads J1-N / J1-E / J1-S / J1-W with their structures. false = no arm roads. */
+    junctionJ1Arms: { enabled: true as boolean },
     /** The long bridge to the island and the island's road network (RoadPlan.ISLAND_PLAN). */
     island: false,
     /**

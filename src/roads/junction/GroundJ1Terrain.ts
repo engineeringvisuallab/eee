@@ -2,7 +2,7 @@
 //  - pad plane (J1-c1) inside r <= 60 m of the centre,
 //  - on each arm the lane zone (s = 0..270 m, half width 27 m): pad plane to s 60, then the arm profile (PVI table, J1-c4c / c5c / c7c), the cross-fall of the plane fades out by s 200,
 //  - an embankment skirt of EMB metres around both, smoothstep back to the natural ground.
-// The S arm has no full profile yet (J1-c6): pad plane to s 60, then a 8.9 m curve into -0.30 % (docs/j1c_S.json).
+// All four arms use their PVI table (S: J1-c6c, since J1-e2).
 import { J1_ARM_PVI, type Pvi } from './J1ArmProfiles';
 
 export type J1Arm = 'N' | 'E' | 'S' | 'W';
@@ -30,19 +30,13 @@ export class J1Terrain {
   readonly cfg: J1TerrainCfg;
   private readonly cy: number; private readonly sy: number;
   private readonly delta: Record<J1Arm, number> = { N: 0, E: 0, S: 0, W: 0 };
-  private readonly sPvi: Pvi[];
 
   constructor(cfg: J1TerrainCfg) {
     this.cfg = cfg;
     const y = (cfg.yawDeg * Math.PI) / 180;
     this.cy = Math.cos(y); this.sy = Math.sin(y);
     const s60 = (arm: J1Arm): number => this.plane(...this.axisPoint(arm, 60));
-    // S: pad -> S stretch grade after the plane (curve 8.9 m, then -0.30 %)
-    const y60 = s60('S'), y0 = this.plane(cfg.x, cfg.z);
-    const gp = (y60 - y0) / 60;
-    this.sPvi = [{ s: 0, y: y0, g1: 0, g2: gp, Lc: 0 }, { s: 60, y: y60, g1: gp, g2: -0.003, Lc: 8.88 }];
-    for (const arm of ['N', 'E', 'W'] as const) this.delta[arm] = s60(arm) - pviLevel(J1_ARM_PVI[arm], 60);
-    this.delta.S = 0;
+    for (const arm of ['N', 'E', 'S', 'W'] as const) this.delta[arm] = s60(arm) - pviLevel(J1_ARM_PVI[arm], 60);
   }
 
   /** Local (e east, n north of the J1 axes) -> world, and back. */
@@ -58,7 +52,6 @@ export class J1Terrain {
   /** Finished level on the axis of an arm at s. */
   armLevel(arm: J1Arm, s: number): number {
     if (s <= 60) return this.plane(...this.axisPoint(arm, Math.max(0, s)));
-    if (arm === 'S') return pviLevel(this.sPvi, s);
     return pviLevel(J1_ARM_PVI[arm], s) + this.delta[arm] * (1 - smooth(60, 200, s));
   }
 

@@ -6,6 +6,7 @@ import { planRing } from '../src/roads/ring/RingRoad';
 let fails = 0;
 const check = (ok: boolean, name: string, detail: string): void => { if (!ok) fails++; console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${name.padEnd(62)} ${detail}`); };
 const t0 = Date.now();
+Config.roads.junctionJ1Arms.enabled = false; // this check tests the ring alone; the J1 arms end on the ring (J1-e2, scripts/j1-arms-game-check.ts)
 const net = new TerrainGenerator(Config.world.seed).roads;
 console.log(`RoadNetwork built in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 const plan = planRing(Config.roads.ring.step);

@@ -419,9 +419,13 @@ export function buildStructure(roads: RoadNetwork, b: BridgeSpec, k: number): Me
   return plainGirder(roads, b);
 }
 
-/** The structures of the ring in station order. */
+/** The structures of the ring in station order, then the structures of the four J1 arms (J1-e2, J1-N, J1-E, J1-S, J1-W, each in station order): the index is the design number (RING_DESIGNS, 'plain' after the ring). */
 export function ringStructures(roads: RoadNetwork): BridgeSpec[] {
   const ring = roads.roads.find((r) => r.name === 'M8');
-  if (!ring) return [];
-  return roads.bridges.filter((b) => b.roadId === ring.id).sort((a, c) => a.i0 - c.i0);
+  const out: BridgeSpec[] = ring ? roads.bridges.filter((b) => b.roadId === ring.id).sort((a, c) => a.i0 - c.i0) : [];
+  for (const name of ['J1-N', 'J1-E', 'J1-S', 'J1-W']) {
+    const arm = roads.roads.find((r) => r.name === name);
+    if (arm) out.push(...roads.bridges.filter((b) => b.roadId === arm.id).sort((a, c) => a.i0 - c.i0));
+  }
+  return out;
 }

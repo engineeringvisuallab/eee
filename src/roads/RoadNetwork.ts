@@ -12,7 +12,10 @@ import { CityPlan } from '../city/CityPlan';
 import { DIVIDED_SECTIONS, sectionFor } from './RoadSection';
 import { buildInterchange, type InterchangeModel, type RoadSection as IcSection } from '../interchange';
 import type { LocalAreaStat } from './LocalRoads';
-import { planRing } from './ring/RingRoad';
+import { planRing, sectionFields } from './ring/RingRoad';
+import { SECTION_M8 } from './standards/SectionTable';
+import { RING_DESIGN_SPEED } from './alignment/RingAlignment';
+import { J1_ARM_DATA, type J1ArmData } from './junction/J1ArmData';
 import { STRUCT, STRUCT_CARVE } from './ring/RingStructures';
 import { SCENARIOS, cutRange, nearestPoint, uvToWorld, type ScenarioSpec } from '../interchange/scenario/J6Scenario';
 
@@ -273,6 +276,73 @@ export class RoadNetwork {
       if (last && a - last.b <= 3) last.b = Math.max(last.b, b);
       else zones.push({ a, b });
     }
+    this.registerStructures(r, zones, lev);
+  }
+
+  /**
+   * STEP J1-e2: adds the four M8 arms of J1 AFTER the railway is planned (TerrainGenerator calls this once the railway exists). Why: the railway router reads the roads and moves its line away from them,
+   * but THE RAILWAY CANNOT CHANGE (user, 2026-11-14): the arms were designed against the railway plan without them (6.1d). So the railway is planned on the network without the arms, and the arms
+   * join the network afterwards (terrain carve, ribbon, structures). Deterministic like everything else: main thread and workers run the same constructor.
+   */
+  addJ1Arms(): void {
+    if (!Config.roads.junctionJ1Arms.enabled || !Config.roads.junctionJ1.enabled) return;
+    const before = this.roads.length;
+    this.layoutJ1Arms();
+    if (this.roads.length === before) return;
+    this.chunkSegs.clear();
+    this.padCells.clear();
+    this.chunkPads.clear();
+    this.cells.clear();
+    this.j1Cells.clear();
+    this.buildSegments();
+  }
+
+  /**
+   * STEP J1-e2: the four M8 arms of J1 as game roads (J1-N, J1-E, J1-S, J1-W). Centreline and finished heights come from the design files of J1-c (J1ArmData.ts), they start where the lane zone of J1 ends
+   * (s = 270 m) and end in the T on the ring. Resampled to the highway step, heights used exactly (fixedY), terrain follows daylight slopes like the ring. Structures: the stretches of 6.1d.
+   */
+  private layoutJ1Arms(): void {
+    if (!Config.roads.junctionJ1Arms.enabled || !Config.roads.junctionJ1.enabled) return;
+    const sec = sectionFields(SECTION_M8);
+    for (const a of J1_ARM_DATA) {
+      const m = a.pts.length;
+      const cum = [0];
+      for (let i = 1; i < m; i++) cum.push(cum[i - 1] + Math.hypot(a.pts[i][0] - a.pts[i - 1][0], a.pts[i][1] - a.pts[i - 1][1]));
+      const L = cum[m - 1];
+      const n = Math.max(2, Math.ceil(L / KIND.highway.step)) + 1;
+      const pts: number[][] = [];
+      const ys: number[] = [];
+      let j = 0;
+      for (let k = 0; k < n; k++) {
+        const d = (L * k) / (n - 1);
+        while (j < m - 2 && cum[j + 1] < d) j++;
+        const t = cum[j + 1] > cum[j] ? Math.min(1, Math.max(0, (d - cum[j]) / (cum[j + 1] - cum[j]))) : 0;
+        pts.push([a.pts[j][0] + (a.pts[j + 1][0] - a.pts[j][0]) * t, a.pts[j][1] + (a.pts[j + 1][1] - a.pts[j][1]) * t]);
+        ys.push(a.ys[j] + (a.ys[j + 1] - a.ys[j]) * t);
+      }
+      this.addRoad({ tier: 1, kind: 'highway', name: a.name, closed: false, pts, fixedY: ys, halfWidth: sec.halfWidth, shoulder: sec.shoulder, lanes: sec.lanesPerDir * 2, speedKmh: RING_DESIGN_SPEED, maxGrade: 0.04, section: sec, daylight: true });
+      this.bridgeArm(this.roads[this.roads.length - 1], a);
+    }
+  }
+
+  /** The structures of one J1 arm: the station ranges of 6.1d (docs/STEP61D_*_OUTPUT.txt) mapped to point indices of the resampled road. */
+  private bridgeArm(r: RoadSpec, a: J1ArmData): void {
+    const n = r.xs.length;
+    const sA = a.s[0];
+    const sB = a.s[a.s.length - 1];
+    const idx = (s: number): number => Math.max(0, Math.min(n - 1, Math.round(((s - sA) / (sB - sA)) * (n - 1))));
+    const lev = new Float64Array(n).fill(NaN);
+    for (let i = 0; i < n; i++) {
+      this.natural(r.xs[i], r.zs[i], this.scratch);
+      const w = this.scratch.water;
+      if (!Number.isNaN(w) && this.scratch.h < w + 0.3 && this.scratch.h > 2) lev[i] = w;
+    }
+    this.registerStructures(r, a.structs.map(([s0, s1]) => ({ a: idx(s0), b: idx(s1) })), lev);
+  }
+
+  /** Data of the structures (BridgeSpec + RoadSpec.bridgeOf) for index zones a..b of road r; lev = water level of every point (NaN = dry). Used by the ring (5.3b) and the J1 arms (J1-e2). */
+  private registerStructures(r: RoadSpec, zones: { a: number; b: number }[], lev: Float64Array): void {
+    const step = r.step;
     for (const z of zones) {
       if (z.b - z.a < 4) continue;
       let peak = -Infinity;

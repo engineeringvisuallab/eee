@@ -103,6 +103,7 @@ export class TerrainGenerator {
     // the railway is planned on natural ground + the finished roads (it never touches road earthworks)
     this.rail = new RailNetwork(this);
     this.railForm = new RailFormation(this.rail);
+    this.roads.addJ1Arms(); // STEP J1-e2: the J1 arms join the road network after the railway is planned (the railway cannot change)
     // the mall floor = the natural ground height at the plot centre (the plot is nearly level there, +-0.4 m)
     // the mall floor = the MEDIAN natural ground over its (bent) plot
     {

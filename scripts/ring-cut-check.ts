@@ -6,6 +6,7 @@ import { Config } from '../src/core/Config';
 const stride = Number(process.argv[2] ?? 5);
 let fails = 0;
 const check = (ok: boolean, name: string, detail: string): void => { if (!ok) fails++; console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${name.padEnd(66)} ${detail}`); };
+Config.roads.junctionJ1Arms.enabled = false; // this check tests the ring alone; the J1 arms end on the ring (J1-e2, scripts/j1-arms-game-check.ts)
 const gen = new TerrainGenerator(Config.world.seed);
 const ring = gen.roads.roads.find((r) => r.name === 'M8')!;
 const core = ring.halfWidth + ring.shoulder; // flat platform half width
