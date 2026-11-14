@@ -46,6 +46,7 @@ const h1 = hr - Math.PI / 2;                                              // arr
 const ringPoint = (u: number): { x: number; z: number } => ({ x: rRef.x + u * Math.cos(hr), z: rRef.z + u * Math.sin(hr) });
 const U_LO = ST_LO - rRef.st + 150, U_HI = ST_HI - rRef.st - 150;         // keep 150 m inside the straight at least
 const R_MIN = 591, LS = 100, V = 100, DS = 20;
+const ZONES_ON = process.env.ZONES !== '0';                                 // ZONES=0: engineering zones / fences may be crossed (user 2026-11-14: buildings move to the roads; the RAILWAY stays fixed)
 
 // ---------------------------------------------------------------- parameters -> alignment
 const nInter = NPI - 2;
@@ -93,7 +94,7 @@ function evaluate(p: Par, detail = false): Eval {
     if (Number.isNaN(g0 + ga + gb)) return { cost: 1e8, ok: false, zoneN: 0, wetN: 0, note: 'outside raster' };
     gmax[i] = Math.max(g0, ga, gb); gmin[i] = Math.min(g0, ga, gb);
     if (wetAt(q.x, q.z)) { wetN++; pen += 200; }
-    if (i > 0 && i < n) for (const r of RECTS) if (q.x > r.x0 - 45 && q.x < r.x1 + 45 && q.z > r.z0 - 45 && q.z < r.z1 + 45) { zoneN++; pen += 400; break; }
+    if (ZONES_ON && i > 0 && i < n) for (const r of RECTS) if (q.x > r.x0 - 45 && q.x < r.x1 + 45 && q.z > r.z0 - 45 && q.z < r.z1 + 45) { zoneN++; if (ZONES_ON) pen += 400; break; }
   }
   // dynamic programming on the road level (grade <= 3 %), start between 0.3 and 3 % from the pad, end at the ring level
   const yEnd = ringLevel(ringS.reduce((b, r) => (Math.hypot(r.x - E.x, r.z - E.z) < Math.hypot(b.x - E.x, b.z - E.z) ? r : b)).st);
@@ -186,7 +187,8 @@ CHK('smooth: no kink, curvature is continuous (dk/ds <= 1/(R Ls) + small)', maxD
 const clearOf: Record<string, number> = {};
 for (const r of RECTS) { let m = Infinity; for (const q of sm) { const dx = Math.max(r.x0 - q.x, 0, q.x - r.x1), dz = Math.max(r.z0 - q.z, 0, q.z - r.z1); m = Math.min(m, Math.hypot(dx, dz)); } clearOf[r.id] = m; }
 const worst = Object.entries(clearOf).sort((a, b) => a[1] - b[1]).slice(0, 3).map(([k, v]) => `${k} ${f0(v)} m`).join(', ');
-CHK('centreline at least 45 m from every engineering zone / airport fence', Object.values(clearOf).every((v) => v >= 45), `nearest: ${worst}`);
+if (ZONES_ON) CHK('centreline at least 45 m from every engineering zone / airport fence', Object.values(clearOf).every((v) => v >= 45), `nearest: ${worst}`);
+else P(`  INFO  zones ignored (ZONES=0, buildings will be re-placed to fit the road); nearest: ${worst}`);
 let wetLen = 0; for (const q of sm) if (wetAt(q.x, q.z)) wetLen += d5;
 P(`  INFO  wet length (river / lake cells under the centreline) ${f0(wetLen)} m  (a river crossing becomes a bridge, 6.1e)`);
 const railX: number[] = [];
