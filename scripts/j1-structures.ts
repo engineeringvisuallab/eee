@@ -24,7 +24,7 @@ interface Row { s: number; g: number; r: number; x: number; z: number; h: number
 interface Struct {
   id: string; arm: string; kinds: string[]; s0: number; s1: number; length: number; x0: number; z0: number; x1: number; z1: number; xm: number; zm: number;
   maxHeight: number; maxCarve: number; waterLen: number; waterLevel: number | null; riverClear: number | null; rail: Array<{ edge: string; s: number; angle: number; gap: number; span: number }>;
-  specialSpans: number[]; stdSpans: number; spanTotal: number; piers: number; maxPier: number; maxCurvatureOn: number; hCurveOnStruct: boolean; vCurvesOn: number; fromArmEnd: number; proposal: string; why: string;
+  specialSpans: number[]; stdSpans: number; spanTotal: number; piers: number; maxPier: number; maxCurvatureOn: number; hCurveOnStruct: boolean; vCurvesOn: number; fromArmEnd: number; proposal: string; why: string; interchange?: boolean;
 }
 
 function loadArm(tag: string, alignFile: string, profFile: string): { rows: Row[]; prof: any; align: any } {
@@ -151,13 +151,20 @@ for (const [A, nm] of [[N, 'N'], [W, 'W']] as const) {
   const vc = A.list.filter((s) => s.vCurvesOn > 0);
   P(`  INFO  ${nm}: structures with vertical curves on the deck: ${vc.map((s) => `${s.id} (${s.vCurvesOn})`).join(', ') || 'none'} (a parabola on a deck is normal, joints are placed by the bridge design)`);
 }
-// the T on the ring
-for (const [A, nm] of [[N, 'N'], [W, 'W']] as const) {
+// the T on the ring. A structure within NEAR_END of the T is allowed ONLY when it is part of the ring interchange (decision 2026-11-14, W arm: the rail line ring-west runs parallel to the ring W straight, 83-240 m inside it,
+// so every join on the flat part of the straight has the rail inside the interchange footprint; the rail cannot change). Then every ramp that crosses the rail must be >= RAIL_CLR above the rail top at the rail
+// and still be able to come down to the ring level (ramp grade <= 5 %) before the ring outer pavement edge (22.1 m from the ring centreline, SECTION_M8).
+const RAMP_G = 0.05, RING_EDGE = 22.1, RAIL_HALF = RAIL_CORRIDOR / 2;
+for (const [A, nm, prof] of [[N, 'N', 'j1c4c_profile.json'], [W, 'W', 'j1c5c_profile.json']] as const) {
   const last = A.list[A.list.length - 1];
-  const need = 300;
-  CHK(`${nm}: no structure within ${NEAR_END} m of the T on the ring (ring interchange needs room, 6.1a2 / 9.2)`, !last || last.fromArmEnd >= NEAR_END, last ? `last structure ${last.id} ends ${f0(last.fromArmEnd)} m before the ring${last.fromArmEnd < need ? ` (target at least ${need} m)` : ''}` : 'no structure');
+  if (!last || last.fromArmEnd >= NEAR_END) { CHK(`${nm}: no structure within ${NEAR_END} m of the T on the ring`, true, last ? `last structure ${last.id} ends ${f0(last.fromArmEnd)} m before the ring` : 'no structure'); continue; }
+  const P0 = JSON.parse(readFileSync(`${out}/${prof}`, 'utf8')), ringY = P0.pvi[P0.pvi.length - 1].y as number;
+  const c = last.rail[last.rail.length - 1];
+  if (!c) { CHK(`${nm}: structure ${last.id} within ${NEAR_END} m of the T has no rail crossing to justify it`, false, `ends ${f0(last.fromArmEnd)} m before the ring`); continue; }
+  const railTop = c.gap !== undefined ? (at(A.rows, c.s).r - c.gap) : NaN, need = railTop + RAIL_CLR + 0.1, drop = Math.max(0, need - ringY), dist = A.length - c.s, avail = dist - RAIL_HALF - RING_EDGE, req = drop / RAMP_G;
+  last.interchange = true; last.why += `; part of the ${nm} ring interchange (rail ${c.edge} is ${f0(dist)} m before the ring)`;
+  CHK(`${nm}: ${last.id} is inside the ring interchange: a ramp over the rail (>= ${RAIL_CLR} m) can come down to the ring level at <= ${f0(RAMP_G * 100)} %`, avail >= req, `rail top ${f2(railTop)} m, ring ${f2(ringY)} m, drop ${f2(drop)} m needs ${f0(req)} m, available ${f0(avail)} m (rail axis ${f0(dist)} m before the ring - corridor half ${RAIL_HALF} - ring edge ${RING_EDGE})`);
 }
-for (const [A, nm] of [[N, 'N'], [W, 'W']] as const) for (let i = 1; i < A.list.length; i++) { const g = A.list[i].s0 - A.list[i - 1].s1; if (g < 60) P(`  INFO  ${nm}: only ${f0(g)} m of embankment between ${A.list[i - 1].id} and ${A.list[i].id} (short; merge them into one structure if you prefer)`); }
 const fails = chk.filter((c) => !c.pass).length;
 P(`SUMMARY: ${chk.length - fails} PASS, ${fails} FAIL`);
 writeFileSync(`${out}/STEP61D_OUTPUT.txt`, lines.join('\n') + '\n');

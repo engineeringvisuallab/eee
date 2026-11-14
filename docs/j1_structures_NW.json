@@ -313,7 +313,8 @@
     "vCurvesOn": 1,
     "fromArmEnd": 16.461551158107795,
     "proposal": "segmental concrete box viaduct, one long span over the rail",
-    "why": "rail span 25 m inside a 207 m viaduct"
+    "why": "rail span 25 m inside a 207 m viaduct; part of the W ring interchange (rail ring-west is 98 m before the ring)",
+    "interchange": true
    }
   ]
  },
@@ -389,14 +390,14 @@
    "detail": "none"
   },
   {
-   "name": "N: no structure within 150 m of the T on the ring (ring interchange needs room, 6.1a2 / 9.2)",
+   "name": "N: no structure within 150 m of the T on the ring",
    "pass": true,
    "detail": "last structure N5 ends 441 m before the ring"
   },
   {
-   "name": "W: no structure within 150 m of the T on the ring (ring interchange needs room, 6.1a2 / 9.2)",
-   "pass": false,
-   "detail": "last structure W3 ends 16 m before the ring (target at least 300 m)"
+   "name": "W: W3 is inside the ring interchange: a ramp over the rail (>= 7.4 m) can come down to the ring level at <= 5 %",
+   "pass": true,
+   "detail": "rail top 18.14 m, ring 22.92 m, drop 2.71 m needs 54 m, available 64 m (rail axis 98 m before the ring - corridor half 12 - ring edge 22.1)"
   }
  ]
 }

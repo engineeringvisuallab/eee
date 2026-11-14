@@ -42,7 +42,6 @@ PROPOSED DESIGNS (types wait for the user OK, every structure different, none re
   PASS  W: no structure on a horizontal curve tighter than 591 m (rule 3.12.8)     none
   INFO  W: structures that lie partly on a bend (R >= 591 m, allowed, listed for the mesh): W1 (R 700)
   INFO  W: structures with vertical curves on the deck: W1 (1), W2 (1), W3 (1) (a parabola on a deck is normal, joints are placed by the bridge design)
-  PASS  N: no structure within 150 m of the T on the ring (ring interchange needs room, 6.1a2 / 9.2) last structure N5 ends 441 m before the ring
-  FAIL  W: no structure within 150 m of the T on the ring (ring interchange needs room, 6.1a2 / 9.2) last structure W3 ends 16 m before the ring (target at least 300 m)
-  INFO  N: only 34 m of embankment between N2 and N3 (short; merge them into one structure if you prefer)
-SUMMARY: 15 PASS, 1 FAIL
+  PASS  N: no structure within 150 m of the T on the ring                          last structure N5 ends 441 m before the ring
+  PASS  W: W3 is inside the ring interchange: a ramp over the rail (>= 7.4 m) can come down to the ring level at <= 5 % rail top 18.14 m, ring 22.92 m, drop 2.71 m needs 54 m, available 64 m (rail axis 98 m before the ring - corridor half 12 - ring edge 22.1)
+SUMMARY: 16 PASS, 0 FAIL
