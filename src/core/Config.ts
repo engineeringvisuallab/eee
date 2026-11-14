@@ -73,6 +73,14 @@ export const Config = {
     junctionJ1: { enabled: true as boolean, x: -87, z: -277, yawDeg: 37.5, y: 18.19311912937595, a: -0.0010220450179961758, b: 0.00623096742143054, rCore: 60, emb: 20 },
     /** STEP J1-e2: the four M8 arms of J1 (src/roads/junction/J1ArmData.ts, made by tools/j1-arm-data.py) from s = 270 m to the T on the ring, as game roads J1-N / J1-E / J1-S / J1-W with their structures. false = no arm roads. */
     junctionJ1Arms: { enabled: true as boolean },
+    /**
+     * STEP RAIL-B2: ONE place for the road / rail buffer (m). Used by scripts/road-rail-buffer-check.ts (measure only; the design code does not read it yet).
+     *   railOverRoad   : rail over a road: underside of the rail deck above the road surface.
+     *   roadOverRail   : road over the rail: road surface above the top of the rail.
+     *   pierToDeckEdge : plan distance from a rail pier to the edge of a road deck (carriageway + shoulder).
+     *   armPierToRailPier : plan distance between a pier of a J1 arm structure and a rail pier.
+     */
+    roadRailBuffer: { railOverRoad: 7.0, roadOverRail: 9.0, pierToDeckEdge: 3.0, armPierToRailPier: 3.0 },
     /** The long bridge to the island and the island's road network (RoadPlan.ISLAND_PLAN). */
     island: false,
     /**
