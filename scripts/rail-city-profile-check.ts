@@ -94,7 +94,7 @@ for (const c of rail.crossings) {
   else if (c.kind === 'rail-under-bridge' || c.kind === 'road-over-rail') worstUnder = Math.min(worstUnder, ry - dz);
   console.log(`  ${road.name} x ${c.edgeId} s ${c.s.toFixed(0)} (${c.x.toFixed(0)}, ${c.z.toFixed(0)}): ${c.kind}, road ${ry.toFixed(1)} m, rail ${dz.toFixed(1)} m`);
 }
-ok(nCross === 9, `${nCross} crossings of the J1 arms with the railway (6.1e list: 9)`);
+ok(nCross === 8, `${nCross} crossings of the J1 arms with the railway (9 before the new E route: E now has north-1 + east-1, east-2 is gone)`);
 ok(worstOver >= D.roadClearance - 0.05, `rail over an arm: smallest clearance under the viaduct ${f1(worstOver)} m (needs ${D.roadClearance} m)`);
 ok(worstUnder >= 7.0, `arm over the rail: smallest height of the arm over the rail top ${f1(worstUnder)} m (needs 7.0 m)`);
 
