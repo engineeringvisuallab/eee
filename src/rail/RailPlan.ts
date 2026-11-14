@@ -69,6 +69,12 @@ export const LINES: readonly LinePlan[] = [
  */
 export const STATION_LEVELS: Readonly<Record<string, number>> = { central: 34 };
 
+/**
+ * STEP RAIL-B / 3: where a J1 arm road was lowered to the ground under the railway, the railway keeps its old height (it must not follow the road down).
+ * Key = `${road name}|${rail edge id}`, value = lowest rail design height (m) inside the crossing zone (the old design height at the crossing).
+ */
+export const RAIL_OVER_ROAD_FLOOR: Readonly<Record<string, number>> = { 'J1-E|north-1': 33.8, 'J1-S|west-nw': 33.7, 'J1-W|west-nw': 40.6 };
+
 /** Gentle-line design limits (a heavy railway: far gentler than a road). */
 export const RAIL_DESIGN = {
   /** Steepest allowed grade (rise / run). */

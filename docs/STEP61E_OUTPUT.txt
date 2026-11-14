@@ -27,7 +27,7 @@
   PASS  N: every wet centreline point is inside a structure                            55 m wet
   PASS  N: no sea on the centreline                                                    sea m = 0
   PASS  N: every river crossing is inside a structure                                  1 crossings
-  PASS  N: every rail crossing is inside a structure and is in the profile list (X5)   1 from the world, 1 in the profile
+  PASS  N: every rail crossing is inside a road structure, or the rail passes over the road with >= 7.0 m, and is in the profile list (X5) 1 from the world, 1 in the profile, 0 of them rail over the road on the ground
   PASS  N: fill over 7 m only inside a structure (D4)                                  0 ranges outside
   PASS  N: max cut on the centreline <= 12 m (3.7)                                     max 11.9 m
   PASS  N: no facility fence (airport / seaport / army) or sea inside the ROW          nearest fence airport 744 m
@@ -44,11 +44,11 @@
   s  2555  channel width 21.1 m  water level 14.9 m  angle 61 deg  (inside a structure)
   s  2933  channel width 21.5 m  water level 21.1 m  angle 31 deg  (inside a structure)
 3. TERRAIN CLASS (steepest 10 m step across the ROW)   flat 1280 m (45.1 %), rolling 1350 m (47.5 %), HILLY 220 m (7.7 %), STEEP 0 m (0.0 %)
-   earthwork against the natural ground: max cut on the centreline 2.3 m, max cut at the formation edge (+-24.2 m) 2.4 m, max fill at the edge 54.2 m
+   earthwork against the natural ground: max cut on the centreline 2.8 m, max cut at the formation edge (+-24.2 m) 2.8 m, max fill at the edge 54.2 m
    edge cut over 12 m (side slopes steeper than 1:2 are ROCK CUT up to 4:1, user decision 5.2a): none
    fill over 7 m on the centreline outside a structure: none
 4. RAILWAY CROSSINGS (the railway cannot change; every one must be road OVER rail, inside a structure)
-  s   423  line north-1     angle 67 deg  profile gap 7.66 m  (inside a structure)
+  s   423  line north-1     angle 67 deg  profile gap -14.43 m  (OUTSIDE a structure)
   s  1346  line east-1      angle 16 deg  profile gap 7.67 m  (inside a structure)
   s  2648  line east-2      angle 80 deg  profile gap 36.99 m  (inside a structure)
    rail closer than 60 m to the centreline away from a crossing (parallel running): none
@@ -68,9 +68,9 @@
   PASS  E: every wet centreline point is inside a structure                            130 m wet
   PASS  E: no sea on the centreline                                                    sea m = 0
   PASS  E: every river crossing is inside a structure                                  3 crossings
-  PASS  E: every rail crossing is inside a structure and is in the profile list (X5)   3 from the world, 3 in the profile
+  PASS  E: every rail crossing is inside a road structure, or the rail passes over the road with >= 7.0 m, and is in the profile list (X5) 3 from the world, 3 in the profile, 1 of them rail over the road on the ground
   PASS  E: fill over 7 m only inside a structure (D4)                                  0 ranges outside
-  PASS  E: max cut on the centreline <= 12 m (3.7)                                     max 2.3 m
+  PASS  E: max cut on the centreline <= 12 m (3.7)                                     max 2.8 m
   PASS  E: no facility fence (airport / seaport / army) or sea inside the ROW          nearest fence seaport 2385 m
   PASS  E: ROW stays inside the map (>= 100 m from the edge)                           2033 m
 
@@ -85,7 +85,7 @@
    edge cut over 12 m (side slopes steeper than 1:2 are ROCK CUT up to 4:1, user decision 5.2a): none
    fill over 7 m on the centreline outside a structure: none
 4. RAILWAY CROSSINGS (the railway cannot change; every one must be road OVER rail, inside a structure)
-  s   415  line west-nw     angle 83 deg  profile gap 7.67 m  (inside a structure)
+  s   415  line west-nw     angle 83 deg  profile gap -15.57 m  (OUTSIDE a structure)
   s  1239  line west-sw     angle 34 deg  profile gap 7.62 m  (inside a structure)
   s  2065  line ring-south  angle 65 deg  profile gap 7.68 m  (inside a structure)
    rail closer than 60 m to the centreline away from a crossing (parallel running): none
@@ -104,7 +104,7 @@
   PASS  S: every wet centreline point is inside a structure                            40 m wet
   PASS  S: no sea on the centreline                                                    sea m = 0
   PASS  S: every river crossing is inside a structure                                  1 crossings
-  PASS  S: every rail crossing is inside a structure and is in the profile list (X5)   3 from the world, 3 in the profile
+  PASS  S: every rail crossing is inside a road structure, or the rail passes over the road with >= 7.0 m, and is in the profile list (X5) 3 from the world, 3 in the profile, 1 of them rail over the road on the ground
   PASS  S: fill over 7 m only inside a structure (D4)                                  0 ranges outside
   PASS  S: max cut on the centreline <= 12 m (3.7)                                     max 0.7 m
   PASS  S: no facility fence (airport / seaport / army) or sea inside the ROW          nearest fence airport-sea 1086 m
@@ -117,11 +117,11 @@
 2. RIVER SEGMENTS CROSSING THE CENTRELINE
   s  1885  channel width 26.6 m  water level 19.6 m  angle 48 deg  (inside a structure)
 3. TERRAIN CLASS (steepest 10 m step across the ROW)   flat 745 m (29.3 %), rolling 1170 m (46.0 %), HILLY 635 m (25.0 %), STEEP 0 m (0.0 %)
-   earthwork against the natural ground: max cut on the centreline 11.7 m, max cut at the formation edge (+-24.2 m) 19.5 m, max fill at the edge 14.1 m
-   edge cut over 12 m (side slopes steeper than 1:2 are ROCK CUT up to 4:1, user decision 5.2a): s 465-645 max 19.5 m
+   earthwork against the natural ground: max cut on the centreline 11.5 m, max cut at the formation edge (+-24.2 m) 19.6 m, max fill at the edge 14.1 m
+   edge cut over 12 m (side slopes steeper than 1:2 are ROCK CUT up to 4:1, user decision 5.2a): s 465-650 max 19.6 m
    fill over 7 m on the centreline outside a structure: none
 4. RAILWAY CROSSINGS (the railway cannot change; every one must be road OVER rail, inside a structure)
-  s   912  line west-nw     angle 89 deg  profile gap 7.97 m  (inside a structure)
+  s   912  line west-nw     angle 89 deg  profile gap -10.23 m  (OUTSIDE a structure)
   s  2783  line ring-west   angle 86 deg  profile gap 7.64 m  (inside a structure)
    rail closer than 60 m to the centreline away from a crossing (parallel running): none
 5. WORLD ZONE UNDER THE CENTRELINE
@@ -137,9 +137,9 @@
   PASS  W: every wet centreline point is inside a structure                            30 m wet
   PASS  W: no sea on the centreline                                                    sea m = 0
   PASS  W: every river crossing is inside a structure                                  1 crossings
-  PASS  W: every rail crossing is inside a structure and is in the profile list (X5)   2 from the world, 2 in the profile
+  PASS  W: every rail crossing is inside a road structure, or the rail passes over the road with >= 7.0 m, and is in the profile list (X5) 2 from the world, 2 in the profile, 1 of them rail over the road on the ground
   PASS  W: fill over 7 m only inside a structure (D4)                                  0 ranges outside
-  PASS  W: max cut on the centreline <= 12 m (3.7)                                     max 11.7 m
+  PASS  W: max cut on the centreline <= 12 m (3.7)                                     max 11.5 m
   PASS  W: no facility fence (airport / seaport / army) or sea inside the ROW          nearest fence army 2478 m
   PASS  W: ROW stays inside the map (>= 100 m from the edge)                           2444 m
 

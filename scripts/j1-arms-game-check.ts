@@ -19,7 +19,8 @@ const net = gen.roads, t = net.j1!;
 ok(!!t, 'J1 terrain exists');
 ok(off.roads.roads.every((r) => !r.name.startsWith('J1-')) && off.roads.roads.length + 4 === net.roads.length, `flag off: no arm roads (${off.roads.roads.length} roads), flag on: ${net.roads.length} roads`);
 
-const EXPECT: Record<string, number> = { 'J1-N': 5, 'J1-E': 4, 'J1-S': 5, 'J1-W': 3 };
+// RAIL-B STEP 3: E1, S1, W1 (road bridges over a rail that now passes over the lowered road) are gone: E 3, S 4, W 2
+const EXPECT: Record<string, number> = { 'J1-N': 5, 'J1-E': 3, 'J1-S': 4, 'J1-W': 2 };
 for (const d of J1_ARM_DATA) {
   const r = net.roads.find((q) => q.name === d.name);
   ok(!!r, `${d.name}: road exists`);
@@ -47,7 +48,7 @@ for (const d of J1_ARM_DATA) {
 }
 // structures: meshes
 const all = ringStructures(net);
-ok(all.length === 6 + 17, `ringStructures = ${all.length} (ring 6 + arms 17)`);
+ok(all.length === 6 + 14, `ringStructures = ${all.length} (ring 6 + arms 14)`);
 let tri = 0, empty = 0;
 const t0 = Date.now();
 all.forEach((b, k) => { const m = buildStructure(net, b, k); if (!m.indices.length) empty++; tri += m.indices.length / 3; });

@@ -3,6 +3,7 @@
 // Same rules as the ring (RoadNetwork.bridgeRing / STRUCT): a stretch is a structure when the centreline is WET (every river crossing, no dam), when the road is more than 7 m above the ground (D4 viaduct),
 // or where the road passes OVER a rail line (X5, the whole rail corridor is spanned). Each structure gets a 16 m approach slab at both ends (STRUCT.approach), neighbouring ones are merged when the gap is <= 15 m.
 // Spans are a PROPOSAL (marked): rail span = corridor 24 m / sin(angle), river main span = wet length + 2 x 15 m bank set-back, rest standard spans 40 m (50 m above 15 m height).
+import { RAIL_DESIGN } from '../src/rail/RailPlan';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { TerrainGenerator } from '../src/terrain/TerrainGenerator';
 import { Config } from '../src/core/Config';
@@ -14,6 +15,7 @@ const sc = { h: 0, water: NaN, fx: 0, fz: 0 };
 const ground = (x: number, z: number): number => { gen.sampleNatural(x, z, sc); return sc.h; };
 const waterAt = (x: number, z: number): number => { gen.sampleNatural(x, z, sc); return sc.water; };
 
+const RAIL_UNDER = RAIL_DESIGN.ballast + RAIL_DESIGN.deckThick;   // rail top -> deck underside
 const LANE_END = 269, SJ = 340, VIADUCT = 7, MERGE_GAP = 15, RAIL_CORRIDOR = 24, BANK = 15, SPAN_STD = 40, SPAN_TALL = 50, TALL = 15, SPAN_VTALL = 75, VTALL = 35, RAIL_CLR = 7.4, MIN_WATER_CLR = 2.5, NEAR_END = 150, RMIN_BRIDGE = 591;
 const lines: string[] = []; const P = (s = ''): void => { lines.push(s); console.log(s); };
 const f0 = (v: number): string => v.toFixed(0), f1 = (v: number): string => v.toFixed(1), f2 = (v: number): string => v.toFixed(2);
@@ -48,7 +50,7 @@ function crossAngle(rows: Row[], c: { s: number; edge: string }): number {
   return best;
 }
 
-function arm(tag: string, label: string, alignFile: string, profFile: string): { list: Struct[]; rows: Row[]; length: number } {
+function arm(tag: string, label: string, alignFile: string, profFile: string): { list: Struct[]; rows: Row[]; length: number; railOver: Array<{ s: number; edge: string; gap: number }> } {
   const { rows, prof, align } = loadArm(tag, alignFile, profFile);
   const ENDS = SJ + (align.length as number);
   // 1) flags per 5 m row
@@ -56,7 +58,10 @@ function arm(tag: string, label: string, alignFile: string, profFile: string): {
   const zr: Array<{ a: number; b: number; wet: boolean; via: boolean; rail: any[] }> = [];
   const flagged: Array<{ s: number; wet: boolean; via: boolean }> = [];
   rows.forEach((r) => { const wet = !Number.isNaN(r.w) && r.g < r.w + 0.3 && r.g > 2; const via = r.r - r.g > VIADUCT; if (wet || via) flagged.push({ s: r.s, wet, via }); });
-  const cross = (prof.crossings as Array<{ s: number; rail: number; edge: string; road: number; gap: number }>).map((c) => { const ang = crossAngle(rows, c); const span = Math.ceil(RAIL_CORRIDOR / Math.sin((Math.max(ang, 20) * Math.PI) / 180) / 5) * 5; return { ...c, angle: ang, span }; });
+  // RAIL-B STEP 3: a crossing where the rail passes OVER the lowered road needs no road structure (the rail bridge is the structure); it is only checked (rail deck underside >= 7.0 m over the road)
+  const crossAll = (prof.crossings as Array<{ s: number; rail: number; edge: string; road: number; gap: number }>).map((c) => { const ang = crossAngle(rows, c); const span = Math.ceil(RAIL_CORRIDOR / Math.sin((Math.max(ang, 20) * Math.PI) / 180) / 5) * 5; return { ...c, angle: ang, span }; });
+  const railOver = crossAll.filter((c) => c.gap < 0);
+  const cross = crossAll.filter((c) => c.gap >= 0);
   const parts: Array<{ a: number; b: number; wet: boolean; via: boolean; rail: typeof cross }> = [];
   for (const f of flagged) {
     const a = f.s - 5 / 2 - STRUCT.approach, b = f.s + 5 / 2 + STRUCT.approach, last = parts[parts.length - 1];
@@ -91,7 +96,7 @@ function arm(tag: string, label: string, alignFile: string, profFile: string): {
       maxCurvatureOn: kMax, hCurveOnStruct: curved, vCurvesOn: vOn, fromArmEnd: ENDS - p.b, proposal: '', why: '',
     };
   });
-  return { list, rows, length: ENDS };
+  return { list, rows, length: ENDS, railOver };
 }
 
 const S = arm('S', 'S arm', 'j1c6b_align.json', 'j1c6c_profile.json');
@@ -139,6 +144,7 @@ for (const [A, nm] of [[S, 'S']] as const) {
   CHK(`${nm}: every point with fill > ${VIADUCT} m is inside a viaduct (D4)`, viaOut === 0, `${viaOut * 5} m outside`);
   const rails = A.list.flatMap((s) => s.rail.map((c) => ({ s, c })));
   CHK(`${nm}: every rail crossing lies in a structure that spans the whole corridor + approach (X5)`, rails.every(({ s, c }) => c.s - c.span / 2 >= s.s0 + STRUCT.approach - 0.01 && c.s + c.span / 2 <= s.s1 - STRUCT.approach + 0.01), `${rails.length} crossings: ${rails.map(({ s, c }) => `${s.id}/${c.edge} s ${f0(c.s)}`).join(', ') || '-'}`);
+  CHK(`${nm}: rail over road (no road structure): rail deck underside >= 7.0 m over the road`, A.railOver.every((c) => -c.gap - RAIL_UNDER >= 7.0), A.railOver.map((c) => `${c.edge} s ${f0(c.s)}: ${f2(-c.gap - RAIL_UNDER)} m`).join(', ') || '-');
   CHK(`${nm}: road over rail >= ${RAIL_CLR} m on every rail crossing`, rails.every(({ c }) => c.gap >= RAIL_CLR), rails.map(({ c }) => `${f2(c.gap)} m`).join(', ') || '-');
   CHK(`${nm}: river crossings: road at least ${MIN_WATER_CLR} m above the water`, A.list.every((s) => s.riverClear === null || s.riverClear >= MIN_WATER_CLR), A.list.filter((s) => s.riverClear !== null).map((s) => `${s.id} ${f1(s.riverClear!)} m`).join(', ') || 'no river');
   CHK(`${nm}: structures do not overlap and start after the J1 lane zone (s >= ${LANE_END}, J1-b)`, A.list.every((s, i) => s.s0 >= LANE_END - 0.01 && (i === 0 || s.s0 > A.list[i - 1].s1)), `${A.list.length} structures, first starts at s ${f0(A.list[0]?.s0 ?? 0)}`);

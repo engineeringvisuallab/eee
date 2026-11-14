@@ -3,6 +3,7 @@
 // Run: npx tsx scripts/j1-arms-ground-check.ts docs    needs docs/j1c{4b,7b,6b,5b}_align.json, j1c{4c,7c,6c,5c}_profile.json, j1_structures_NW.json, j1_structures_E.json, j1_structures_S.json
 // Writes docs/j1_arms_ground.json + docs/STEP61E_OUTPUT.txt. Rules (user, 2026-11-14): ONLY THE RAILWAY IS FIXED. Zones, parks, buildings may be crossed (they are re-placed to the roads later, J1-f / 6.2b), so they are LISTED, not failed.
 // Hard stops: water on the centreline outside a structure, a river or rail crossing outside a structure, a facility fence (airport / seaport / army) or the sea inside the ROW, the map edge, a centre cut over 12 m (3.7).
+import { RAIL_DESIGN } from '../src/rail/RailPlan';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { TerrainGenerator } from '../src/terrain/TerrainGenerator';
 import { Config } from '../src/core/Config';
@@ -134,7 +135,9 @@ for (const A of ARMS) {
   CHK(`${A.id}: every wet centreline point is inside a structure`, rows.every((r) => !r.wetC || inS(r.s)), `${f0(wetC.reduce((a, r) => a + r.len, 0))} m wet`);
   CHK(`${A.id}: no sea on the centreline`, rows.every((r) => !r.sea), 'sea m = ' + rows.filter((r) => r.sea).length * 5);
   CHK(`${A.id}: every river crossing is inside a structure`, rivX.every((r) => inS(r.s)), `${rivX.length} crossings`);
-  CHK(`${A.id}: every rail crossing is inside a structure and is in the profile list (X5)`, railX.every((r) => inS(r.s) && profRail[A.id].some((c: any) => c.edge === r.edge && Math.abs(c.s - r.s) < 25)), `${railX.length} from the world, ${profRail[A.id].length} in the profile`);
+  // RAIL-B STEP 3: a crossing may also be on the GROUND when the rail passes over the lowered road (deck underside >= 7.0 m over the road); the rail bridge is then the structure
+  const railOver = (r: { s: number; edge: string }): boolean => profRail[A.id].some((c: any) => c.edge === r.edge && Math.abs(c.s - r.s) < 25 && c.gap <= -(RAIL_DESIGN.ballast + RAIL_DESIGN.deckThick + 7.0));
+  CHK(`${A.id}: every rail crossing is inside a road structure, or the rail passes over the road with >= 7.0 m, and is in the profile list (X5)`, railX.every((r) => (inS(r.s) || railOver(r)) && profRail[A.id].some((c: any) => c.edge === r.edge && Math.abs(c.s - r.s) < 25)), `${railX.length} from the world, ${profRail[A.id].length} in the profile, ${railX.filter((r) => !inS(r.s) && railOver(r)).length} of them rail over the road on the ground`);
   CHK(`${A.id}: fill over ${FILL_VIADUCT} m only inside a structure (D4)`, tall.length === 0, `${tall.length} ranges outside`);
   CHK(`${A.id}: max cut on the centreline <= ${CUT_MAX} m (3.7)`, cutC <= CUT_MAX + 0.05, `max ${f1(cutC)} m`);
   CHK(`${A.id}: no facility fence (airport / seaport / army) or sea inside the ROW`, hard.length === 0 && fmin >= FENCE_MIN, `nearest fence ${fid} ${f0(fmin)} m`);
