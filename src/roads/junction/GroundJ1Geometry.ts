@@ -1,3 +1,5 @@
+// J1-g4 NOTE: the game no longer draws this old box (GroundJ1Mesh was removed). This file stays because the open star (OpenJ1Geometry / OpenJ1Mesh) reads its shared frame and inputs
+// (DIRS, rotCW, toWorld, J1_SITE, J1_APPROACH_INPUTS) and scripts/j1-ground-check.ts still checks the old box numbers.
 // STEP J1-b  GEOMETRY DATA of the ground-level 8 x 8 signalised "+" J1 (HANDOFF_ROAD_DESIGN.md 15.8, 15.9, section 12). PURE MATH: no three.js, no terrain.
 // Every number comes from DESIGN / CRITERIA / SECTION_M8 / the J1-a calculation sheet (docs/j1a.json); the few free choices are listed in J1_PARAMS and marked ASSUMED.
 //

@@ -1,10 +1,9 @@
-// STEP J1-e1 (headless): the ground-level J1 in the game. Terrain carve vs mesh height, cut / fill under the lane zones, EVLab yielding, railway unchanged.
+// STEP J1-e1 / J1-g4 (headless): the ground-level J1 (open star since J1-g4) in the game. Terrain carve vs mesh height, cut / fill under the lane zones, EVLab yielding, railway unchanged.
 // Run: npx tsx scripts/j1-game-check.ts
 import { TerrainGenerator } from '../src/terrain/TerrainGenerator';
 import { Config } from '../src/core/Config';
 import { J1Terrain, J1_S_END } from '../src/roads/junction/GroundJ1Terrain';
-import { buildJ1Mesh } from '../src/roads/junction/GroundJ1Mesh';
-import { buildJ1Geometry } from '../src/roads/junction/GroundJ1Geometry';
+import { buildOpenJ1Mesh, OPEN_MESH } from '../src/roads/junction/OpenJ1Mesh';
 import { EVLAB_PLOT } from '../src/evlab/EVLabSite';
 
 let fails = 0;
@@ -56,12 +55,32 @@ for (let e = -330; e <= 330; e += 6) for (let nn = -330; nn <= 330; nn += 6) {
 console.log(`  footprint samples ${cnt}: wet ${wet}, inside the EVLab plot ${inPlot} (${((100 * inPlot) / cnt).toFixed(0)} %)`);
 ok(wet === 0, 'no water inside the J1 footprint');
 
-// 5. mesh
-const geo = buildJ1Geometry();
-const m = buildJ1Mesh(t, geo);
-console.log(`  mesh: ${m.stats.verts} vertices, ${m.stats.tris} triangles (islands ${m.stats.islandTris}, marks ${m.stats.markTris})`);
+// 5. mesh (open star, J1-g4)
+const m = buildOpenJ1Mesh(t);
+console.log(`  mesh: ${m.stats.verts} vertices, ${m.stats.tris} triangles (surface ${m.stats.surfaceTris}, islands ${m.stats.islandTris}, kerbs ${m.stats.kerbTris}, marks ${m.stats.markTris})`);
 ok(m.stats.tris > 1000 && m.stats.tris < 60000, 'triangle count is sane');
-let up = 0; for (let i = 0; i < m.indices.length; i += 3) { const a = m.indices[i] * 3, b = m.indices[i + 1] * 3, c = m.indices[i + 2] * 3; const ny = (m.positions[b + 2] - m.positions[a + 2]) * (m.positions[c] - m.positions[a]) - (m.positions[b] - m.positions[a]) * (m.positions[c + 2] - m.positions[a + 2]); if (ny !== 0) up++; }
-ok(up > 0, 'faces have area');
+let flat = 0, degenerate = 0, downFaces = 0;
+for (let ti = 0; ti < m.indices.length / 3; ti++) {
+  if (ti >= m.parts.kerb[0] && ti < m.parts.kerb[1]) continue; // kerb walls are vertical
+  const a = m.indices[ti * 3] * 3, b = m.indices[ti * 3 + 1] * 3, c = m.indices[ti * 3 + 2] * 3; flat++;
+  const ny = (m.positions[b + 2] - m.positions[a + 2]) * (m.positions[c] - m.positions[a]) - (m.positions[b] - m.positions[a]) * (m.positions[c + 2] - m.positions[a + 2]);
+  if (Math.abs(ny) < 1e-7) degenerate++; else if (ny < 0) downFaces++;
+}
+ok(degenerate === 0 && downFaces === 0, `every flat face has area and looks up (${flat} faces, ${degenerate} degenerate, ${downFaces} looking down)`);
+// every surface / island / mark vertex lies on the game ground (carved terrain incl. EVLab) + its lift
+let worstG = 0, worstWhere = '';
+const [s0, s1] = m.parts.surface, [k0, k1] = [m.parts.island[0], m.parts.mark[1]];
+const seen = new Set<number>();
+for (let ti = s0; ti < k1; ti++) {
+  if (ti >= m.parts.kerb[0] && ti < m.parts.kerb[1]) continue; // kerb walls have the island height at the top, ground at the foot
+  for (let q = 0; q < 3; q++) {
+    const vi = m.indices[ti * 3 + q]; if (seen.has(vi)) continue; seen.add(vi);
+    const x = m.positions[vi * 3], y = m.positions[vi * 3 + 1], z = m.positions[vi * 3 + 2];
+    const lift = ti < s1 ? OPEN_MESH.lift : ti < m.parts.island[1] ? OPEN_MESH.islandH : OPEN_MESH.mark;
+    const d = Math.abs(y - lift - gen.heightAt(x, z));
+    if (d > worstG) { worstG = d; worstWhere = `x ${x.toFixed(1)} z ${z.toFixed(1)}`; }
+  }
+}
+ok(worstG < 0.06, `every mesh vertex lies on the game ground + its lift: max diff ${worstG.toFixed(3)} m at ${worstWhere} (${seen.size} vertices)`);
 console.log(fails === 0 ? 'ALL PASS' : `${fails} FAIL`);
 process.exit(fails ? 1 : 0);
