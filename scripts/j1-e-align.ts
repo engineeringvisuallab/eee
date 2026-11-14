@@ -38,7 +38,7 @@ const J1 = { x: Number(process.env.J1X ?? -87), z: Number(process.env.J1Z ?? -27
 const SS = 340, S0 = 60, Y_PAD = 18.19;
 const h0 = J1.yawDeg * rad;                                              // math heading of the E axis (bearing yaw + 90 = math yaw)
 const S = { x: J1.x + SS * Math.sin((J1.yawDeg + 90) * rad), z: J1.z - SS * Math.cos((J1.yawDeg + 90) * rad) };
-const ST_LO = Number(process.env.STLO ?? 14959), ST_HI = Number(process.env.STHI ?? 15799), ST_REF = 15400;   // ring E straight 14809..15949 (150 m inside by default), reference station for u
+const ST_LO = Number(process.env.STLO ?? 14959), ST_HI = Number(process.env.STHI ?? 15799), ST_REF = Number(process.env.STREF ?? 15400);   // ring E straight 14809..15949 (150 m inside by default), reference station for u
 const rRef = ringS.reduce((b, r) => (Math.abs(r.st - ST_REF) < Math.abs(b.st - ST_REF) ? r : b));
 const hr = rRef.h * rad;                                                  // ring heading (math, rad) on the straight
 const h1 = hr - Math.PI / 2;                                              // arrival heading of the radial (perpendicular, pointing to the ring)

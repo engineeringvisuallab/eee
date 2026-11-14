@@ -1,30 +1,32 @@
-restart 0: cost 33936
-restart 1: cost 34080
-restart 2: cost 34673
-restart 3: cost 33950
-restart 4: cost 33943
-restart 5: cost 34054
-restart 6: cost 45925
-restart 7: cost 33922
-J1-c7b E ARM ALIGNMENT   J1 (-87, -277) yaw 37.5 deg, start S (182.7, -70.0) heading 37.5 deg (math), 2 PIs, Ls 100 m, V 100
-  end E (2967.0, 193.6) on the ring E straight, arrival heading 6.8 deg (ring 96.8 deg), alignment length 2841 m (straight line S-E 2797 m)
+restart 0: cost 3908
+restart 1: cost 10200152
+restart 2: cost 10200463
+restart 3: cost 4548
+restart 4: cost 5871
+restart 5: cost 7010
+restart 6: cost 4401
+restart 7: cost 10252120
+J1-c7b E ARM ALIGNMENT   J1 (-87, -277) yaw 37.5 deg, start S (182.7, -70.0) heading 37.5 deg (math), 4 PIs, Ls 100 m, V 100
+  end E (1896.1, 1663.7) on the ring E straight, arrival heading 63.7 deg (ring 153.7 deg), alignment length 2472 m (straight line S-E 2437 m)
   PI table:  #  x  z  R  Ls  delta(deg)  Ts  arc(m)  straight before / after
-    0  475.1  154.3  R 883  Ls 100  delta -39.2  Ts 364.7  arc 504  straight 4 / 1260
-    1  2200.3  102.1  R 686  Ls 100  delta 8.5  Ts 101.2  arc 2  straight 1260 / 671
+    0  410.4  104.6  R 1643  Ls 100  delta -3.6  Ts 102.3  arc 5  straight 185 / 221
+    1  859.5  405.9  R 828  Ls 100  delta 22.8  Ts 217.0  arc 229  straight 221 / 273
+    2  1233.7  974.7  R 888  Ls 100  delta -18.1  Ts 191.3  arc 180  straight 273 / 293
+    3  1765.1  1398.7  R 654  Ls 100  delta 25.1  Ts 195.7  arc 187  straight 293 / 100
 
-  PASS  PI 1.. every R >= 591 m (1.5 x Rmin V100)                        smallest R 686 m
-  PASS  PI 0 R >= 591 m                                                  R 883 m, Ls 100 m, turn 39.2 deg
-  PASS  spiral Ls >= minimum (V55 on PI 0, V100 on the rest)             Ls 100 m, needed 60 / 60 m
-  PASS  straights between curves: reverse >= 2V, same direction >= 6V, none negative 4 / 1260(>=200) / 671
+  PASS  PI 1.. every R >= 591 m (1.5 x Rmin V100)                        smallest R 654 m
+  PASS  PI 0 R >= 591 m                                                  R 1643 m, Ls 100 m, turn 3.6 deg
+  PASS  spiral Ls >= minimum (V55 on PI 0, V100 on the rest)             Ls 100 m, needed 60 / 60 / 60 / 60 m
+  PASS  straights between curves: reverse >= 2V, same direction >= 6V, none negative 185 / 221(>=200) / 273(>=200) / 293(>=200) / 100
   PASS  first tangent is the J1 axis (start heading exact)               start heading 37.50 deg
-  PASS  dead reckoning reaches E (position and heading)                  gap 4.6e-13 m, -1.6e-15 deg
+  PASS  dead reckoning reaches E (position and heading)                  gap 3.2e-13 m, -1.3e-14 deg
   PASS  T on the ring: arrival angle 80..100 deg to the ring             90.0 deg
-  PASS  join point on the ring E straight (st 15309..15449 of 14809..15949) st 15313, 4 m from the west end and 136 m from the east end of the straight (3-leg interchange wants about 1000 m each side: INFO)
-  PASS  smooth: no kink, curvature is continuous (dk/ds <= 1/(R Ls) + small) max heading step 0.42 deg per 5 m, max dk/ds 1.46e-5, tightest R 692 m
-  PASS  centreline at least 45 m from every engineering zone / airport fence nearest: eng-mech-works 75 m, eng-dam 241 m, eng-automation 374 m
-  INFO  wet length (river / lake cells under the centreline) 110 m  (a river crossing becomes a bridge, 6.1e)
-  INFO  rail crossings (road over rail, 6.5 m clearance, 6.1d): 3 at s 85, 1009, 2312 m from S
-  VERTICAL PREVIEW (grade <= 3 % DP profile, the real profile is c4c): max centre cut 3.1 m, cut > 8 m 0 m, cut > 12 m 0 m, max fill 51.3 m, fill > 7 m (viaduct) 1261 m, max grade 3.00 %, cut volume about 0.02 million m3 (rough)
-  PASS  no centre cut over 12 m (user: hill cut must go; 12 m = section 3.7 limit 12 m) max cut 3.1 m
-  PASS  grade <= 3 % (<= 3.0 % on the first 0 m from S)                  max 0.00 % on the hill stretch, 3.00 % elsewhere
+  PASS  join point on the ring E straight (st 16788..17403 of 14809..15949) st 17328, 540 m from the west end and 75 m from the east end of the straight (3-leg interchange wants about 1000 m each side: INFO)
+  PASS  smooth: no kink, curvature is continuous (dk/ds <= 1/(R Ls) + small) max heading step 0.44 deg per 5 m, max dk/ds 1.53e-5, tightest R 654 m
+  PASS  centreline at least 45 m from every engineering zone / airport fence nearest: eng-transport 354 m, eng-mech-works 359 m, eng-chemical 437 m
+  INFO  wet length (river / lake cells under the centreline) 70 m  (a river crossing becomes a bridge, 6.1e)
+  INFO  rail crossings (road over rail, 6.5 m clearance, 6.1d): 2 at s 85, 579 m from S
+  VERTICAL PREVIEW (grade <= 3 % DP profile, the real profile is c4c): max centre cut 4.3 m, cut > 8 m 0 m, cut > 12 m 0 m, max fill 12.1 m, fill > 7 m (viaduct) 60 m, max grade 2.99 %, cut volume about 0.07 million m3 (rough)
+  PASS  no centre cut over 12 m (user: hill cut must go; 12 m = section 3.7 limit 12 m) max cut 4.3 m
+  PASS  grade <= 3 % (<= 3.0 % on the first 0 m from S)                  max 0.00 % on the hill stretch, 2.99 % elsewhere
 SUMMARY: 12 PASS, 0 FAIL

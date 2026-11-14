@@ -9,7 +9,7 @@ const out = process.argv[2] ?? 'docs';
 mkdirSync(out, { recursive: true });
 const gen = new TerrainGenerator(Config.world.seed);
 const sc = { h: 0, water: NaN, fx: 0, fz: 0 };
-const CELL = 20, X0 = -300, X1 = 3300, Z0 = -1000, Z1 = 1000;
+const CELL = 20, X0 = -300, X1 = 3300, Z0 = -1000, Z1 = Number(process.env.RZ1 ?? 1000);
 const NX = (X1 - X0) / CELL, NZ = (Z1 - Z0) / CELL;
 const h: number[] = [], wet: number[] = [];
 for (let j = 0; j < NZ; j++) for (let i = 0; i < NX; i++) {
