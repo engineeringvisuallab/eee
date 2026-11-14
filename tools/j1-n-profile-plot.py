@@ -8,7 +8,7 @@ fig, ax = plt.subplots(2, 1, figsize=(16, 8), sharex=True, gridspec_kw={'height_
 a = ax[0]
 a.fill_between(s, g, y, where=g > y, color='tab:red', alpha=.45, label='cut (centre)')
 a.fill_between(s, g, y, where=g < y, color='tab:blue', alpha=.45, label='fill (centre)')
-a.plot(s, g, 'k', lw=1.5, label='ground'); a.plot(s, y, 'r', lw=2, label='road level (grade <= 3 %)')
+a.plot(s, g, 'k', lw=1.5, label='ground'); a.plot(s, y, 'r', lw=2, label='road level (grade <= 3 %, 4 % on the first 1000 m from S)')
 a.axhline(0, lw=0)
 for x, t in [(340 + c, 'rail crossing') for c in A['railCrossS']]: a.axvline(x, color='m', ls='--'); a.text(x, a.get_ylim()[1], t, color='m', rotation=90, va='top', ha='right')
 a.set_ylabel('level (m)'); a.legend(loc='upper right'); a.set_title(f"N arm c4b profile: max cut {A['cutMax']:.1f} m, max fill {A['fillMax']:.1f} m, length {A['length']:.0f} m from S (J1 + 340 m)"); a.grid(alpha=.3)

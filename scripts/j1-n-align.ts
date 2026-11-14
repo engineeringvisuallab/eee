@@ -46,6 +46,8 @@ const h1 = hr - Math.PI / 2;                                              // arr
 const ringPoint = (u: number): { x: number; z: number } => ({ x: rRef.x + u * Math.cos(hr), z: rRef.z + u * Math.sin(hr) });
 const U_LO = ST_LO - rRef.st + 150, U_HI = ST_HI - rRef.st - 150;         // keep 150 m inside the straight at least
 const R_MIN = 591, LS = 100, V = 100, DS = 20;
+const GH = Number(process.env.GHILL ?? 0.04), HILL_END = Number(process.env.HILLEND ?? 1000);   // grade limit on the first HILL_END m from S (user 2026-11-14: allow steeper on the hill stretch); 3 % elsewhere
+const gLim = (s: number): number => (s < HILL_END ? GH : 0.03);
 const ZONES_ON = process.env.ZONES !== '0';                                 // ZONES=0: engineering zones / fences may be crossed (user 2026-11-14: buildings move to the roads; the RAILWAY stays fixed)
 
 // ---------------------------------------------------------------- parameters -> alignment
@@ -85,7 +87,7 @@ function evaluate(p: Par, detail = false): Eval {
     } else if (g < 100) pen += 0.4 * (100 - g) ** 2;                                  // a little straight at both ends
   }
   if (pen >= 1e5) return { cost: 1e7 + pen, ok: false, zoneN: 0, wetN: 0, note: 'overlap' };
-  const n = Math.ceil(al.length / DS), ds = al.length / n;
+  const n = Math.max(1, Math.floor(al.length / DS)), ds = al.length / n;   // ds >= DS so that kmax bins of DH never exceed the grade limit
   const gmax = new Float64Array(n + 1), gmin = new Float64Array(n + 1);
   let zoneN = 0, wetN = 0;
   for (let i = 0; i <= n; i++) {
@@ -106,7 +108,7 @@ function evaluate(p: Par, detail = false): Eval {
   for (let k = 0; k < NL; k++) if (lvl(k) >= yLo && lvl(k) <= yHi) cur[k] = stepCost(0, lvl(k));
   for (let i = 1; i <= n; i++) {
     const nxt = new Float64Array(NL).fill(Infinity), pp = new Int16Array(NL).fill(-1);
-    const kmax = Math.floor((0.03 * ds) / DH + 1e-9);
+    const kmax = Math.floor((gLim(i * ds) * ds) / DH + 1e-9);
     for (let k = 0; k < NL; k++) {
       const c = stepCost(i, lvl(k)); let best = Infinity, bk = -1;
       for (let d = -kmax; d <= kmax; d++) { const kk = k + d; if (kk < 0 || kk >= NL) continue; if (cur[kk] < best) { best = cur[kk]; bk = kk; } }
@@ -201,6 +203,7 @@ for (let i = 1; i < sm.length; i++) for (const e of RAIL) for (let k = 0; k + 1 
 P(`  INFO  rail crossings (road over rail, 6.5 m clearance, 6.1d): ${railX.length} at s ${railX.join(', ') || '-'} m from S`);
 // vertical preview
 const n = prof.length - 1, dsP = al.length / n;
+let gBad = 0, gHill = 0, gRest = 0;
 let cutMax = 0, fillMax = 0, c8 = 0, c12 = 0, f7 = 0, gMax = 0, volCut = 0;
 const gnd: number[] = [];
 for (let i = 0; i <= n; i++) {
@@ -209,11 +212,11 @@ for (let i = 0; i <= n; i++) {
   gnd.push(g0); const c = g0 - prof[i];
   cutMax = Math.max(cutMax, c); fillMax = Math.max(fillMax, -c);
   if (c > 8) c8 += dsP; if (c > 12) c12 += dsP; if (-c > 7) f7 += dsP; if (c > 0) volCut += dsP * (c * (44.2 + 6 + 1.5 * c)); void gm;
-  if (i > 0) gMax = Math.max(gMax, Math.abs(prof[i] - prof[i - 1]) / dsP);
+  if (i > 0) { const gg = Math.abs(prof[i] - prof[i - 1]) / dsP; gMax = Math.max(gMax, gg); if (gg > gLim(i * dsP) + 1e-6) gBad++; if (i * dsP < HILL_END) gHill = Math.max(gHill, gg); else gRest = Math.max(gRest, gg); }
 }
 P(`  VERTICAL PREVIEW (grade <= 3 % DP profile, the real profile is c4c): max centre cut ${f1(cutMax)} m, cut > 8 m ${f0(c8)} m, cut > 12 m ${f0(c12)} m, max fill ${f1(fillMax)} m, fill > 7 m (viaduct) ${f0(f7)} m, max grade ${f2(gMax * 100)} %, cut volume about ${(volCut / 1e6).toFixed(2)} million m3 (rough)`);
 CHK('no centre cut over 12 m (user: hill cut must go; 12 m = section 3.7 limit 12 m)', c12 === 0, `max cut ${f1(cutMax)} m`);
-CHK('grade <= 3 %', gMax <= 0.0301, `${f2(gMax * 100)} %`);
+CHK(`grade <= 3 % (<= ${f1(GH * 100)} % on the first ${HILL_END} m from S)`, gBad === 0, `max ${f2(gHill * 100)} % on the hill stretch, ${f2(gRest * 100)} % elsewhere`);
 const fails = checks.filter((c) => !c.pass).length;
 P(`SUMMARY: ${checks.length - fails} PASS, ${fails} FAIL`);
 writeFileSync(`${out}/STEPJ1C4B_OUTPUT.txt`, lines.join('\n') + '\n');
