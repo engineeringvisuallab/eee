@@ -110,7 +110,7 @@
   {
    "name": "S: max cut on the centreline <= 12 m (3.7)",
    "pass": true,
-   "detail": "max 0.7 m"
+   "detail": "max 2.6 m"
   },
   {
    "name": "S: no facility fence (airport / seaport / army) or sea inside the ROW",
@@ -249,23 +249,13 @@
    "structs": [
     {
      "id": "S1",
-     "s0": 970.4,
-     "s1": 1157.2
+     "s0": 1215.1,
+     "s1": 1292
     },
     {
      "id": "S2",
-     "s0": 1180.1,
-     "s1": 1331.9
-    },
-    {
-     "id": "S3",
-     "s0": 1369.8,
-     "s1": 1541.6
-    },
-    {
-     "id": "S4",
-     "s0": 1938.9,
-     "s1": 2130.6
+     "s0": 1903.9,
+     "s1": 2240.4
     }
    ]
   },

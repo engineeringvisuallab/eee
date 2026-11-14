@@ -81,13 +81,13 @@
 2. RIVER SEGMENTS CROSSING THE CENTRELINE
   s  1254  channel width 33.3 m  water level 16.5 m  angle 48 deg  (inside a structure)
 3. TERRAIN CLASS (steepest 10 m step across the ROW)   flat 2180 m (87.7 %), rolling 225 m (9.1 %), HILLY 90 m (3.6 %), STEEP 0 m (0.0 %)
-   earthwork against the natural ground: max cut on the centreline 0.7 m, max cut at the formation edge (+-24.2 m) 0.7 m, max fill at the edge 16.5 m
+   earthwork against the natural ground: max cut on the centreline 2.6 m, max cut at the formation edge (+-24.2 m) 3.1 m, max fill at the edge 9.8 m
    edge cut over 12 m (side slopes steeper than 1:2 are ROCK CUT up to 4:1, user decision 5.2a): none
    fill over 7 m on the centreline outside a structure: none
 4. RAILWAY CROSSINGS (the railway cannot change; every one must be road OVER rail, inside a structure)
   s   415  line west-nw     angle 83 deg  profile gap -15.57 m  (OUTSIDE a structure)
-  s  1239  line west-sw     angle 34 deg  profile gap 7.62 m  (inside a structure)
-  s  2065  line ring-south  angle 65 deg  profile gap 7.68 m  (inside a structure)
+  s  1239  line west-sw     angle 34 deg  profile gap -16.52 m  (inside a structure)
+  s  2065  line ring-south  angle 65 deg  profile gap 9.57 m  (inside a structure)
    rail closer than 60 m to the centreline away from a crossing (parallel running): none
 5. WORLD ZONE UNDER THE CENTRELINE
   s   340- 1129    794 m  metro-core (urban-core)
@@ -106,7 +106,7 @@
   PASS  S: every river crossing is inside a structure                                  1 crossings
   PASS  S: every rail crossing is inside a road structure, or the rail passes over the road with >= 7.0 m, and is in the profile list (X5) 3 from the world, 3 in the profile, 1 of them rail over the road on the ground
   PASS  S: fill over 7 m only inside a structure (D4)                                  0 ranges outside
-  PASS  S: max cut on the centreline <= 12 m (3.7)                                     max 0.7 m
+  PASS  S: max cut on the centreline <= 12 m (3.7)                                     max 2.6 m
   PASS  S: no facility fence (airport / seaport / army) or sea inside the ROW          nearest fence airport-sea 1086 m
   PASS  S: ROW stays inside the map (>= 100 m from the edge)                           2698 m
 
