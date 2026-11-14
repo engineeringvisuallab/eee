@@ -1,4 +1,4 @@
-// STEP RAIL-B / point 7, step 2: vertical profile of the NEW E arm (route j1c7b_align.json, T on the ring at ground level, ring st 17328). Same method as j1-rail-b4-profile.ts:
+// STEP RAIL-B / point 7, step 2: vertical profile of the NEW E arm (route j1c7b_align.json, T on the ring at ground level; T moved to ring st ~16813 on 2026-11-14 so an interchange stays clear of the rail). Same method as j1-rail-b4-profile.ts:
 // all PVIs (s, level) are searched, the road follows the ground, grade <= 3 %, K >= minimum, first curve starts at s >= 60 (pad plane kept), end level = ring level.
 // Rail crossings: north-1 = rail over road (road must be low), east-1 = road over rail (road must be high), heights of the rail as in the game now (step 5 re-checks the rail with the new arm).
 // Run: npx tsx scripts/j1-e-profile2.ts docs   (WRITE=1: writes docs/j1c7c_profile.json; then structures-e, tools/j1-arm-data.py in the later steps)
@@ -40,9 +40,14 @@ for (const cfg of ARMS) {
   const oldPvi: Pvi[] = PR.pvi;
   oldPvi[1] = { ...oldPvi[1], s: 130, y: oldPvi[0].y + 0.003 * 130 };   // pad-line join fixed at s 130 (grade 0.30 %), first curve then starts at s >= 60
   cfg.tailFrom = oldPvi.length - 1;
-  const yEnd = oldPvi[oldPvi.length - 1].y;
   const smp = A.samples as number[][];             // [s from S, x, z, headingDeg, k]
   const ENDS = SJ + A.length;
+  // 2026-11-14 (T moved away from the rail, ring st ~16813): the start table of the previous route is stretched to the new length and its last level = ring DESIGN level at the T (docs/ring_profile.csv)
+  const ringRows = readFileSync(`${out}/ring_profile.csv`, 'utf8').split(/\r?\n/).slice(1).filter(Boolean).map((l) => l.split(',').map(Number));
+  const ringDesign = (st: number): number => { const k = Math.max(0, Math.min(ringRows.length - 2, Math.floor(st / 10))); const u = st / 10 - k; return ringRows[k][2] * (1 - u) + ringRows[k + 1][2] * u; };
+  const yEnd = ringDesign(A.endStation);
+  { const s0 = 130, sOld = oldPvi[oldPvi.length - 1].s, k = (ENDS - s0) / (sOld - s0); const yOldEnd = oldPvi[oldPvi.length - 1].y;
+    for (let i = 2; i < oldPvi.length; i++) { oldPvi[i] = { ...oldPvi[i], s: s0 + (oldPvi[i].s - s0) * k, y: oldPvi[i].y + (yEnd - yOldEnd) * ((oldPvi[i].s - s0) / (sOld - s0)) }; } }
   const hx = smp[1][1] - smp[0][1], hz = smp[1][2] - smp[0][2], hl = Math.hypot(hx, hz);
   // ground samples: lane zone s 60..340 (straight line backwards from S, as tools/j1-arm-data.py) + plan samples
   const sS: number[] = [], xs: number[] = [], zs: number[] = [], hd: number[] = [];
@@ -63,6 +68,8 @@ for (const cfg of ARMS) {
     const t = ((cx - ax) * (dz - cz) - (cz - az) * (dx - cx)) / den, u = ((cx - ax) * (bz - az) - (cz - az) * (bx - ax)) / den;
     if (t >= 0 && t <= 1 && u >= 0 && u <= 1) crossings.push({ s: SJ + smp[i - 1][0] + t * (smp[i][0] - smp[i - 1][0]), rail: e.design[k] + (e.design[k + 1] - e.design[k]) * u, edge: e.id, x: ax + t * (bx - ax), z: az + t * (bz - az) });
   }
+  // crossings that are not in the fixed target list: rail on a viaduct (rail top > 5 m over the ground) -> rail over road, else road over rail
+  for (const c of crossings) if (!cfg.targets.some((q) => q.edge === c.edge)) cfg.targets.push({ edge: c.edge, mode: c.rail - ground(c.x, c.z) > 5 ? 'over' : 'under' });
   P(`  rail crossings on this arm (rail design of the game now): ${crossings.map((c) => `${c.edge} s ${f0(c.s)} rail top ${f2(c.rail)}`).join('; ')}`);
     const sEnd = oldPvi[oldPvi.length - 1].s, evalEnd = sEnd, sHead = 0, sTail = sEnd;
 
@@ -108,6 +115,7 @@ for (const cfg of ARMS) {
       if (gC[i] - r > CUTMAX) cost += 1000 * (gC[i] - r - CUTMAX);
       if (r - gC[i] > VIADUCT - 0.5 && !(wW[i] === wW[i] && gC[i] < wW[i] - 0.05)) cost += 4 * (r - gC[i] - VIADUCT + 0.5) ** 2;   // prefer no viaduct away from water
       if (!Number.isNaN(prev) && s > sHead + 5) { const g = Math.abs(r - prev) / (s - prevS), ex = g - (limAt(s) - 0.0006); if (ex > 0) cost += 2e4 * (ex * 100) ** 2; }
+      if (s > ENDS - 175 && r - gC[i] > VIADUCT - 1) cost += 400 * (r - gC[i] - VIADUCT + 1) ** 2;   // keep the last 175 m before the T free of viaduct (2026-11-14: room for a ring interchange)
       prev = r; prevS = s;
       if (!Number.isNaN(wW[i]) && gC[i] < wW[i] - 0.05 && r - wW[i] < 3) cost += 500 * (3 - (r - wW[i])) ** 2;
     }

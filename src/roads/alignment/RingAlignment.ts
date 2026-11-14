@@ -21,7 +21,7 @@ export const RING_PIS: readonly Pi[] = [
  *  (exit lane 116 + taper 91, entry lane 241 + taper 183). N and E were moved along the ring to the nearest such straight; S needed the small refit of PI 1 and PI 2 (straight 705-1763, 1058 m). */
 export const RING_RADIAL_JOINS: ReadonlyArray<{ dir: 'N' | 'E' | 'S' | 'W'; station: number; x: number; z: number }> = [
   { dir: 'N', station: 11549, x: 1711.6, z: -3145.4 }, // straight 11049-12512 (500 / 963 m clear)
-  { dir: 'E', station: 17328, x: 1896.1, z: 1663.7 }, // RAIL-B point 7 option B (2026-11-14): moved from st 15309 (2967.4, 190.5, ring 35 m high there) to the ring at ground level; J1-E arm T, arrival heading 63.7 deg
+  { dir: 'E', station: 16813, x: 2354.5, z: 1436.9 }, // RAIL-B point 7 option B (2026-11-14, T moved away from the rail): was st 15309 (2967.4, 190.5), then st 17328 (35 m from the rail crossing east-2); ring at ground level here, rail 340 m away
   { dir: 'S', station: 1205, x: -1131.6, z: 2301.8 }, // straight 705-1763 (500 / 558 m clear)
   { dir: 'W', station: 5104, x: -2595.0, z: -591.5 }, // straight 3031-6014 (2073 / 910 m clear)
 ];

@@ -1,3 +1,4 @@
+import { Config } from '../core/Config';
 import type { TerrainSample } from '../terrain/Lakes';
 import type { RoadNetwork } from '../roads/RoadNetwork';
 import type { RoadSpec } from '../roads/RoadTypes';
@@ -65,7 +66,7 @@ export class RailContext {
         // STEP RAIL-A: under the main span of a J1 arm (between its abutments) there is no pier of the road, so a rail pier may stand there (see pierFree)
         const armInner = rd.name.startsWith('J1-') && i >= b.i0 + ARM_APPROACH_PTS(rd) && i <= b.i1 - ARM_APPROACH_PTS(rd);
         // pier test: the 9 m margin round a bridge is for river piers / abutments of ordinary road bridges; a J1 arm has its piers and abutments inside the deck width, so a rail pier needs only 1 m beside the deck
-        this.bridgePts.push({ x: rd.xs[i], z: rd.zs[i], r: b.deckHalfWidth + 9, rPier: rd.name.startsWith('J1-') ? b.deckHalfWidth + 1 : b.deckHalfWidth + 9, armInner });
+        this.bridgePts.push({ x: rd.xs[i], z: rd.zs[i], r: b.deckHalfWidth + 9, rPier: rd.name.startsWith('J1-') ? b.deckHalfWidth + Config.roads.roadRailBuffer.pierToDeckEdge + 0.2 : b.deckHalfWidth + 9, armInner });
         const k = key(Math.floor(rd.xs[i] / CELL), Math.floor(rd.zs[i] / CELL));
         const a = this.bridgeCells.get(k);
         if (a) a.push(id);

@@ -3,7 +3,7 @@ import { RAIL_BOX_COVER } from '../roads/RoadCorrections';
 import type { RoadSpec } from '../roads/RoadTypes';
 import { RailContext, type RailTerrain } from './RailContext';
 import { bandOk, movingAverage, solveProfile } from './RailProfile';
-import { LINES, RAIL_DESIGN as D, RAIL_OVER_ROAD_FLOOR, RAIL_OVER_ROAD_RISE, RAIL_UNDER_BRIDGE_DROP, STATIONS, STATION_LEVELS, type StationKind } from './RailPlan';
+import { LINES, RAIL_DESIGN as D, RAIL_OVER_ROAD_FLOOR, RAIL_OVER_ROAD_RISE, RAIL_UNDER_BRIDGE_DROP, RAIL_UNDER_BRIDGE_FORCE, STATIONS, STATION_LEVELS, type StationKind } from './RailPlan';
 import { buildDiamonds, buildSwitches, type RailDiamond, type RailSwitch } from './RailSwitches';
 
 export type { RailTerrain } from './RailContext';
@@ -1024,7 +1024,8 @@ export class RailNetwork {
       let kind: Window['kind'] = 'free';
       if (zones.length) {
         const wetHere = a.wet.some((w, i) => w && a.cum[i] >= r.a - 20 && a.cum[i] <= r.b + 20);
-        if (zones.some((z) => z.bridge) && !wetHere) kind = 'under-bridge';
+        const forceUnder = a.cross.some((c) => c.s >= r.a - 8 && c.s <= r.b + 8 && RAIL_UNDER_BRIDGE_FORCE.has(`${c.road.name}|${a.id}`));
+        if (zones.some((z) => z.bridge) && (!wetHere || forceUnder)) kind = 'under-bridge';
         else if (zones.some((z) => z.bridge)) kind = 'over';
         else {
           let over = 0;

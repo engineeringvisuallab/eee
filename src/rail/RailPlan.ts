@@ -86,6 +86,8 @@ export const RAIL_OVER_ROAD_RISE: Readonly<Record<string, number>> = { 'M8|ring-
  * Key = `${road name}|${rail edge id}`, value = least distance (m) from the road surface down to the rail top (replaces underRoadDrop + 0.4 on a bridge).
  */
 export const RAIL_UNDER_BRIDGE_DROP: Readonly<Record<string, number>> = { 'J1-W|ring-west': 9.3 };
+/** STEP RAIL-B / point 7 step 5 (2026-11-14): crossings where the rail MUST pass UNDER the road bridge even though the rail corridor is wet near it (the standard rule then switches to 'over', which put the rail 8 m ABOVE a road that is itself 34 m up on a valley viaduct). Key 'road|railEdge'. */
+export const RAIL_UNDER_BRIDGE_FORCE: ReadonlySet<string> = new Set(['J1-E|east-1']);
 
 /** Gentle-line design limits (a heavy railway: far gentler than a road). */
 export const RAIL_DESIGN = {

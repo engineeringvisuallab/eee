@@ -166,7 +166,7 @@ for (const [A, nm] of [[E, 'E']] as const) {
   const last = E.list[E.list.length - 1], P0 = JSON.parse(readFileSync(`${out}/j1c7c_profile.json`, 'utf8')), ringY = P0.pvi[P0.pvi.length - 1].y as number;
   const endRow = E.rows[E.rows.length - 1], fillEnd = endRow.r - endRow.g;
   if (last && last.fromArmEnd < NEAR_END) { last.interchange = true; last.why += '; part of the E ring interchange'; }
-  CHK('E: the T is on the ring at ground level (route of 2026-11-14, ring st 17328): no structure within 150 m of the T, road meets the ring level, fill at the end <= 7 m', !(last && last.fromArmEnd < NEAR_END) && fillEnd <= VIADUCT && Math.abs(endRow.r - ringY) < 0.05, `last structure ${last?.id} ends ${f0(last?.fromArmEnd ?? 0)} m before the ring, ring level ${f2(ringY)} m, fill at the end ${f1(fillEnd)} m`);
+  CHK('E: the T is on the ring at ground level (route of 2026-11-14, T moved to ring st 16813): no structure within 150 m of the T, road meets the ring level, fill at the end <= 7 m', !(last && last.fromArmEnd < NEAR_END) && fillEnd <= VIADUCT && Math.abs(endRow.r - ringY) < 0.05, `last structure ${last?.id} ends ${f0(last?.fromArmEnd ?? 0)} m before the ring, ring level ${f2(ringY)} m, fill at the end ${f1(fillEnd)} m`);
   const via = E.list.filter((s) => s.kinds.includes('viaduct')).reduce((a, s) => a + s.length, 0);
   P(`  INFO  E approach viaduct: ${last?.id} ${f0(last?.length ?? 0)} m, deck up to ${f1(last?.maxHeight ?? 0)} m above ground, max pier ${f1(last?.maxPier ?? 0)} m, ${last?.piers} piers; all viaduct-type structures ${f0(via)} m`);
 }

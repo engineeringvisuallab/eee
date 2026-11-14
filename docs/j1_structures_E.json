@@ -7,7 +7,7 @@
   "protectReach": 60
  },
  "E": {
-  "length": 2811.893095090821,
+  "length": 3036.7237917360517,
   "structures": [
    {
     "id": "E1",
@@ -15,32 +15,32 @@
     "kinds": [
      "viaduct"
     ],
-    "s0": 536.2,
-    "s1": 698.1,
-    "length": 161.89999999999998,
-    "x0": 338.3814285714286,
-    "z0": 49.40857142857147,
-    "x1": 469.5571428571429,
-    "z1": 144.31000000000003,
-    "xm": 403.1,
-    "zm": 98.05500000000004,
-    "maxHeight": 8.91,
+    "s0": 561.2,
+    "s1": 688.1,
+    "length": 126.89999999999998,
+    "x0": 358.258,
+    "z0": 64.652,
+    "x1": 459.238,
+    "z1": 141.41500000000002,
+    "xm": 408.53040000000004,
+    "zm": 103.23960000000002,
+    "maxHeight": 8.29,
     "maxCarve": 0,
     "waterLen": 0,
     "waterLevel": null,
     "riverClear": null,
     "rail": [],
     "specialSpans": [],
-    "stdSpans": 4,
-    "spanTotal": 160,
-    "piers": 3,
-    "maxPier": 7.41,
-    "maxCurvatureOn": 0.0006085,
+    "stdSpans": 3,
+    "spanTotal": 120,
+    "piers": 2,
+    "maxPier": 6.789999999999999,
+    "maxCurvatureOn": 0.0007001,
     "hCurveOnStruct": true,
     "vCurvesOn": 0,
-    "fromArmEnd": 2113.793095090821,
+    "fromArmEnd": 2348.6237917360518,
     "proposal": "precast concrete viaduct, slender twin-blade piers",
-    "why": "162 m long, up to 8.9 m high, standard spans"
+    "why": "127 m long, up to 8.3 m high, standard spans"
    },
    {
     "id": "E2",
@@ -50,76 +50,158 @@
      "river bridge",
      "viaduct"
     ],
-    "s0": 741,
-    "s1": 1202.4,
-    "length": 461.4000000000001,
-    "x0": 505.145,
-    "z0": 168.224,
-    "x1": 872.762,
-    "z1": 444.89300000000003,
-    "xm": 696.73,
-    "zm": 296.755,
-    "maxHeight": 25.78,
+    "s0": 746,
+    "s1": 1157.5,
+    "length": 411.5,
+    "x0": 506.947,
+    "z0": 174.256,
+    "x1": 858.509,
+    "z1": 388.113,
+    "xm": 682.4823,
+    "zm": 281.48910000000006,
+    "maxHeight": 25.4,
     "maxCarve": 0,
-    "waterLen": 80,
+    "waterLen": 75,
     "waterLevel": 14.905052442801662,
-    "riverClear": 17.454947557198338,
+    "riverClear": 17.01494755719834,
     "rail": [
      {
       "edge": "east-1",
-      "s": 918.5318221015235,
-      "angle": 49.48009215192955,
-      "gap": 9.55695172441554,
+      "s": 921.71298251683,
+      "angle": 46.34978998392681,
+      "gap": 9.56038941035942,
       "span": 35
      }
     ],
     "specialSpans": [
      35,
-     110
+     105
     ],
-    "stdSpans": 6,
-    "spanTotal": 445,
-    "piers": 7,
-    "maxPier": 24.28,
-    "maxCurvatureOn": 0.0012082,
+    "stdSpans": 5,
+    "spanTotal": 390,
+    "piers": 6,
+    "maxPier": 23.9,
+    "maxCurvatureOn": 0.0007769,
     "hCurveOnStruct": true,
     "vCurvesOn": 2,
-    "fromArmEnd": 1609.493095090821,
+    "fromArmEnd": 1879.2237917360517,
     "proposal": "haunched steel box girder, slender V-shaped piers",
-    "why": "river main span about 110 m, deck 26 m above ground"
+    "why": "river main span about 105 m, deck 25 m above ground"
    },
    {
     "id": "E3",
     "arm": "E arm",
     "kinds": [
+     "river bridge",
      "viaduct"
     ],
-    "s0": 1664.8,
-    "s1": 1726.8,
-    "length": 62,
-    "x0": 1134.46,
-    "z0": 823.83,
-    "x1": 1169.959,
-    "z1": 876.386,
-    "xm": 1152.435,
-    "zm": 850.87,
-    "maxHeight": 7.659999999999997,
+    "s0": 1260.4,
+    "s1": 1422.2,
+    "length": 161.79999999999995,
+    "x0": 946.3720000000001,
+    "z0": 441.61899999999997,
+    "x1": 1082.115,
+    "z1": 529.6460000000001,
+    "xm": 1014.6750000000002,
+    "zm": 484.97000000000014,
+    "maxHeight": 9.34,
+    "maxCarve": 0,
+    "waterLen": 125,
+    "waterLevel": 27.137886895889174,
+    "riverClear": 5.3221131041108265,
+    "rail": [],
+    "specialSpans": [
+     155
+    ],
+    "stdSpans": 0,
+    "spanTotal": 155,
+    "piers": 0,
+    "maxPier": 7.84,
+    "maxCurvatureOn": 0.0003025,
+    "hCurveOnStruct": true,
+    "vCurvesOn": 1,
+    "fromArmEnd": 1614.5237917360516,
+    "proposal": "haunched steel box girder, slender V-shaped piers (variant 2: different pier shape and parapet)",
+    "why": "river main span about 155 m, deck 9 m above ground"
+   },
+   {
+    "id": "E4",
+    "arm": "E arm",
+    "kinds": [
+     "rail bridge",
+     "river bridge",
+     "viaduct"
+    ],
+    "s0": 2344,
+    "s1": 2645.5948496942906,
+    "length": 301.5948496942906,
+    "x0": 1899.72,
+    "z0": 942.25,
+    "x1": 2152.846394786003,
+    "z1": 1104.187132982335,
+    "xm": 2034.03,
+    "zm": 1008.01,
+    "maxHeight": 16.31,
+    "maxCarve": 0,
+    "waterLen": 20,
+    "waterLevel": 26.066462000708345,
+    "riverClear": 13.163537999291652,
+    "rail": [
+     {
+      "edge": "east-2",
+      "s": 2614.5948496942906,
+      "angle": 66.11494166091421,
+      "gap": 9.533103951758704,
+      "span": 30
+     }
+    ],
+    "specialSpans": [
+     30,
+     50
+    ],
+    "stdSpans": 4,
+    "spanTotal": 280,
+    "piers": 5,
+    "maxPier": 14.809999999999999,
+    "maxCurvatureOn": 0.001511,
+    "hCurveOnStruct": true,
+    "vCurvesOn": 2,
+    "fromArmEnd": 391.1289420417611,
+    "proposal": "haunched steel box girder, slender V-shaped piers (variant 3: different pier shape and parapet)",
+    "why": "river main span about 50 m, deck 16 m above ground"
+   },
+   {
+    "id": "E5",
+    "arm": "E arm",
+    "kinds": [
+     "viaduct"
+    ],
+    "s0": 2768.5,
+    "s1": 2880.4,
+    "length": 111.90000000000009,
+    "x0": 2229.38,
+    "z0": 1198.28,
+    "x1": 2285.188,
+    "z1": 1296.852,
+    "xm": 2258.07,
+    "zm": 1245.1,
+    "maxHeight": 10.43,
     "maxCarve": 0,
     "waterLen": 0,
     "waterLevel": null,
     "riverClear": null,
     "rail": [],
     "specialSpans": [],
-    "stdSpans": 1,
-    "spanTotal": 40,
-    "piers": 0,
-    "maxPier": 6.159999999999997,
-    "maxCurvatureOn": 0.0007952,
+    "stdSpans": 2,
+    "spanTotal": 80,
+    "piers": 1,
+    "maxPier": 8.93,
+    "maxCurvatureOn": 0.001511,
     "hCurveOnStruct": true,
     "vCurvesOn": 0,
-    "fromArmEnd": 1085.0930950908212,
+    "fromArmEnd": 156.3237917360516,
     "proposal": "precast concrete viaduct, slender twin-blade piers (variant 2: different pier shape and parapet)",
-    "why": "62 m long, up to 7.7 m high, standard spans"
+    "why": "112 m long, up to 10.4 m high, standard spans"
    }
   ]
  },
@@ -137,27 +219,27 @@
   {
    "name": "E: every rail crossing lies in a structure that spans the whole corridor + approach (X5)",
    "pass": true,
-   "detail": "1 crossings: E2/east-1 s 919"
+   "detail": "2 crossings: E2/east-1 s 922, E4/east-2 s 2615"
   },
   {
    "name": "E: rail over road (no road structure): rail deck underside >= 7.0 m over the road",
    "pass": true,
-   "detail": "north-1 s 424: 10.00 m"
+   "detail": "north-1 s 424: 10.58 m"
   },
   {
    "name": "E: road over rail >= 7.4 m on every rail crossing",
    "pass": true,
-   "detail": "9.56 m"
+   "detail": "9.56 m, 9.53 m"
   },
   {
    "name": "E: river crossings: road at least 2.5 m above the water",
    "pass": true,
-   "detail": "E2 17.5 m"
+   "detail": "E2 17.0 m, E3 5.3 m, E4 13.2 m"
   },
   {
    "name": "E: structures do not overlap and start after the J1 lane zone (s >= 340)",
    "pass": true,
-   "detail": "3 structures, first starts at s 536"
+   "detail": "5 structures, first starts at s 561"
   },
   {
    "name": "E: no structure on a horizontal curve tighter than 591 m (rule 3.12.8)",
@@ -165,9 +247,9 @@
    "detail": "none"
   },
   {
-   "name": "E: the T is on the ring at ground level (route of 2026-11-14, ring st 17328): no structure within 150 m of the T, road meets the ring level, fill at the end <= 7 m",
+   "name": "E: the T is on the ring at ground level (route of 2026-11-14, T moved to ring st 16813): no structure within 150 m of the T, road meets the ring level, fill at the end <= 7 m",
    "pass": true,
-   "detail": "last structure E3 ends 1085 m before the ring, ring level 33.42 m, fill at the end -0.0 m"
+   "detail": "last structure E5 ends 156 m before the ring, ring level 28.41 m, fill at the end 1.6 m"
   }
  ]
 }

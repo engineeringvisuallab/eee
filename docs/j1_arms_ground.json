@@ -45,7 +45,7 @@
   {
    "name": "E: every wet centreline point is inside a structure",
    "pass": true,
-   "detail": "75 m wet"
+   "detail": "215 m wet"
   },
   {
    "name": "E: no sea on the centreline",
@@ -55,12 +55,12 @@
   {
    "name": "E: every river crossing is inside a structure",
    "pass": true,
-   "detail": "1 crossings"
+   "detail": "2 crossings"
   },
   {
    "name": "E: every rail crossing is inside a road structure, or the rail passes over the road with >= 7.0 m, and is in the profile list (X5)",
    "pass": true,
-   "detail": "2 from the world, 2 in the profile, 1 of them rail over the road on the ground"
+   "detail": "3 from the world, 3 in the profile, 1 of them rail over the road on the ground"
   },
   {
    "name": "E: fill over 7 m only inside a structure (D4)",
@@ -70,17 +70,17 @@
   {
    "name": "E: max cut on the centreline <= 12 m (3.7)",
    "pass": true,
-   "detail": "max 7.1 m"
+   "detail": "max 8.1 m"
   },
   {
    "name": "E: no facility fence (airport / seaport / army) or sea inside the ROW",
    "pass": true,
-   "detail": "nearest fence seaport 876 m"
+   "detail": "nearest fence seaport 1103 m"
   },
   {
    "name": "E: ROW stays inside the map (>= 100 m from the edge)",
    "pass": true,
-   "detail": "3104 m"
+   "detail": "2645 m"
   },
   {
    "name": "S: every wet centreline point is inside a structure",
@@ -180,12 +180,12 @@
   {
    "name": "E x S: centrelines at least 80 m apart (two ROWs)",
    "pass": true,
-   "detail": "854 m (s 605 / 605)"
+   "detail": "853 m (s 605 / 605)"
   },
   {
    "name": "E x W: centrelines at least 80 m apart (two ROWs)",
    "pass": true,
-   "detail": "1104 m (s 605 / 635)"
+   "detail": "1103 m (s 605 / 635)"
   },
   {
    "name": "S x W: centrelines at least 80 m apart (two ROWs)",
@@ -225,22 +225,32 @@
    ]
   },
   "E": {
-   "length": 2811.893095090821,
+   "length": 3036.7237917360517,
    "structs": [
     {
      "id": "E1",
-     "s0": 536.2,
-     "s1": 698.1
+     "s0": 561.2,
+     "s1": 688.1
     },
     {
      "id": "E2",
-     "s0": 741,
-     "s1": 1202.4
+     "s0": 746,
+     "s1": 1157.5
     },
     {
      "id": "E3",
-     "s0": 1664.8,
-     "s1": 1726.8
+     "s0": 1260.4,
+     "s1": 1422.2
+    },
+    {
+     "id": "E4",
+     "s0": 2344,
+     "s1": 2645.5948496942906
+    },
+    {
+     "id": "E5",
+     "s0": 2768.5,
+     "s1": 2880.4
     }
    ]
   },
