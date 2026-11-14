@@ -59,13 +59,13 @@
   },
   {
    "name": "E: every rail crossing is inside a road structure, or the rail passes over the road with >= 7.0 m, and is in the profile list (X5)",
-   "pass": false,
+   "pass": true,
    "detail": "2 from the world, 2 in the profile, 1 of them rail over the road on the ground"
   },
   {
    "name": "E: fill over 7 m only inside a structure (D4)",
-   "pass": false,
-   "detail": "4 ranges outside"
+   "pass": true,
+   "detail": "0 ranges outside"
   },
   {
    "name": "E: max cut on the centreline <= 12 m (3.7)",
@@ -228,19 +228,19 @@
    "length": 2811.893095090821,
    "structs": [
     {
+     "id": "E1",
+     "s0": 536.2,
+     "s1": 698.1
+    },
+    {
      "id": "E2",
-     "s0": 780.9,
-     "s1": 902.8
+     "s0": 741,
+     "s1": 1202.4
     },
     {
      "id": "E3",
-     "s0": 1292.6360723112991,
-     "s1": 1841.6
-    },
-    {
-     "id": "E4",
-     "s0": 2014.3,
-     "s1": 3183.776837740561
+     "s0": 1664.8,
+     "s1": 1726.8
     }
    ]
   },
