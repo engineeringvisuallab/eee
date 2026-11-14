@@ -69,6 +69,8 @@ export const Config = {
     ring: { enabled: true as boolean, step: 8 },
     /** ROADS STEP 9.2: interchange J1 (stack, 4 level, src/interchange/m8). OFF until the outward M8 roads fix its place (6.3); x, z = world position of the crossing, y = height of road A, yaw = turn of road A. Terrain is not carved under it yet. */
     interchangeJ1: { enabled: false as boolean, x: 0, z: 0, y: 0, yaw: 0 },
+    /** STEP J1-e1: the GROUND-LEVEL J1 (src/roads/junction): x, z = centre, yawDeg = turn of the N axis, y, a, b = pad plane (J1-c1, docs/j1c1.json), rCore / emb = flat core radius and skirt (m). enabled = false: no J1, no terrain change. */
+    junctionJ1: { enabled: true as boolean, x: -87, z: -277, yawDeg: 37.5, y: 18.19311912937595, a: -0.0010220450179961758, b: 0.00623096742143054, rCore: 60, emb: 20 },
     /** The long bridge to the island and the island's road network (RoadPlan.ISLAND_PLAN). */
     island: false,
     /**

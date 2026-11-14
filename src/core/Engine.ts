@@ -65,6 +65,7 @@ import { VoiceManager } from '../audio/VoiceManager';
 import { Environment, LighthouseLight, StreetLights } from '../environment';
 import { RingStructureLayer } from '../roads/ring/RingStructureLayer';
 import { StackInterchangeLayer } from '../interchange/m8/StackInterchangeLayer';
+import { GroundJ1Layer } from '../roads/junction/GroundJ1Layer';
 import { RingStructurePhysics } from '../roads/ring/RingStructurePhysics';
 import { SignPhysics } from '../signs/SignPhysics';
 import { Toast } from '../ui/Toast';
@@ -150,6 +151,7 @@ export class Engine {
   /** STEP 5.3c: ring structures (S1 cable-stayed, the rest plain girders until their designs come). */
   private ringStructures: RingStructureLayer;
   private stackJ1: StackInterchangeLayer;
+  private groundJ1: GroundJ1Layer;
   /** STEP 5.3c-6: colliders of the ring structures (bodies only near the player). */
   private ringStructurePhysics: RingStructurePhysics;
   /** STEP 3: colliders of the fuel stations / charge points (same class as the road signs' physics: bodies only near the player). */
@@ -364,6 +366,7 @@ export class Engine {
     const roads = this.world.terrain.roads;
     this.streetLights = new StreetLights(this.world.root, roads);
     this.ringStructures = new RingStructureLayer(this.world.root, roads);
+    this.groundJ1 = new GroundJ1Layer(this.world.root, this.world.terrain.roads.j1);
     this.stackJ1 = new StackInterchangeLayer(this.world.root, Config.roads.interchangeJ1, (x, z) => this.world.terrain.heightAt(x, z));
     this.rail = this.world.terrain.rail;
     this.railDebug = new RailDebug(this.rail);
@@ -1657,6 +1660,7 @@ export class Engine {
     this.streetLights.dispose();
     this.ringStructures.dispose();
     this.stackJ1.dispose();
+    this.groundJ1.dispose();
     this.stationPhysics.dispose();
     this.ringStructurePhysics.dispose();
     this.lighthouseLight?.dispose();

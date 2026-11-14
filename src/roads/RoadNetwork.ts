@@ -6,6 +6,7 @@ import type { CitySite } from '../terrain/TerrainGenerator';
 import { chunkKey, worldToChunkCoord } from '../world/WorldGrid';
 import type { BridgeSpec, CulvertSpec, JunctionSpec, PadSpec, RoadInfo, RoadKind, RoadSpec, SurfaceKind } from './RoadTypes';
 import { buildJunctionPads } from './Junctions';
+import { J1Terrain } from './junction/GroundJ1Terrain';
 import { planLocalStreets } from './LocalRoads';
 import { CityPlan } from '../city/CityPlan';
 import { DIVIDED_SECTIONS, sectionFor } from './RoadSection';
@@ -115,6 +116,10 @@ export class RoadNetwork {
   /** Why a junction cluster did not get a pad (debug / tests). */
   padSkipped: string[] = [];
   private trim = new Map<number, Uint8Array>();
+  /** STEP J1-e1: the ground-level J1 (pad + lane zones of the four arms), or null. Carves the terrain and keeps the EVLab pad off it. */
+  j1: J1Terrain | null = null;
+  private j1Out = { w: 0, y: 0 };
+  private j1Cells = new Set<number>();
   private padCells = new Map<number, number[]>();
   private chunkPads = new Map<string, number[]>();
   /** Where the main roads meet, after snapping (id -> [x, z]). */
@@ -208,6 +213,7 @@ export class RoadNetwork {
     this.checkScenarioPads();
     this.layoutEarthen();
     this.layoutInterchanges();
+    if (Config.roads.junctionJ1.enabled) this.j1 = new J1Terrain(Config.roads.junctionJ1);
     this.buildSegments();
   }
 
@@ -2535,6 +2541,15 @@ export class RoadNetwork {
       if (!l) this.chunkPads.set(ck, (l = []));
       l.push(p.id);
     }
+    if (this.j1) {
+      for (const [cx0, cz0, r] of this.j1.cover()) {
+        for (let cz = Math.floor((cz0 - r) / CELL); cz <= Math.floor((cz0 + r) / CELL); cz++) for (let cx = Math.floor((cx0 - r) / CELL); cx <= Math.floor((cx0 + r) / CELL); cx++) {
+          const k = (cx + 512) * 1024 + (cz + 512);
+          this.j1Cells.add(k);
+          if (!temp.has(k)) temp.set(k, []);
+        }
+      }
+    }
     for (const [k, a] of temp) this.cells.set(k, Int32Array.from(a));
     for (const c of this.culverts) c.roadY = Math.round(c.roadY * 100) / 100;
   }
@@ -2586,6 +2601,12 @@ export class RoadNetwork {
           by = p.y + p.a * (x - p.x) + p.b * (z - p.z);
         }
       }
+    }
+    // J1 (ground level): pad plane + lane zones of the four arms, same weight rule as a pad
+    if (this.j1 && this.j1Cells.has((Math.floor(x / CELL) + 512) * 1024 + (Math.floor(z / CELL) + 512)) && this.j1.sample(x, z, this.j1Out) && this.j1Out.w > bw + 1e-6) {
+      bw = this.j1Out.w;
+      bd = bw >= 1 - 1e-6 ? -1 : (1 - bw) * 20;
+      by = this.j1Out.y;
     }
     for (let q = 0; q < segs.length; q++) {
       const s: number = segs[q];
@@ -2742,6 +2763,8 @@ export class RoadNetwork {
         out[1] = 1;
       }
     }
+    // J1 (ground level): the pad / lane-zone ground counts as road ground (the EVLab pad and the grass keep off it)
+    if (this.j1 && this.j1Cells.has((Math.floor(x / CELL) + 512) * 1024 + (Math.floor(z / CELL) + 512)) && this.j1.sample(x, z, this.j1Out) && this.j1Out.w > out[1]) out[1] = this.j1Out.w;
     for (let q = 0; q < segs.length; q++) {
       const s = segs[q];
       const abx = this.sbx[s] - this.sax[s];
