@@ -24,7 +24,7 @@ const j1a = j1aPath ? JSON.parse(readFileSync(j1aPath, 'utf8')) as { dStop: numb
 const byId = new Map<string, J1Element>(g.elements.map((e) => [e.id, e]));
 const el = (id: string): J1Element => { const e = byId.get(id); if (!e) throw new Error('missing element ' + id); return e; };
 
-P(`J1-b GEOMETRY CHECK SHEET   J1 = C9 (${g.site.x}, ${g.site.z}), yaw ${g.site.yawDeg} deg east of north, 8 lane x 8 lane, ground level, signalised "+"   (inputs: J1-a ${j1aPath ?? 'NOT FOUND, built-in copy used'})`);
+P(`J1-b GEOMETRY CHECK SHEET   J1 = C10 (${g.site.x}, ${g.site.z}), yaw ${g.site.yawDeg} deg east of north, 8 lane x 8 lane, ground level, signalised "+"   (inputs: J1-a ${j1aPath ?? 'NOT FOUND, built-in copy used'})`);
 P(`${g.elements.length} elements, ${g.elements.reduce((a, e) => a + e.cells.length, 0)} convex cells, ${g.bars.length} zebra bars, ${g.stopLines.length} stop lines, ${g.kerbArcs.length} kerb arcs`);
 
 // ------------------------------------------------------------------ (1) cross-section and derived numbers

@@ -24,15 +24,15 @@ export const DIRS: readonly Dir[] = ['N', 'E', 'S', 'W'];
 export type V2 = readonly [number, number];
 export type ElementKind = 'box' | 'through-in' | 'through-out' | 'pocket' | 'island' | 'slip-in' | 'slip-arc' | 'slip-out' | 'corner-island';
 
-/** Position and direction of J1 (C9, decided in J1-a, 15.8.7). Config.roads.junctionJ1 is added in J1-e. */
-export const J1_SITE = { x: -117, z: -277, yawDeg: 17.6 } as const;
+/** Position and direction of J1 (C10, J1-a2, 15.8.8; was C9 (-117, -277) yaw 17.6). Config.roads.junctionJ1 is added in J1-e. */
+export const J1_SITE = { x: -87, z: -277, yawDeg: 37.5 } as const;
 
 /** Inputs per approach taken from the J1-a sheet (docs/j1a.json: clears, fits.storageT, fits.storageR). scripts/j1-ground-check.ts compares them with the file. */
 export const J1_APPROACH_INPUTS: Record<Dir, { clear: number; storageT: number; storageR: number }> = {
-  N: { clear: 340, storageT: 89.58, storageR: 59.48 },
-  E: { clear: 340, storageT: 81.33, storageR: 53.52 },
-  S: { clear: 340, storageT: 82.22, storageR: 59.48 },
-  W: { clear: 350, storageT: 81.33, storageR: 53.52 },
+  N: { clear: 380, storageT: 89.58, storageR: 59.48 },
+  E: { clear: 350, storageT: 81.33, storageR: 53.52 },
+  S: { clear: 350, storageT: 82.22, storageR: 59.48 },
+  W: { clear: 330, storageT: 81.33, storageR: 53.52 },
 };
 
 const W = DESIGN.laneWidth; // 3.65

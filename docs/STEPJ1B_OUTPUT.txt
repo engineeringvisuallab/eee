@@ -1,4 +1,4 @@
-J1-b GEOMETRY CHECK SHEET   J1 = C9 (-117, -277), yaw 17.6 deg east of north, 8 lane x 8 lane, ground level, signalised "+"   (inputs: J1-a docs/j1a.json)
+J1-b GEOMETRY CHECK SHEET   J1 = C10 (-87, -277), yaw 37.5 deg east of north, 8 lane x 8 lane, ground level, signalised "+"   (inputs: J1-a docs/j1a.json)
 61 elements, 341 convex cells, 152 zebra bars, 8 stop lines, 4 kerb arcs
 
 === (1) CROSS-SECTION of one arm (distance o from the arm axis, + = inbound side = left of the traffic; left-hand traffic) and derived numbers
@@ -12,10 +12,10 @@ J1-b GEOMETRY CHECK SHEET   J1 = C9 (-117, -277), yaw 17.6 deg east of north, 8 
 
 === (2) POCKETS, SLIP LANE and ZONE LENGTH per arm (all distances from the J1 centre along the arm axis; x = from the stop line)
   arm   R1 full + taper (end)     R2 full + taper (end)     slip taper-in..arc start      receiving lane end    zone end (plain M8)   clear   J1-a pocket
-  N     116 + 85 (201 m, s 225)     86 + 85 (171 m, s 195)     s 179 .. 48               s 229              s 269          340     200
-  E     110 + 85 (195 m, s 219)     80 + 85 (165 m, s 189)     s 179 .. 48               s 229              s 269          340     194
-  S     116 + 85 (201 m, s 225)     86 + 85 (171 m, s 195)     s 179 .. 48               s 229              s 269          340     200
-  W     110 + 85 (195 m, s 219)     80 + 85 (165 m, s 189)     s 179 .. 48               s 229              s 269          350     194
+  N     116 + 85 (201 m, s 225)     86 + 85 (171 m, s 195)     s 179 .. 48               s 229              s 269          380     200
+  E     110 + 85 (195 m, s 219)     80 + 85 (165 m, s 189)     s 179 .. 48               s 229              s 269          350     194
+  S     116 + 85 (201 m, s 225)     86 + 85 (171 m, s 195)     s 179 .. 48               s 229              s 269          350     200
+  W     110 + 85 (195 m, s 219)     80 + 85 (165 m, s 189)     s 179 .. 48               s 229              s 269          330     194
   slip lane: taper-in 84.8 m (s 179.1 -> 94.3), full width 45.9 m (s 94.3 -> 48.4), kerb arc R 25 m (lane centre R 26.8 m, outer edge R 28.6 m) from s 48.4 on the arm to s 48.4 on the cross road,
   then the receiving lane: acceleration 95.6 m + merge taper 84.8 m = 180.4 m (ends at s 228.8 on the cross road)
 
@@ -42,10 +42,10 @@ J1-b GEOMETRY CHECK SHEET   J1 = C9 (-117, -277), yaw 17.6 deg east of north, 8 
   PASS  built-in approach inputs = docs/j1a.json (clear length, queue per lane) largest difference 0.003 m
   PASS  pocket R1 (full + taper) >= pocket wanted by J1-a (braking + storage + taper), all arms N 200.8 >= 199.8, E 194.8 >= 193.9, S 200.8 >= 199.8, W 194.8 >= 193.9
   PASS  stop line distance <= J1-a stop line (31.05 m), box half <= J1-a box half stop line 23.75 <= 31.05, box 19.75 <= 27.05: J1-a signal numbers stay valid (they were conservative)
-  PASS  N: queue / pocket + step-down fit in the clear length from the REAL stop line need 300 m, available 316 m (J1-a 309); lane zone ends at s 269 of 340
-  PASS  E: queue / pocket + step-down fit in the clear length from the REAL stop line need 294 m, available 316 m (J1-a 309); lane zone ends at s 269 of 340
-  PASS  S: queue / pocket + step-down fit in the clear length from the REAL stop line need 300 m, available 316 m (J1-a 309); lane zone ends at s 269 of 340
-  PASS  W: queue / pocket + step-down fit in the clear length from the REAL stop line need 294 m, available 326 m (J1-a 319); lane zone ends at s 269 of 350
+  PASS  N: queue / pocket + step-down fit in the clear length from the REAL stop line need 300 m, available 356 m (J1-a 349); lane zone ends at s 269 of 380
+  PASS  E: queue / pocket + step-down fit in the clear length from the REAL stop line need 294 m, available 326 m (J1-a 319); lane zone ends at s 269 of 350
+  PASS  S: queue / pocket + step-down fit in the clear length from the REAL stop line need 300 m, available 326 m (J1-a 319); lane zone ends at s 269 of 350
+  PASS  W: queue / pocket + step-down fit in the clear length from the REAL stop line need 294 m, available 306 m (J1-a 299); lane zone ends at s 269 of 330
 
 === (6) ISLANDS and ZEBRA
   PASS  median island at the stop line is the J1-a width (3.0 m) and a refuge (>= 1.8 m) 3.00 m
@@ -60,16 +60,16 @@ J1-b GEOMETRY CHECK SHEET   J1 = C9 (-117, -277), yaw 17.6 deg east of north, 8 
 
 === (8) SIGHT around the slip lane and the building line (ROW boundary of M8 = 40.0 m from each arm axis)
   stopping sight distance at 25 km/h = 24.5 m (tPR 2.5 s, a 3.4 m/s2); the slip zebra is 21.1 m along the path from the start of the arc -> the driver's eye is 3.4 m before the arc, on the straight (eye 1.08 m)
-  pedestrian waiting points 0.5 m behind the kerb (corner side) and 0.5 m behind the island kerb at the zebra: world positions (-78.0, -297.2) and (-82.1, -295.1)
+  pedestrian waiting points 0.5 m behind the kerb (corner side) and 0.5 m behind the island kerb at the zebra: world positions (-43.4, -282.7) and (-48.0, -282.1)
   PASS  slip lane: straight run before the arc is long enough for the sight distance to the zebra eye 3.4 m before the arc, full-width straight 45.9 m
   PASS  sight lines eye -> pedestrian (corner side and island side) stay clear of the building line (corner square beyond the ROW) nearest approach to the ROW corner 11.8 m / 14.9 m; keep buildings, trees > 0.6 m and signs out of the triangle (J1-f)
   PASS  corner kerb arcs stay inside the union of the two M8 right-of-way strips (no extra land needed at the corners) kerb arc reaches 53.8 m from the centre; ROW half 40.0 m
   footprint for J1-f (re-zoning): box 39.5 x 39.5 m, corner kerbs reach 53.8 m, lanes end at s 269 m, receiving lanes at s 229 m, ROW half 40.0 m
 
 === WORLD positions of the key points (x east, z south) for the next steps
-  N: stop line axis point (-109.8, -299.6), end of the lane zone (plain M8 starts) (-35.6, -533.5)
-  E: stop line axis point (-94.4, -269.8), end of the lane zone (plain M8 starts) (139.5, -195.6)
-  S: stop line axis point (-124.2, -254.4), end of the lane zone (plain M8 starts) (-198.4, -20.5)
-  W: stop line axis point (-139.6, -284.2), end of the lane zone (plain M8 starts) (-373.5, -358.4)
+  N: stop line axis point (-72.5, -295.8), end of the lane zone (plain M8 starts) (76.8, -490.5)
+  E: stop line axis point (-68.2, -262.5), end of the lane zone (plain M8 starts) (126.5, -113.2)
+  S: stop line axis point (-101.5, -258.2), end of the lane zone (plain M8 starts) (-250.8, -63.5)
+  W: stop line axis point (-105.8, -291.5), end of the lane zone (plain M8 starts) (-300.5, -440.8)
 
 SUMMARY: 32 PASS, 0 FAIL
