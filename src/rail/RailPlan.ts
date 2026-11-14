@@ -75,6 +75,12 @@ export const STATION_LEVELS: Readonly<Record<string, number>> = { central: 34 };
  */
 export const RAIL_OVER_ROAD_FLOOR: Readonly<Record<string, number>> = { 'J1-E|north-1': 33.8, 'J1-S|west-nw': 33.7, 'J1-W|west-nw': 40.6, 'J1-S|west-sw': 37.4 };
 
+/**
+ * STEP RAIL-B / 4: where a J1 arm road passes OVER the railway and cannot be raised (grade limit to the ring), the railway goes lower instead.
+ * Key = `${road name}|${rail edge id}`, value = least distance (m) from the road surface down to the rail top (replaces underRoadDrop + 0.4 on a bridge).
+ */
+export const RAIL_UNDER_BRIDGE_DROP: Readonly<Record<string, number>> = { 'J1-W|ring-west': 9.3 };
+
 /** Gentle-line design limits (a heavy railway: far gentler than a road). */
 export const RAIL_DESIGN = {
   /** Steepest allowed grade (rise / run). */
