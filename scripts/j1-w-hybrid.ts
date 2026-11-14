@@ -26,7 +26,8 @@ const rs = readFileSync(`${out}/ring_samples_5m.csv`, 'utf8').split('\n').slice(
 const rp = readFileSync(`${out}/ring_profile.csv`, 'utf8').split(/\r?\n/).slice(1).filter(Boolean).map((l) => l.split(',').map(Number));
 const ringPts = rs.filter((r) => r[0] >= Number(process.env.RST0 ?? 4600) && r[0] <= Number(process.env.RST1 ?? 6000)).map((r) => ({ x: r[1], z: r[2], st: r[0], y: rp[Math.round(r[0] / 10)][2] }));
 // search grid
-const GMAX = Number(process.env.GMAX ?? 0.03);
+const GMAX = Number(process.env.GMAX ?? 0.03), RT = Number(process.env.RT ?? 0);
+const arcOf = new Map<number, { k: number; l: number }>();
 const C = 30, GX0 = -2800, GZ0 = -1600, NI = 100, NJ = 67, STEP = Number(process.env.STEP ?? 90);
 const HB = 28, H0 = -232.5, DHD = 5, DHR = (DHD * Math.PI) / 180;           // heading bins, math angle atan2(dz, dx), bin centre = H0 + k*5
 const DH = 0.9, Y0 = 10, NL = 80;
@@ -61,6 +62,10 @@ for (let l = 0; l < NL; l++) {
   const ys = Y0 + l * DH, g = (ys - Y_PAD) / (SS - S0); if (g < 0.003 || g > GMAX) continue;
   const x1 = J1.x + S0 * Math.sin(J1.yaw), z1 = J1.z - S0 * Math.cos(J1.yaw); const c = pieceCost(x1, z1, sx, sz, Y_PAD, ys, J1.yaw - Math.PI / 2 + Math.PI / 2 - Math.PI / 2);
   const s = sid(hs, cj(sz), ci(sx), l); if (c < dist[s]) { dist[s] = c; push(c, s); }
+  // env RT = radius (m) of ONE tight first bend after the lane zone (low speed, 5 deg per step, constant level); the search continues from every arc end
+  if (RT > 0) { let cx = sx, cz = sz, cc = c; const L = RT * DHR; for (let k = 1; k <= 30 && hs - k >= 0; k++) {
+    const hr = (H0 + (hs - k + 0.5) * DHD) * Math.PI / 180, x2 = cx + L * Math.cos(hr), z2 = cz + L * Math.sin(hr); if (ci(x2) < 0 || ci(x2) >= NI || cj(z2) < 0 || cj(z2) >= NJ) break;
+    cc += pieceCost(cx, cz, x2, z2, ys, ys, hr); cx = x2; cz = z2; const s2 = sid(hs - k, cj(cz), ci(cx), l); if (cc < dist[s2]) { dist[s2] = cc; arcOf.set(s2, { k, l }); push(cc, s2); } } }
 }
 let best = -1, popped = 0;
 while (hn > 0) {
@@ -85,6 +90,11 @@ if (best < 0) { console.log('NO ROUTE, popped', popped); process.exit(1); }
 const pts: Array<{ x: number; z: number; y: number; hd: number }> = [];
 for (let s = best; s >= 0; s = par[s]) { const l = s % NL, r1 = (s - l) / NL, i = r1 % NI, r2 = (r1 - i) / NI, j = r2 % NJ, h = (r2 - j) / NJ; pts.push({ x: GX0 + (i + .5) * C, z: GZ0 + (j + .5) * C, y: Y0 + l * DH, hd: H0 + h * DHD }); }
 pts.reverse();
+// prepend the tight first bend (it is not in the parent chain) so that cut, fill and length include it
+{ const first = best >= 0 ? (() => { let s = best, last = best; for (; s >= 0; s = par[s]) last = s; return last; })() : -1; const ai = arcOf.get(first);
+  if (RT > 0 && ai) { const L = RT * DHR, arc: typeof pts = [{ x: sx, z: sz, y: Y0 + ai.l * DH, hd: H0 + hs * DHD }]; let ax = sx, az = sz;
+    for (let k = 1; k <= ai.k; k++) { const hr = (H0 + (hs - k + 0.5) * DHD) * Math.PI / 180; ax += L * Math.cos(hr); az += L * Math.sin(hr); arc.push({ x: ax, z: az, y: Y0 + ai.l * DH, hd: H0 + (hs - k) * DHD }); }
+    pts.splice(0, 1, ...arc); console.log(`tight first bend R ${RT}: ${ai.k} steps = ${(ai.k * L).toFixed(0)} m, ${ai.k * DHD} deg, level ${(Y0 + ai.l * DH).toFixed(1)} m`); } }
 let len = 0, turns = 0, cutMax = 0, fillMax = 0, viaduct = 0, wet = 0, zone = 0, rail = 0, gmax = 0;
 for (let k = 1; k < pts.length; k++) {
   const a = pts[k - 1], b = pts[k], dl = Math.hypot(b.x - a.x, b.z - a.z); len += dl; if (b.hd !== a.hd) turns++; gmax = Math.max(gmax, Math.abs(b.y - a.y) / dl);
