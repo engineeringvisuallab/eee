@@ -5,7 +5,7 @@ import type { J1Terrain } from './GroundJ1Terrain';
 
 export interface J1MeshData { positions: number[]; colors: number[]; indices: number[]; stats: { tris: number; verts: number; islandTris: number; markTris: number } }
 
-const ASPHALT: V2 = [0.16, 0.16, 0.17], ASPHALT2: V2 = [0.19, 0.19, 0.20];
+const ASPHALT = [0.16, 0.16, 0.17], ASPHALT2 = [0.19, 0.19, 0.20];
 const CONCRETE = [0.55, 0.55, 0.52], KERB = [0.66, 0.66, 0.63], WHITE = [0.92, 0.92, 0.9], YELLOW = [0.9, 0.72, 0.12];
 const LIFT = 0.02, MARK = 0.045, ISLAND_H = 0.14, MAXEDGE = 8;
 
