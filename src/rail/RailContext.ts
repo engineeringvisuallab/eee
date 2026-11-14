@@ -1,6 +1,7 @@
 import type { TerrainSample } from '../terrain/Lakes';
 import type { RoadNetwork } from '../roads/RoadNetwork';
 import type { RoadSpec } from '../roads/RoadTypes';
+import { STRUCT } from '../roads/ring/RingStructures';
 import { RAIL_FACILITIES } from '../city/WorldZones';
 
 /** What the railway needs from the terrain: natural ground + water (no roads, no rail) and the finished road network. */
@@ -11,6 +12,8 @@ export interface RailTerrain {
 }
 
 const CELL = 64;
+/** Road points of the approach slab at each end of a bridge (STRUCT.approach m): the abutment walls stand at i0 + this and i1 - this (RingBridgeGeometry.deck). */
+const ARM_APPROACH_PTS = (rd: RoadSpec): number => Math.ceil(STRUCT.approach / rd.step);
 const key = (cx: number, cz: number): number => (cx + 1024) * 4096 + (cz + 1024);
 
 export interface NearRoad {
@@ -37,7 +40,7 @@ export class RailContext {
   private cells = new Map<number, number[]>();
   private pts: { r: number; i: number }[] = [];
   private bridgeCells = new Map<number, number[]>();
-  private bridgePts: { x: number; z: number; r: number }[] = [];
+  private bridgePts: { x: number; z: number; r: number; rPier: number; armInner: boolean }[] = [];
   private sa;
 
   constructor(private terrain: RailTerrain) {
@@ -59,7 +62,10 @@ export class RailContext {
       const rd = roads[b.roadId];
       for (let i = b.i0; i <= b.i1; i++) {
         const id = this.bridgePts.length;
-        this.bridgePts.push({ x: rd.xs[i], z: rd.zs[i], r: b.deckHalfWidth + 9 });
+        // STEP RAIL-A: under the main span of a J1 arm (between its abutments) there is no pier of the road, so a rail pier may stand there (see pierFree)
+        const armInner = rd.name.startsWith('J1-') && i >= b.i0 + ARM_APPROACH_PTS(rd) && i <= b.i1 - ARM_APPROACH_PTS(rd);
+        // pier test: the 9 m margin round a bridge is for river piers / abutments of ordinary road bridges; a J1 arm has its piers and abutments inside the deck width, so a rail pier needs only 1 m beside the deck
+        this.bridgePts.push({ x: rd.xs[i], z: rd.zs[i], r: b.deckHalfWidth + 9, rPier: rd.name.startsWith('J1-') ? b.deckHalfWidth + 1 : b.deckHalfWidth + 9, armInner });
         const k = key(Math.floor(rd.xs[i] / CELL), Math.floor(rd.zs[i] / CELL));
         const a = this.bridgeCells.get(k);
         if (a) a.push(id);
@@ -209,14 +215,15 @@ export class RailContext {
   }
 
   /** Is (x, z) inside a road bridge (deck, abutments, piers) or within `margin` m of it? */
-  nearRoadBridge(x: number, z: number, margin = 0): boolean {
+  nearRoadBridge(x: number, z: number, margin = 0, pier?: { belowArm: boolean }): boolean {
     for (let cz = Math.floor((z - 40) / CELL); cz <= Math.floor((z + 40) / CELL); cz++) {
       for (let cx = Math.floor((x - 40) / CELL); cx <= Math.floor((x + 40) / CELL); cx++) {
         const a = this.bridgeCells.get(key(cx, cz));
         if (!a) continue;
         for (const id of a) {
           const p = this.bridgePts[id];
-          if (Math.hypot(x - p.x, z - p.z) < p.r + margin) return true;
+          if (pier?.belowArm && p.armInner) continue; // pier test only: the deck of an arm is high above the rail, its abutments are the end points (not armInner)
+          if (Math.hypot(x - p.x, z - p.z) < (pier ? p.rPier : p.r) + margin) return true;
         }
       }
     }
@@ -240,14 +247,28 @@ export class RailContext {
   }
 
   /** Can a viaduct pier column (half size `half`) stand at (x, z)? Not on / next to asphalt, not in a junction pad, not at a road bridge. */
-  pierFree(x: number, z: number, half: number, gap: number): boolean {
+  pierFree(x: number, z: number, half: number, gap: number, railY?: number): boolean {
     const nr = this.nearestRoad(x, z, 50);
-    if (nr && nr.d < nr.road.planHalfWidth + nr.road.shoulder + half + gap) return false;
+    // STEP RAIL-A: right under the deck (main span) of a J1 arm a rail pier is allowed: the arm deck is 7.4 m or more above the rail and the arm has no pier there.
+    // The piers of the arm designs (6.1d types) must keep clear of the rail piers (list: RailNetwork.piers).
+    // Only where the rail is BELOW the arm deck (railY = top of ballast of the rail there, the deck must be at least 5 m higher); where the rail passes OVER the arm the arm road is the obstacle.
+    const belowArm = railY !== undefined && !!nr && nr.onBridge && nr.road.name.startsWith('J1-') && nr.y - railY >= 5;
+    const underArmDeck = belowArm && this.armInnerAt(nr!.road, nr!.i) && nr!.d < nr!.road.planHalfWidth + nr!.road.shoulder;
+    if (nr && !underArmDeck && nr.d < nr.road.planHalfWidth + nr.road.shoulder + half + gap) return false;
     for (const p of this.terrain.roads.pads) {
       if (Math.abs(p.x - x) > p.rCore + 60 || Math.abs(p.z - z) > p.rCore + 60) continue;
       if (Math.hypot(x - p.x, z - p.z) < p.rCore + half + gap) return false;
     }
-    return !this.nearRoadBridge(x, z, 2);
+    return !this.nearRoadBridge(x, z, 2, { belowArm });
+  }
+
+  /** Is point index i of road rd inside the main span (between the abutments) of one of its bridges? */
+  private armInnerAt(rd: RoadSpec, i: number): boolean {
+    const id = rd.bridgeOf[i];
+    if (id < 0) return false;
+    const b = this.terrain.roads.bridges[id];
+    const ap = ARM_APPROACH_PTS(rd);
+    return i >= b.i0 + ap && i <= b.i1 - ap;
   }
 
   /** The airport / seaport whose grounds (+ margin m) contain (x, z), or null. */

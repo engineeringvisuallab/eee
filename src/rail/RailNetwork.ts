@@ -3,7 +3,7 @@ import { RAIL_BOX_COVER } from '../roads/RoadCorrections';
 import type { RoadSpec } from '../roads/RoadTypes';
 import { RailContext, type RailTerrain } from './RailContext';
 import { bandOk, movingAverage, solveProfile } from './RailProfile';
-import { LINES, RAIL_DESIGN as D, STATIONS, type StationKind } from './RailPlan';
+import { LINES, RAIL_DESIGN as D, STATIONS, STATION_LEVELS, type StationKind } from './RailPlan';
 import { buildDiamonds, buildSwitches, type RailDiamond, type RailSwitch } from './RailSwitches';
 
 export type { RailTerrain } from './RailContext';
@@ -253,7 +253,7 @@ export class RailNetwork {
   /** 1 = junction pad nearby, 3 = road bridge nearby (the router keeps away), 2 = inside a facility (blocked). */
   private near = new Uint8Array(N * N);
   private sc;
-  private ctx: RailContext;
+  private ctx!: RailContext;
   private roadBuckets = new Map<number, { r: RoadSpec; i: number }[]>();
 
   constructor(private terrain: RailTerrain) {
@@ -265,6 +265,7 @@ export class RailNetwork {
     const grid = this.routeGrid();
     this.fixArrivals(grid);
     const aligned = LINES.map((l, k) => this.alignment(l.id, l.from, l.to, grid[k]));
+    this.joinLateRoads(aligned);
     this.elevateStations(aligned);
     for (const a of aligned) this.edges.push(this.design(a));
     this.findCrossings();
@@ -273,6 +274,21 @@ export class RailNetwork {
     this.switches.push(...buildSwitches(this.links));
     this.diamonds.push(...buildDiamonds(this.links));
     this.checkClearances();
+  }
+
+  /**
+   * STEP RAIL-A: the railway PLAN (stations, router, alignment in plan view) is made on the roads WITHOUT the J1 arms, so the plan is identical with the arms on / off
+   * (the railway cannot change, user 2026-11-14). From here on the arms are part of the road network: the context, the road index and the road crossings of every line
+   * are rebuilt, so the long section (station levels, grade, structures, bridge / ground) and the earthworks know the arms and the rail keeps clear of them.
+   */
+  private joinLateRoads(aligned: Aligned[]): void {
+    const before = this.terrain.roads.roads.length;
+    this.terrain.roads.addJ1Arms();
+    if (this.terrain.roads.roads.length === before) return;
+    this.ctx = new RailContext(this.terrain);
+    this.roadBuckets.clear();
+    this.indexRoads();
+    for (const a of aligned) a.cross = this.crossingsOf(a.xs, a.zs, a.cum);
   }
 
   stationById(id: string): RailStation | undefined {
@@ -929,7 +945,11 @@ export class RailNetwork {
         }
       }
       const mean = cnt ? sum / cnt : st.y;
-      if (Number.isFinite(rise)) {
+      const fixedLevel = STATION_LEVELS[st.id];
+      if (fixedLevel !== undefined) {
+        st.elevated = true;
+        st.level = fixedLevel;
+      } else if (Number.isFinite(rise)) {
         st.elevated = true;
         st.level = Math.max(rise, mean);
       } else {
@@ -1320,7 +1340,8 @@ export class RailNetwork {
   private placePiers(): void {
     const free = (e: RailEdge, s: number): boolean => {
       const p = this.pointAt(e, s);
-      return this.ctx.pierFree(p.x, p.z, D.pierSize / 2, D.pierRoadGap);
+      const t = Math.max(0, Math.min(1, (s - e.cum[p.i]) / (e.cum[p.i + 1] - e.cum[p.i] || 1)));
+      return this.ctx.pierFree(p.x, p.z, D.pierSize / 2, D.pierRoadGap, e.design[p.i] + (e.design[p.i + 1] - e.design[p.i]) * t);
     };
     for (const e of this.edges) {
       for (const seg of e.segments) {

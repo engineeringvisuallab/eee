@@ -62,6 +62,13 @@ export const LINES: readonly LinePlan[] = [
   { id: 'ring-west', from: 'nw-town', to: 'sw-newtown', via: [[-2400, -1000], [-2800, -500], [-2700, 400], [-2400, 1300]] },
 ];
 
+/**
+ * STEP RAIL-C2: fixed platform level (top of ballast, m) of a station, by id. The station is then ELEVATED (platforms on a viaduct, like the old game's Central at 31 m) whatever
+ * the roads under its approaches say. Central: the city railway stands high over the streets and the J1 arms (rail over arm, 7.4 m or more clearance), the PLAN is not touched.
+ * Ground at Central is 18.1 m, so 34 m is 15.9 m above it.
+ */
+export const STATION_LEVELS: Readonly<Record<string, number>> = { central: 34 };
+
 /** Gentle-line design limits (a heavy railway: far gentler than a road). */
 export const RAIL_DESIGN = {
   /** Steepest allowed grade (rise / run). */

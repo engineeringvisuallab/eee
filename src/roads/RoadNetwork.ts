@@ -284,8 +284,11 @@ export class RoadNetwork {
    * but THE RAILWAY CANNOT CHANGE (user, 2026-11-14): the arms were designed against the railway plan without them (6.1d). So the railway is planned on the network without the arms, and the arms
    * join the network afterwards (terrain carve, ribbon, structures). Deterministic like everything else: main thread and workers run the same constructor.
    */
+  private j1ArmsAdded = false;
+
   addJ1Arms(): void {
-    if (!Config.roads.junctionJ1Arms.enabled || !Config.roads.junctionJ1.enabled) return;
+    if (!Config.roads.junctionJ1Arms.enabled || !Config.roads.junctionJ1.enabled || this.j1ArmsAdded) return;
+    this.j1ArmsAdded = true; // STEP RAIL-A: the railway calls this before its long section, TerrainGenerator calls it again later (no-op then)
     const before = this.roads.length;
     this.layoutJ1Arms();
     if (this.roads.length === before) return;

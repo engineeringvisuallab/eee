@@ -52,9 +52,14 @@ let tri = 0, empty = 0;
 const t0 = Date.now();
 all.forEach((b, k) => { const m = buildStructure(net, b, k); if (!m.indices.length) empty++; tri += m.indices.length / 3; });
 ok(empty === 0, `all structure meshes build: ${tri} triangles, ${empty} empty, ${Date.now() - t0} ms`);
-// railway unchanged
+// railway PLAN unchanged (STEP RAIL-A: the plan in x / z is made without the arms; the long section (levels, structures) now knows the arms, so only the plan must be identical)
 let railSame = off.rail.edges.length === gen.rail.edges.length;
-if (railSame) for (let i = 0; i < gen.rail.edges.length; i++) { const a = off.rail.edges[i], b = gen.rail.edges[i]; if (a.id !== b.id || a.xs.length !== b.xs.length || a.design.some((v, j) => Math.abs(v - b.design[j]) > 1e-6) || a.xs.some((v, j) => Math.abs(v - b.xs[j]) > 1e-6)) railSame = false; }
-ok(railSame, `railway plan identical with the arms on / off (${gen.rail.edges.length} edges)`);
+let maxPlan = 0, maxDesign = 0;
+if (railSame) for (let i = 0; i < gen.rail.edges.length; i++) {
+  const a = off.rail.edges[i], b = gen.rail.edges[i];
+  if (a.id !== b.id || a.xs.length !== b.xs.length) { railSame = false; continue; }
+  for (let j = 0; j < a.xs.length; j++) { maxPlan = Math.max(maxPlan, Math.hypot(a.xs[j] - b.xs[j], a.zs[j] - b.zs[j])); maxDesign = Math.max(maxDesign, Math.abs(a.design[j] - b.design[j])); }
+}
+ok(railSame && maxPlan < 1e-6, `railway PLAN (x, z of ${gen.rail.edges.length} edges) identical with the arms on / off: max difference ${maxPlan.toExponential(1)} m (rail height differs by up to ${f2(maxDesign)} m: the long section knows the arms)`);
 console.log(fails ? `\n${fails} FAIL` : '\nALL PASS');
 process.exit(fails ? 1 : 0);

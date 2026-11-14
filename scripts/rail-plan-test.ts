@@ -118,7 +118,7 @@ if (padHurt) fail(`${padHurt} junction-pad probes are changed by the railway`);
 
 // ---- piers: free ground, sane spans
 let pierBad = 0;
-for (const p of rail.piers) if (!ctx.pierFree(p.x, p.z, D.pierSize / 2, D.pierRoadGap - 0.01)) pierBad++;
+for (const p of rail.piers) if (!ctx.pierFree(p.x, p.z, D.pierSize / 2, D.pierRoadGap - 0.01, p.deckY)) pierBad++; // deckY: a pier under the deck of a J1 arm is legal only where the rail is below the arm
 if (pierBad) fail(`${pierBad} viaduct piers stand on road / pad / road-bridge ground`);
 if (rail.piers.some((p) => p.deckY - p.baseY < 1)) console.log('(info) some piers are very short (deck close to the ground)');
 console.log(`piers checked: ${rail.piers.length}, on blocked ground: ${pierBad}`);
