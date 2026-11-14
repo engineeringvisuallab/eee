@@ -1,0 +1,9 @@
+STEP J1-c5 (W arm) search result, 2026-11-14, J1 = C10 (-87,-277) yaw 37.5, W arm axis bearing -52.5 (math heading -142.5), start s 340 = (-357,-484), pad y 18.19
+Scripts: scripts/j1-w-raster.ts (raster 20 m, x -2800..200, z -1600..400), scripts/j1-w-hybrid.ts (env STEP, GMAX, RST0, RST1, J1YAW, HMIN, HMAX)
+Target: ring W straight st 4600..6000, arrival heading 160..200 deg, ring level
+Heading-aware search, grade 3 %, cut cap 12 m (soft), turn step 5 deg:
+ STEP 90 (R 1031): cut 93.6 m | STEP 75 (R 860): 88.5 | STEP 60 (R 688): 89.3 | STEP 45 (R 516): 87.2 | STEP 35 (R 401): 85.2 | STEP 30 (R 344): 94.8 | STEP 24 (R 275): no route
+ GMAX 4 %, STEP 60: cut 86.6 m
+Lowest corridor on the ground (cells <= 33 m, no road rules): 2852 m, lowest saddle 31.9 m. It leaves the arm start at heading about -223 deg (80 deg away from the arm axis -142.5), passes (-730,-10), (-1210,250), (-1690,110), (-2170,-130), (-2410,-370).
+CAUSE: the hill spur (up to 190 m, x -1600..-600, z -1000..-150) lies straight ahead of the W arm. The low land is 440 m to the side, but the arm leaves J1 pointing at the hill and a bend with R >= 400 m cannot turn 80 deg inside that distance.
+RESULT: NO W route with centre cut <= 12 m exists with the arm axis fixed. OPEN QUESTION for the user.
