@@ -14,7 +14,7 @@ import { SECTION_M8 } from '../src/roads/standards/SectionTable';
 import { RING_RADIAL_JOINS } from '../src/roads/alignment/RingAlignment';
 
 // ------------------------------------------------------------------ inputs
-const J1 = { x: Number(process.env.J1X ?? -117), z: Number(process.env.J1Z ?? -277), yawDeg: 17.6 }; // C9 = C8 (0, -250) moved 120 m west + 10 m south along its own axes, because the east approach of C8 was 104 m too short (user: do what is best, 2026-11-13); env J1X / J1Z test another point
+const J1 = { x: Number(process.env.J1X ?? -117), z: Number(process.env.J1Z ?? -277), yawDeg: Number(process.env.J1YAW ?? 17.6) }; // env J1YAW = another yaw (J1-a2). C9 = C8 (0, -250) moved 120 m west + 10 m south along its own axes, because the east approach of C8 was 104 m too short (user: do what is best, 2026-11-13); env J1X / J1Z test another point
 const W = DESIGN.laneWidth; // 3.65
 const PAVE_HALF = SECTION_M8.pavementEdge; // 22.1 m, one M8 carriageway edge from the centreline
 const ARM_STRAIGHT = 500; // m, straight perpendicular part of each arm (proposal 15.8.2, final in 6.1b)
