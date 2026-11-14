@@ -3,7 +3,7 @@ import { RAIL_BOX_COVER } from '../roads/RoadCorrections';
 import type { RoadSpec } from '../roads/RoadTypes';
 import { RailContext, type RailTerrain } from './RailContext';
 import { bandOk, movingAverage, solveProfile } from './RailProfile';
-import { LINES, RAIL_DESIGN as D, RAIL_OVER_ROAD_FLOOR, RAIL_UNDER_BRIDGE_DROP, STATIONS, STATION_LEVELS, type StationKind } from './RailPlan';
+import { LINES, RAIL_DESIGN as D, RAIL_OVER_ROAD_FLOOR, RAIL_OVER_ROAD_RISE, RAIL_UNDER_BRIDGE_DROP, STATIONS, STATION_LEVELS, type StationKind } from './RailPlan';
 import { buildDiamonds, buildSwitches, type RailDiamond, type RailSwitch } from './RailSwitches';
 
 export type { RailTerrain } from './RailContext';
@@ -164,6 +164,8 @@ interface Zone {
   floor: number;
   /** STEP RAIL-B / 4: road surface to rail top (m) under a road bridge (RAIL_UNDER_BRIDGE_DROP), else NaN = standard rule. */
   bridgeDrop: number;
+  /** STEP RAIL-B / 5: road surface to rail top (m) when the rail passes OVER the road (RAIL_OVER_ROAD_RISE), else NaN = OVER_RISE. */
+  rise: number;
 }
 
 interface Window {
@@ -1017,7 +1019,7 @@ export class RailNetwork {
           const rz = c.road.zs[c.i + 1] - c.road.zs[c.i];
           const sin = Math.abs(p.dx * rz - p.dz * rx) / (Math.hypot(rx, rz) || 1);
           const half = Math.min(70, (c.road.planHalfWidth + c.road.shoulder + 5) / Math.max(0.3, sin) + 6);
-          return { a: c.s - half, b: c.s + half, y: c.y, bridge: c.onBridge, extra: RAIL_BOX_COVER[c.road.name] ?? 0, floor: RAIL_OVER_ROAD_FLOOR[`${c.road.name}|${a.id}`] ?? -Infinity, bridgeDrop: RAIL_UNDER_BRIDGE_DROP[`${c.road.name}|${a.id}`] ?? NaN };
+          return { a: c.s - half, b: c.s + half, y: c.y, bridge: c.onBridge, extra: RAIL_BOX_COVER[c.road.name] ?? 0, floor: RAIL_OVER_ROAD_FLOOR[`${c.road.name}|${a.id}`] ?? -Infinity, bridgeDrop: RAIL_UNDER_BRIDGE_DROP[`${c.road.name}|${a.id}`] ?? NaN, rise: RAIL_OVER_ROAD_RISE[`${c.road.name}|${a.id}`] ?? NaN };
         });
       let kind: Window['kind'] = 'free';
       if (zones.length) {
@@ -1047,7 +1049,7 @@ export class RailNetwork {
         const i0 = Math.max(0, Math.floor(z.a / step));
         const i1 = Math.min(n - 1, Math.ceil(z.b / step));
         for (let i = i0; i <= i1; i++) {
-          if (kind === 'over') l[i] = Math.max(l[i], z.y + OVER_RISE, z.floor);
+          if (kind === 'over') l[i] = Math.max(l[i], z.y + (Number.isNaN(z.rise) ? OVER_RISE : z.rise), z.floor);
           else if (kind === 'under') u[i] = Math.min(u[i], z.y - D.underRoadDrop - 0.06 - z.extra);
           else if (kind === 'under-bridge') u[i] = Math.min(u[i], z.y - (z.bridge && !Number.isNaN(z.bridgeDrop) ? z.bridgeDrop : D.underRoadDrop + (z.bridge ? 0.4 : 0)));
         }

@@ -76,6 +76,12 @@ export const STATION_LEVELS: Readonly<Record<string, number>> = { central: 34 };
 export const RAIL_OVER_ROAD_FLOOR: Readonly<Record<string, number>> = { 'J1-E|north-1': 33.8, 'J1-S|west-nw': 33.7, 'J1-W|west-nw': 40.6, 'J1-S|west-sw': 37.4 };
 
 /**
+ * STEP RAIL-B / 5: where the railway passes OVER a road and is too low, the rail goes UP: least distance (m) from the road surface up to the rail top in the crossing zone.
+ * Key = `${road name}|${rail edge id}`, value replaces overRoadRise (7.4). The rail profile solver ramps up and down at its normal grade limit.
+ */
+export const RAIL_OVER_ROAD_RISE: Readonly<Record<string, number>> = { 'M8|ring-northeast': 10.0, 'M8|airport-branch': 10.0 };
+
+/**
  * STEP RAIL-B / 4: where a J1 arm road passes OVER the railway and cannot be raised (grade limit to the ring), the railway goes lower instead.
  * Key = `${road name}|${rail edge id}`, value = least distance (m) from the road surface down to the rail top (replaces underRoadDrop + 0.4 on a bridge).
  */
