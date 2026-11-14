@@ -1,0 +1,256 @@
+{
+ "SJ": 340,
+ "STRUCT": {
+  "approach": 16,
+  "deckDepth": 1.5,
+  "groundGap": 0.3,
+  "protectReach": 60
+ },
+ "S": {
+  "length": 2825.970770806321,
+  "structures": [
+   {
+    "id": "S1",
+    "arm": "S arm",
+    "kinds": [
+     "rail bridge",
+     "viaduct"
+    ],
+    "s0": 326.5,
+    "s1": 518.2,
+    "length": 191.70000000000005,
+    "x0": -293.98,
+    "z0": -7.26,
+    "x1": -402.43399999999997,
+    "z1": 134.149,
+    "xm": -344.0896,
+    "zm": 58.05040000000004,
+    "maxHeight": 7.949999999999999,
+    "maxCarve": 0,
+    "waterLen": 0,
+    "waterLevel": null,
+    "riverClear": null,
+    "rail": [
+     {
+      "edge": "west-nw",
+      "s": 414.5786291953867,
+      "angle": 82.76229184564647,
+      "gap": 7.665984965942858,
+      "span": 25
+     }
+    ],
+    "specialSpans": [
+     25
+    ],
+    "stdSpans": 4,
+    "spanTotal": 185,
+    "piers": 4,
+    "maxPier": 6.449999999999999,
+    "maxCurvatureOn": 0.0002543,
+    "hCurveOnStruct": true,
+    "vCurvesOn": 1,
+    "fromArmEnd": 2307.770770806321,
+    "proposal": "segmental concrete box viaduct, one long span over the rail",
+    "why": "rail span 25 m inside a 192 m viaduct"
+   },
+   {
+    "id": "S2",
+    "arm": "S arm",
+    "kinds": [
+     "viaduct"
+    ],
+    "s0": 970.4,
+    "s1": 1157.2,
+    "length": 186.80000000000007,
+    "x0": -603.4388,
+    "z0": 536.3631999999999,
+    "x1": -667.457,
+    "z1": 711.8530000000001,
+    "xm": -635.47,
+    "zm": 624.16,
+    "maxHeight": 9.66,
+    "maxCarve": 0,
+    "waterLen": 0,
+    "waterLevel": null,
+    "riverClear": null,
+    "rail": [],
+    "specialSpans": [],
+    "stdSpans": 4,
+    "spanTotal": 160,
+    "piers": 3,
+    "maxPier": 8.16,
+    "maxCurvatureOn": 0,
+    "hCurveOnStruct": false,
+    "vCurvesOn": 1,
+    "fromArmEnd": 1668.770770806321,
+    "proposal": "precast concrete viaduct, slender twin-blade piers",
+    "why": "187 m long, up to 9.7 m high, standard spans"
+   },
+   {
+    "id": "S3",
+    "arm": "S arm",
+    "kinds": [
+     "rail bridge",
+     "river bridge",
+     "viaduct"
+    ],
+    "s0": 1180.1,
+    "s1": 1331.9,
+    "length": 151.80000000000018,
+    "x0": -675.3259999999999,
+    "z0": 733.427,
+    "x1": -727.575,
+    "z1": 875.899,
+    "xm": -701.335,
+    "zm": 804.7049999999999,
+    "maxHeight": 16.1,
+    "maxCarve": 0,
+    "waterLen": 45,
+    "waterLevel": 16.914559728788937,
+    "riverClear": 12.723849494109299,
+    "rail": [
+     {
+      "edge": "west-sw",
+      "s": 1238.906067912731,
+      "angle": 34.160827934454744,
+      "gap": 7.61982337715942,
+      "span": 45
+     }
+    ],
+    "specialSpans": [
+     45,
+     75
+    ],
+    "stdSpans": 0,
+    "spanTotal": 120,
+    "piers": 1,
+    "maxPier": 14.600000000000001,
+    "maxCurvatureOn": 0.0001616,
+    "hCurveOnStruct": true,
+    "vCurvesOn": 1,
+    "fromArmEnd": 1494.070770806321,
+    "proposal": "haunched steel box girder, slender V-shaped piers",
+    "why": "river main span about 75 m, deck 16 m above ground"
+   },
+   {
+    "id": "S4",
+    "arm": "S arm",
+    "kinds": [
+     "viaduct"
+    ],
+    "s0": 1369.8,
+    "s1": 1541.6,
+    "length": 171.79999999999995,
+    "x0": -740.45,
+    "z0": 909.99,
+    "x1": -803.067,
+    "z1": 1071.4950000000001,
+    "xm": -771.935,
+    "zm": 991.4749999999998,
+    "maxHeight": 9.13,
+    "maxCarve": 0,
+    "waterLen": 0,
+    "waterLevel": null,
+    "riverClear": null,
+    "rail": [],
+    "specialSpans": [],
+    "stdSpans": 4,
+    "spanTotal": 160,
+    "piers": 3,
+    "maxPier": 7.630000000000001,
+    "maxCurvatureOn": 0.000148,
+    "hCurveOnStruct": true,
+    "vCurvesOn": 0,
+    "fromArmEnd": 1284.3707708063212,
+    "proposal": "precast concrete viaduct, slender twin-blade piers (variant 2: different pier shape and parapet)",
+    "why": "172 m long, up to 9.1 m high, standard spans"
+   },
+   {
+    "id": "S5",
+    "arm": "S arm",
+    "kinds": [
+     "rail bridge",
+     "viaduct"
+    ],
+    "s0": 1938.9,
+    "s1": 2130.6,
+    "length": 191.69999999999982,
+    "x0": -946.61,
+    "z0": 1440.41,
+    "x1": -1016.586,
+    "z1": 1620.482,
+    "xm": -981.01,
+    "zm": 1528.8,
+    "maxHeight": 7.859999999999999,
+    "maxCarve": 0,
+    "waterLen": 0,
+    "waterLevel": null,
+    "riverClear": null,
+    "rail": [
+     {
+      "edge": "ring-south",
+      "s": 2064.579254918814,
+      "angle": 65.41577585236458,
+      "gap": 7.680581194593271,
+      "span": 30
+     }
+    ],
+    "specialSpans": [
+     30
+    ],
+    "stdSpans": 4,
+    "spanTotal": 190,
+    "piers": 4,
+    "maxPier": 6.359999999999999,
+    "maxCurvatureOn": 0.0002529,
+    "hCurveOnStruct": true,
+    "vCurvesOn": 1,
+    "fromArmEnd": 695.3707708063212,
+    "proposal": "segmental concrete box viaduct, one long span over the rail (variant 2: different pier shape and parapet)",
+    "why": "rail span 30 m inside a 192 m viaduct"
+   }
+  ]
+ },
+ "checks": [
+  {
+   "name": "S: every wet point is inside a structure (no dam across water)",
+   "pass": true,
+   "detail": "0 m of wet centreline outside"
+  },
+  {
+   "name": "S: every point with fill > 7 m is inside a viaduct (D4)",
+   "pass": true,
+   "detail": "0 m outside"
+  },
+  {
+   "name": "S: every rail crossing lies in a structure that spans the whole corridor + approach (X5)",
+   "pass": true,
+   "detail": "3 crossings: S1/west-nw s 415, S3/west-sw s 1239, S5/ring-south s 2065"
+  },
+  {
+   "name": "S: road over rail >= 7.4 m on every rail crossing",
+   "pass": true,
+   "detail": "7.67 m, 7.62 m, 7.68 m"
+  },
+  {
+   "name": "S: river crossings: road at least 2.5 m above the water",
+   "pass": true,
+   "detail": "S3 12.7 m"
+  },
+  {
+   "name": "S: structures do not overlap and start after the J1 lane zone (s >= 269, J1-b)",
+   "pass": true,
+   "detail": "5 structures, first starts at s 327"
+  },
+  {
+   "name": "S: no structure on a horizontal curve tighter than 591 m (rule 3.12.8)",
+   "pass": true,
+   "detail": "none"
+  },
+  {
+   "name": "S: no structure inside the last 150 m before the ring T, or it is marked as part of the ring interchange",
+   "pass": true,
+   "detail": "last structure S5 ends 695 m before the ring, fill at the end 0.0 m"
+  }
+ ]
+}
