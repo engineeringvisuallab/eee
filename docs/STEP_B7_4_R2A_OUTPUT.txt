@@ -1,0 +1,608 @@
+STEP B7-6 batch L-a + L-b: export of the L lines as game data (headless; the game is changed only by the registration in RoadNetwork + Config switch)
+   line      length m  points  y start  y end   max grade %  min / max level m  PVIs  curves
+   PASS  R2-12 is a new, not dropped, class 2 line
+   PASS  R2-12 max PVI tangent grade 8.00 % <= 8 %
+   PASS  R2-12 last PVI station 450.4 m = line length 450.5 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-12        450.5      47    27.78   38.40        7.96      27.8 / 42.7   5     3
+   PASS  R2-12 max sampled grade 7.96 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-12 start level = PVI start level
+   PASS  R2-12 end level = PVI end level
+   PASS  R2-13 is a new, not dropped, class 2 line
+   PASS  R2-13 max PVI tangent grade 6.79 % <= 8 %
+   PASS  R2-13 last PVI station 437.5 m = line length 437.1 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-13        437.1      45    27.78   24.85        6.86      22.9 / 31.0   7     5
+   PASS  R2-13 max sampled grade 6.86 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-13 start level = PVI start level
+   PASS  R2-13 end level = PVI end level
+   PASS  R2-14 is a new, not dropped, class 2 line
+   PASS  R2-14 max PVI tangent grade 2.81 % <= 8 %
+   PASS  R2-14 last PVI station 606.4 m = line length 606.2 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-14        606.2      62    26.04   25.10        2.83      25.1 / 28.6   13     11
+   PASS  R2-14 max sampled grade 2.83 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-14 start level = PVI start level
+   PASS  R2-14 end level = PVI end level
+   PASS  R2-15 is a new, not dropped, class 2 line
+   PASS  R2-15 max PVI tangent grade 7.87 % <= 8 %
+   PASS  R2-15 last PVI station 353.5 m = line length 352.8 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-15        352.8      37    22.48   26.71        7.84      22.5 / 28.9   7     5
+   PASS  R2-15 max sampled grade 7.84 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-15 start level = PVI start level
+   PASS  R2-15 end level = PVI end level
+   PASS  R2-16 is a new, not dropped, class 2 line
+   PASS  R2-16 max PVI tangent grade 2.61 % <= 8 %
+   PASS  R2-16 last PVI station 243.4 m = line length 243.3 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-16        243.3      26    31.77   27.25        2.68      27.3 / 31.8   3     1
+   PASS  R2-16 max sampled grade 2.68 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-16 start level = PVI start level
+   PASS  R2-16 end level = PVI end level
+   PASS  R2-17 is a new, not dropped, class 2 line
+   PASS  R2-17 max PVI tangent grade 8.00 % <= 8 %
+   PASS  R2-17 last PVI station 1173.9 m = line length 1173.7 m (tolerance 1.8 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-17       1173.7     119    30.67   27.00        8.08      27.0 / 44.4   13     11
+   PASS  R2-17 max sampled grade 8.08 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-17 start level = PVI start level
+   PASS  R2-17 end level = PVI end level
+   PASS  R2-18 is a new, not dropped, class 2 line
+   PASS  R2-18 max PVI tangent grade 7.98 % <= 8 %
+   PASS  R2-18 last PVI station 216.8 m = line length 216.5 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-18 start trimmed 7.0 m at the centre line of R4-12; level 18.72 pinned to 18.76 (offset 0.04 m, fades over 80 m)
+   R2-18        209.5      22    18.76   25.25        8.07      18.4 / 25.3   4     2
+   PASS  R2-18 max sampled grade 8.07 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-18 end level = PVI end level
+   PASS  R2-44 is a new, not dropped, class 2 line
+   PASS  R2-44 max PVI tangent grade 7.42 % <= 8 %
+   PASS  R2-44 last PVI station 843.5 m = line length 842.7 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-44        842.7      86    31.19   31.30        7.37      22.2 / 36.9   11     9
+   PASS  R2-44 max sampled grade 7.37 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-44 start level = PVI start level
+   PASS  R2-44 end level = PVI end level
+   PASS  R2-63 is a new, not dropped, class 2 line
+   PASS  R2-63 max PVI tangent grade 2.99 % <= 8 %
+   PASS  R2-63 last PVI station 303.0 m = line length 302.4 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-63        302.4      32    33.25   41.25        3.09      33.3 / 41.3   3     1
+   PASS  R2-63 max sampled grade 3.09 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-63 start level = PVI start level
+   PASS  R2-63 end level = PVI end level
+   PASS  R2-65 is a new, not dropped, class 2 line
+   PASS  R2-65 max PVI tangent grade 7.99 % <= 8 %
+   PASS  R2-65 last PVI station 458.4 m = line length 458.1 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-65        458.1      47    37.00   30.84        8.08      30.8 / 43.3   4     2
+   PASS  R2-65 max sampled grade 8.08 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-65 start level = PVI start level
+   PASS  R2-65 end level = PVI end level
+   PASS  R2-21 is a new, not dropped, class 2 line
+   PASS  R2-21 max PVI tangent grade 7.19 % <= 8 %
+   PASS  R2-21 last PVI station 590.7 m = line length 591.1 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-21        591.1      61    17.63    2.50        7.25      2.5 / 20.9   7     5
+   PASS  R2-21 max sampled grade 7.25 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-21 start level = PVI start level
+   PASS  R2-21 end level = PVI end level
+   PASS  R2-22 is a new, not dropped, class 2 line
+   PASS  R2-22 max PVI tangent grade 7.95 % <= 8 %
+   PASS  R2-22 last PVI station 547.4 m = line length 546.7 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-22        546.7      56    17.63    3.50        7.59      3.5 / 22.9   9     7
+   PASS  R2-22 max sampled grade 7.59 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-22 start level = PVI start level
+   PASS  R2-22 end level = PVI end level
+   PASS  R2-23 is a new, not dropped, class 2 line
+   PASS  R2-23 max PVI tangent grade 6.54 % <= 8 %
+   PASS  R2-23 last PVI station 619.0 m = line length 618.6 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-23        618.6      63    17.02    1.50        6.66      1.4 / 19.1   8     6
+   PASS  R2-23 max sampled grade 6.66 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-23 start level = PVI start level
+   PASS  R2-23 end level = PVI end level
+   PASS  R2-24 is a new, not dropped, class 2 line
+   PASS  R2-24 max PVI tangent grade 6.45 % <= 8 %
+   PASS  R2-24 last PVI station 1149.4 m = line length 1148.2 m (tolerance 1.7 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-24       1148.2     116     2.75    3.00        6.56      2.8 / 19.8   9     7
+   PASS  R2-24 max sampled grade 6.56 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-24 start level = PVI start level
+   PASS  R2-24 end level = PVI end level
+   PASS  R2-25 is a new, not dropped, class 2 line
+   PASS  R2-25 max PVI tangent grade 6.15 % <= 8 %
+   PASS  R2-25 last PVI station 580.1 m = line length 580.5 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-25        580.5      60    21.85    2.30        6.23      2.3 / 24.2   8     6
+   PASS  R2-25 max sampled grade 6.23 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-25 start level = PVI start level
+   PASS  R2-25 end level = PVI end level
+   PASS  R2-26 is a new, not dropped, class 2 line
+   PASS  R2-26 max PVI tangent grade 7.93 % <= 8 %
+   PASS  R2-26 last PVI station 633.0 m = line length 632.5 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-26        632.5      65    21.85    3.50        7.87      3.5 / 21.9   10     8
+   PASS  R2-26 max sampled grade 7.87 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-26 start level = PVI start level
+   PASS  R2-26 end level = PVI end level
+   PASS  R2-27 is a new, not dropped, class 2 line
+   PASS  R2-27 max PVI tangent grade 6.26 % <= 8 %
+   PASS  R2-27 last PVI station 640.5 m = line length 639.5 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-27        639.5      65    17.02    2.50        6.35      2.5 / 19.3   5     3
+   PASS  R2-27 max sampled grade 6.35 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-27 start level = PVI start level
+   PASS  R2-27 end level = PVI end level
+   PASS  R2-28 is a new, not dropped, class 2 line
+   PASS  R2-28 max PVI tangent grade 4.18 % <= 8 %
+   PASS  R2-28 last PVI station 1190.7 m = line length 1189.1 m (tolerance 1.8 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-28       1189.1     120    17.75   18.10        4.19      17.7 / 21.3   14     12
+   PASS  R2-28 max sampled grade 4.19 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-28 start level = PVI start level
+   PASS  R2-28 end level = PVI end level
+   PASS  R2-29 is a new, not dropped, class 2 line
+   PASS  R2-29 max PVI tangent grade 2.04 % <= 8 %
+   PASS  R2-29 last PVI station 430.3 m = line length 429.6 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-29        429.6      44    18.50   16.10        1.70      16.1 / 18.5   11     9
+   PASS  R2-29 max sampled grade 1.70 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-29 start level = PVI start level
+   PASS  R2-29 end level = PVI end level
+   PASS  R2-30 is a new, not dropped, class 2 line
+   PASS  R2-30 max PVI tangent grade 7.94 % <= 8 %
+   PASS  R2-30 last PVI station 256.3 m = line length 256.2 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-30 start trimmed 8.3 m at the centre line of R4-20; level 16.55 pinned to 16.50 (offset -0.05 m, fades over 80 m)
+   R2-30        247.9      26    16.50   21.25        7.98      16.4 / 21.3   5     3
+   PASS  R2-30 max sampled grade 7.98 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-30 end level = PVI end level
+   PASS  R2-31 is a new, not dropped, class 2 line
+   PASS  R2-31 max PVI tangent grade 3.44 % <= 8 %
+   PASS  R2-31 last PVI station 78.3 m = line length 78.2 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-31         78.2       9    21.25   22.40        3.46      21.3 / 22.4   3     1
+   PASS  R2-31 max sampled grade 3.46 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-31 start level = PVI start level
+   PASS  R2-31 end level = PVI end level
+   PASS  R2-32 is a new, not dropped, class 2 line
+   PASS  R2-32 max PVI tangent grade 4.67 % <= 8 %
+   PASS  R2-32 last PVI station 526.1 m = line length 525.5 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-32        525.5      54    21.25   15.45        4.74      15.4 / 22.3   4     2
+   PASS  R2-32 max sampled grade 4.74 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-32 start level = PVI start level
+   PASS  R2-32 end level = PVI end level
+   PASS  R2-38 is a new, not dropped, class 2 line
+   PASS  R2-38 max PVI tangent grade 7.97 % <= 8 %
+   PASS  R2-38 last PVI station 213.7 m = line length 213.1 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-38        213.1      23    15.25   29.55        8.10      15.3 / 29.6   3     1
+   PASS  R2-38 max sampled grade 8.10 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-38 start level = PVI start level
+   PASS  R2-38 end level = PVI end level
+   PASS  R2-39 is a new, not dropped, class 2 line
+   PASS  R2-39 max PVI tangent grade 7.60 % <= 8 %
+   PASS  R2-39 last PVI station 627.4 m = line length 626.8 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-39        626.8      64    15.25   31.15        7.67      14.7 / 31.1   9     7
+   PASS  R2-39 max sampled grade 7.67 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-39 start level = PVI start level
+   PASS  R2-39 end level = PVI end level
+   PASS  R2-41 is a new, not dropped, class 2 line
+   PASS  R2-41 max PVI tangent grade 3.60 % <= 8 %
+   PASS  R2-41 last PVI station 286.4 m = line length 286.1 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-41        286.1      30    14.30   14.80        3.16      14.3 / 15.1   9     7
+   PASS  R2-41 max sampled grade 3.16 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-41 start level = PVI start level
+   PASS  R2-41 end level = PVI end level
+   PASS  R2-46 is a new, not dropped, class 2 line
+   PASS  R2-46 max PVI tangent grade 7.87 % <= 8 %
+   PASS  R2-46 last PVI station 457.0 m = line length 456.9 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-46        456.9      47    27.47   37.96        7.88      27.5 / 41.8   5     3
+   PASS  R2-46 max sampled grade 7.88 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-46 start level = PVI start level
+   PASS  R2-46 end level = PVI end level
+   PASS  R2-48 is a new, not dropped, class 2 line
+   PASS  R2-48 max PVI tangent grade 1.22 % <= 8 %
+   PASS  R2-48 last PVI station 240.2 m = line length 239.4 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-48        239.4      25    29.90   32.30        1.30      29.9 / 32.3   3     1
+   PASS  R2-48 max sampled grade 1.30 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-48 start level = PVI start level
+   PASS  R2-48 end level = PVI end level
+   PASS  R2-49 is a new, not dropped, class 2 line
+   PASS  R2-49 max PVI tangent grade 1.24 % <= 8 %
+   PASS  R2-49 last PVI station 306.6 m = line length 306.4 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-49        306.4      32    30.50   34.00        1.33      30.5 / 34.0   3     1
+   PASS  R2-49 max sampled grade 1.33 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-49 start level = PVI start level
+   PASS  R2-49 end level = PVI end level
+   PASS  R2-50 is a new, not dropped, class 2 line
+   PASS  R2-50 max PVI tangent grade 6.57 % <= 8 %
+   PASS  R2-50 last PVI station 260.3 m = line length 260.1 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-50        260.1      28    30.50   38.30        6.66      30.5 / 38.5   5     3
+   PASS  R2-50 max sampled grade 6.66 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-50 start level = PVI start level
+   PASS  R2-50 end level = PVI end level
+   PASS  R2-66 is a new, not dropped, class 2 line
+   PASS  R2-66 max PVI tangent grade 5.78 % <= 8 %
+   PASS  R2-66 last PVI station 293.3 m = line length 293.0 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-66        293.0      31    37.00   26.04        5.87      26.0 / 37.0   4     2
+   PASS  R2-66 max sampled grade 5.87 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-66 start level = PVI start level
+   PASS  R2-66 end level = PVI end level
+   PASS  R2-20 is a new, not dropped, class 2 line
+   PASS  R2-20 max PVI tangent grade 7.99 % <= 8 %
+   PASS  R2-20 last PVI station 219.6 m = line length 221.2 m (tolerance 1.7 m, NAMED allowance of this line, 21.67)
+   R2-20        221.2      24    27.00   33.16        8.08      27.0 / 37.6   3     1
+   PASS  R2-20 max sampled grade 8.08 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-20 start level = PVI start level
+   PASS  R2-20 end level = PVI end level
+   PASS  R2-34 is a new, not dropped, class 2 line
+   PASS  R2-34 max PVI tangent grade 2.86 % <= 8 %
+   PASS  R2-34 last PVI station 752.0 m = line length 752.3 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-34 node N129 lies on the line (0.20 m)
+   PASS  R2-34 node N130 lies on the line (0.36 m)
+   PASS  R2-34 node N131 lies on the line (0.08 m)
+   R2-34.1      221.1      24    15.25   14.18        1.75      14.2 / 15.5   15     13
+   PASS  R2-34.1 max sampled grade 1.75 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-34.1 start level = PVI start level
+   R2-34.2      216.9      23    14.18   14.27        1.02      13.9 / 14.7   15     13
+   PASS  R2-34.2 max sampled grade 1.02 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   R2-34.3      204.0      22    14.27   15.01        2.76      14.3 / 15.2   15     13
+   PASS  R2-34.3 max sampled grade 2.76 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   R2-34.4      110.3      13    15.01   14.80        1.20      14.8 / 15.3   15     13
+   PASS  R2-34.4 max sampled grade 1.20 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-34.4 end level = PVI end level
+   PASS  R2-35 is a new, not dropped, class 2 line
+   PASS  R2-35 max PVI tangent grade 4.50 % <= 8 %
+   PASS  R2-35 last PVI station 518.3 m = line length 518.3 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-35 node N131 lies on the line (0.21 m)
+   R2-35.1      241.2      26    14.70   15.01        3.02      13.7 / 15.0   10     8
+   PASS  R2-35.1 max sampled grade 3.02 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-35.1 start level = PVI start level
+   R2-35.2      277.1      29    15.01   20.00        4.55      15.0 / 20.0   10     8
+   PASS  R2-35.2 max sampled grade 4.55 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-35.2 end level = PVI end level
+   PASS  R2-36 is a new, not dropped, class 2 line
+   PASS  R2-36 max PVI tangent grade 7.96 % <= 8 %
+   PASS  R2-36 last PVI station 517.1 m = line length 516.6 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-36 node N130 lies on the line (0.18 m)
+   R2-36.1      248.1      26    13.40   14.28        0.91      13.4 / 14.6   5     3
+   PASS  R2-36.1 max sampled grade 0.91 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-36.1 start level = PVI start level
+   R2-36.2      268.5      28    14.28   20.50        7.97      14.3 / 20.5   5     3
+   PASS  R2-36.2 max sampled grade 7.97 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-36.2 end level = PVI end level
+   PASS  R2-37 is a new, not dropped, class 2 line
+   PASS  R2-37 max PVI tangent grade 6.39 % <= 8 %
+   PASS  R2-37 last PVI station 457.1 m = line length 457.4 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-37 node N129 lies on the line (0.01 m)
+   R2-37.1      195.9      21    13.85   14.19        1.23      13.8 / 14.6   5     3
+   PASS  R2-37.1 max sampled grade 1.23 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-37.1 start level = PVI start level
+   R2-37.2      261.5      28    14.19   25.20        6.46      14.2 / 25.2   5     3
+   PASS  R2-37.2 max sampled grade 6.46 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-37.2 end level = PVI end level
+   PASS  R2-40 is a new, not dropped, class 2 line
+   PASS  R2-40 max PVI tangent grade 2.85 % <= 8 %
+   PASS  R2-40 last PVI station 287.2 m = line length 287.2 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-40 node N132 lies on the line (0.19 m)
+   R2-40.1      127.9      14    15.47   15.01        2.86      14.7 / 15.5   8     6
+   PASS  R2-40.1 max sampled grade 2.86 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-40.1 start level = PVI start level
+   R2-40.2      159.4      17    15.01   14.75        2.22      14.5 / 15.1   8     6
+   PASS  R2-40.2 max sampled grade 2.22 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-40.2 end level = PVI end level
+   PASS  R2-42 is a new, not dropped, class 2 line
+   PASS  R2-42 max PVI tangent grade 1.41 % <= 8 %
+   PASS  R2-42 last PVI station 521.0 m = line length 521.9 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-42 node N132 lies on the line (0.06 m)
+   R2-42.1      149.1      16    15.40   15.02        0.71      15.0 / 15.6   7     5
+   PASS  R2-42.1 max sampled grade 0.71 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-42.1 start level = PVI start level
+   R2-42.2      372.8      39    15.02   15.70        1.33      14.6 / 15.7   7     5
+   PASS  R2-42.2 max sampled grade 1.33 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-42.2 end level = PVI end level
+   PASS  R2-45 is a new, not dropped, class 2 line
+   PASS  R2-45 max PVI tangent grade 7.00 % <= 8 %
+   PASS  R2-45 last PVI station 834.8 m = line length 834.6 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-45 start trimmed 12.0 m at the centre line of R2-44; level 24.88 pinned to 25.17 (offset 0.29 m, fades over 80 m)
+   R2-45        822.5      84    25.17   35.05        7.07      24.8 / 43.6   8     6
+   PASS  R2-45 max sampled grade 7.07 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-45 end level = PVI end level
+   PASS  R2-69 is a new, not dropped, class 2 line
+   PASS  R2-69 max PVI tangent grade 7.98 % <= 8 %
+   PASS  R2-69 last PVI station 799.9 m = line length 799.4 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-69        799.4      81    29.67   23.95        8.08      23.9 / 37.9   8     6
+   PASS  R2-69 max sampled grade 8.08 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-69 start level = PVI start level
+   PASS  R2-69 end level = PVI end level
+   PASS  R2-75 is a new, not dropped, class 2 line
+   PASS  R2-75 max PVI tangent grade 6.09 % <= 8 %
+   PASS  R2-75 last PVI station 765.4 m = line length 764.8 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-75 end trimmed 13.9 m at the centre line of R6-15; level 25.78 pinned to 25.77 (offset -0.01 m, fades over 80 m)
+   R2-75        750.9      77    22.50   25.77        6.06      22.5 / 26.0   8     6
+   PASS  R2-75 max sampled grade 6.06 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-75 start level = PVI start level
+   PASS  R2-77 is a new, not dropped, class 2 line
+   PASS  R2-77 max PVI tangent grade 7.91 % <= 8 %
+   PASS  R2-77 last PVI station 457.0 m = line length 456.8 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-77        456.8      47    21.10   30.35        7.98      21.1 / 33.9   8     6
+   PASS  R2-77 max sampled grade 7.98 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-77 start level = PVI start level
+   PASS  R2-77 end level = PVI end level
+   PASS  R2-1 is a new, not dropped, class 2 line
+   PASS  R2-1 max PVI tangent grade 8.00 % <= 8 %
+   PASS  R2-1 last PVI station 1163.7 m = line length 1162.6 m (tolerance 1.7 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-1        1162.6     118   106.13  106.30        8.07      85.3 / 122.0   7     5
+   PASS  R2-1 max sampled grade 8.07 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-1 start level = PVI start level
+   PASS  R2-1 end level = PVI end level
+   R2-1      bridge ranges [[765,1086]]
+   PASS  R2-2 is a new, not dropped, class 2 line
+   PASS  R2-2 max PVI tangent grade 8.00 % <= 8 %
+   PASS  R2-2 last PVI station 1649.4 m = line length 1648.4 m (tolerance 2.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-2        1648.4     166   106.13  154.50        8.08      86.6 / 154.5   8     6
+   PASS  R2-2 max sampled grade 8.08 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-2 start level = PVI start level
+   PASS  R2-2 end level = PVI end level
+   PASS  R2-4 is a new, not dropped, class 2 line
+   PASS  R2-4 max PVI tangent grade 8.00 % <= 8 %
+   PASS  R2-4 last PVI station 1756.9 m = line length 1755.7 m (tolerance 2.6 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-4        1755.7     177    95.86  102.25        8.08      58.3 / 102.3   13     11
+   PASS  R2-4 max sampled grade 8.08 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-4 start level = PVI start level
+   PASS  R2-4 end level = PVI end level
+   R2-4      bridge ranges [[35,285]]
+   PASS  R2-5 is a new, not dropped, class 2 line
+   PASS  R2-5 max PVI tangent grade 8.00 % <= 8 %
+   PASS  R2-5 last PVI station 567.6 m = line length 567.5 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-5         567.5      58    95.86  141.25        8.08      95.9 / 141.3   2     0
+   PASS  R2-5 max sampled grade 8.08 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-5 start level = PVI start level
+   PASS  R2-5 end level = PVI end level
+   PASS  R2-6 is a new, not dropped, class 2 line
+   PASS  R2-6 max PVI tangent grade 8.00 % <= 8 %
+   PASS  R2-6 last PVI station 1621.2 m = line length 1619.9 m (tolerance 2.4 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-6        1619.9     163    19.84   66.55        8.09      19.1 / 87.6   8     6
+   PASS  R2-6 max sampled grade 8.09 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-6 start level = PVI start level
+   PASS  R2-6 end level = PVI end level
+   PASS  R2-7 is a new, not dropped, class 2 line
+   PASS  R2-7 max PVI tangent grade 7.99 % <= 8 %
+   PASS  R2-7 last PVI station 980.0 m = line length 979.1 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-7         979.1      99    60.92   23.65        8.07      21.5 / 73.2   5     3
+   PASS  R2-7 max sampled grade 8.07 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-7 start level = PVI start level
+   PASS  R2-7 end level = PVI end level
+   R2-7      bridge ranges [[385,726]]
+   PASS  R2-8 is a new, not dropped, class 2 line
+   PASS  R2-8 max PVI tangent grade 7.79 % <= 8 %
+   PASS  R2-8 last PVI station 3928.7 m = line length 3926.3 m (tolerance 5.9 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-8 node N012 lies on the line (3.47 m)
+   R2-8.1      1986.6     200    21.10   21.70        7.57      10.6 / 29.4   34     32
+   PASS  R2-8.1 max sampled grade 7.57 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-8.1 start level = PVI start level
+   R2-8.2      1939.7     195    21.70   13.57        7.80      11.1 / 30.2   34     32
+   PASS  R2-8.2 max sampled grade 7.80 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-8.2 end level = PVI end level
+   PASS  R2-9 is a new, not dropped, class 2 line
+   PASS  R2-9 max PVI tangent grade 7.99 % <= 8 %
+   PASS  R2-9 last PVI station 200.2 m = line length 200.0 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-9         200.0      21    76.20   60.20        7.99      60.2 / 76.2   2     0
+   PASS  R2-9 max sampled grade 7.99 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-9 start level = PVI start level
+   PASS  R2-9 end level = PVI end level
+   R2-9      bridge ranges [[96,200]]
+   PASS  R2-10 is a new, not dropped, class 2 line
+   PASS  R2-10 max PVI tangent grade 3.00 % <= 8 %
+   PASS  R2-10 last PVI station 349.4 m = line length 349.7 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-10        349.7      36    65.52   55.05        3.03      55.0 / 65.5   2     0
+   PASS  R2-10 max sampled grade 3.03 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-10 start level = PVI start level
+   PASS  R2-10 end level = PVI end level
+   R2-10     bridge ranges [[195,349.7]]
+   PASS  R2-11 is a new, not dropped, class 2 line
+   PASS  R2-11 max PVI tangent grade 7.99 % <= 8 %
+   PASS  R2-11 last PVI station 1157.7 m = line length 1156.5 m (tolerance 1.7 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-11 end trimmed 26.0 m at the centre line of R2-60; level 127.73 pinned to 128.26 (offset 0.53 m, fades over 80 m)
+   R2-11       1130.5     115   194.30  128.26        8.07      128.3 / 194.3   6     4
+   PASS  R2-11 max sampled grade 8.07 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-11 start level = PVI start level
+   R2-11     bridge ranges [[916,1130.5]]
+   PASS  R2-19 is a new, not dropped, class 2 line
+   PASS  R2-19 max PVI tangent grade 7.92 % <= 8 %
+   PASS  R2-19 last PVI station 2770.8 m = line length 2770.7 m (tolerance 4.2 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-19       2770.7     279    25.25   33.70        7.98      21.3 / 39.6   23     21
+   PASS  R2-19 max sampled grade 7.98 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-19 start level = PVI start level
+   PASS  R2-19 end level = PVI end level
+   R2-19     bridge ranges [[2256,2326]]
+   PASS  R2-33 is a new, not dropped, class 2 line
+   PASS  R2-33 max PVI tangent grade 7.94 % <= 8 %
+   PASS  R2-33 last PVI station 1435.2 m = line length 1434.1 m (tolerance 2.2 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-33       1434.1     145    17.80   20.95        7.99      15.5 / 30.3   11     9
+   PASS  R2-33 max sampled grade 7.99 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-33 start level = PVI start level
+   PASS  R2-33 end level = PVI end level
+   R2-33     bridge ranges [[786,906]]
+   PASS  R2-43 is a new, not dropped, class 2 line
+   PASS  R2-43 max PVI tangent grade 2.99 % <= 8 %
+   PASS  R2-43 last PVI station 746.0 m = line length 745.0 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-43        745.0      76    38.68   20.28        3.03      20.3 / 38.7   4     2
+   PASS  R2-43 max sampled grade 3.03 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-43 start level = PVI start level
+   PASS  R2-43 end level = PVI end level
+   PASS  R2-51 is a new, not dropped, class 2 line
+   PASS  R2-51 max PVI tangent grade 7.90 % <= 8 %
+   PASS  R2-51 last PVI station 1518.1 m = line length 1517.3 m (tolerance 2.3 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-51       1517.3     153    33.00   23.58        7.98      23.6 / 67.3   9     7
+   PASS  R2-51 max sampled grade 7.98 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-51 start level = PVI start level
+   PASS  R2-51 end level = PVI end level
+   PASS  R2-52 is a new, not dropped, class 2 line
+   PASS  R2-52 max PVI tangent grade 7.98 % <= 8 %
+   PASS  R2-52 last PVI station 1079.6 m = line length 1078.5 m (tolerance 1.6 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-52       1078.5     109    34.43   62.09        8.07      34.4 / 82.8   4     2
+   PASS  R2-52 max sampled grade 8.07 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-52 start level = PVI start level
+   PASS  R2-52 end level = PVI end level
+   R2-52     bridge ranges [[365,626]]
+   PASS  R2-53 is a new, not dropped, class 2 line
+   PASS  R2-53 max PVI tangent grade 7.15 % <= 8 %
+   PASS  R2-53 last PVI station 619.7 m = line length 619.0 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-53        619.0      63    78.02  121.49        7.26      78.0 / 121.5   3     1
+   PASS  R2-53 max sampled grade 7.26 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-53 start level = PVI start level
+   PASS  R2-53 end level = PVI end level
+   R2-53     bridge ranges [[75,305]]
+   PASS  R2-54 is a new, not dropped, class 2 line
+   PASS  R2-54 max PVI tangent grade 8.00 % <= 8 %
+   PASS  R2-54 last PVI station 750.3 m = line length 750.0 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-54        750.0      77   104.75   52.00        8.06      52.0 / 104.8   3     1
+   PASS  R2-54 max sampled grade 8.06 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-54 start level = PVI start level
+   PASS  R2-54 end level = PVI end level
+   R2-54     bridge ranges [[545,750]]
+   PASS  R2-55 is a new, not dropped, class 2 line
+   PASS  R2-55 max PVI tangent grade 8.00 % <= 8 %
+   PASS  R2-55 last PVI station 1256.0 m = line length 1255.8 m (tolerance 1.9 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-55       1255.8     127    54.70   88.10        8.08      54.7 / 101.0   6     4
+   PASS  R2-55 max sampled grade 8.08 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-55 start level = PVI start level
+   PASS  R2-55 end level = PVI end level
+   R2-55     bridge ranges [[845,915]]
+   PASS  R2-57 is a new, not dropped, class 2 line
+   PASS  R2-57 max PVI tangent grade 8.00 % <= 8 %
+   PASS  R2-57 last PVI station 196.3 m = line length 196.3 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-57        196.3      21   128.75  116.50        8.06      116.5 / 129.1   3     1
+   PASS  R2-57 max sampled grade 8.06 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-57 start level = PVI start level
+   PASS  R2-57 end level = PVI end level
+   PASS  R2-58 is a new, not dropped, class 2 line
+   PASS  R2-58 max PVI tangent grade 7.99 % <= 8 %
+   PASS  R2-58 last PVI station 1697.3 m = line length 1695.8 m (tolerance 2.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-58       1695.8     171    55.60   32.30        8.07      31.9 / 66.3   11     9
+   PASS  R2-58 max sampled grade 8.07 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-58 start level = PVI start level
+   PASS  R2-58 end level = PVI end level
+   PASS  R2-59 is a new, not dropped, class 2 line
+   PASS  R2-59 max PVI tangent grade 8.00 % <= 8 %
+   PASS  R2-59 last PVI station 469.4 m = line length 468.8 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-59        468.8      48   123.50  115.05        8.07      115.0 / 135.3   4     2
+   PASS  R2-59 max sampled grade 8.07 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-59 start level = PVI start level
+   PASS  R2-59 end level = PVI end level
+   R2-59     bridge ranges [[0,65]]
+   PASS  R2-60 is a new, not dropped, class 2 line
+   PASS  R2-60 max PVI tangent grade 4.98 % <= 8 %
+   PASS  R2-60 last PVI station 190.9 m = line length 190.0 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-60        190.0      20   137.20  127.70        4.98      127.7 / 137.2   2     0
+   PASS  R2-60 max sampled grade 4.98 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-60 start level = PVI start level
+   PASS  R2-60 end level = PVI end level
+   R2-60     bridge ranges [[75,190]]
+   PASS  R2-61 is a new, not dropped, class 2 line
+   PASS  R2-61 max PVI tangent grade 7.99 % <= 8 %
+   PASS  R2-61 last PVI station 1295.7 m = line length 1294.8 m (tolerance 1.9 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-61       1294.8     131   137.52  101.70        8.08      99.8 / 137.5   6     4
+   PASS  R2-61 max sampled grade 8.08 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-61 start level = PVI start level
+   PASS  R2-61 end level = PVI end level
+   R2-61     bridge ranges [[1226,1294.8]]
+   PASS  R2-62 is a new, not dropped, class 2 line
+   PASS  R2-62 max PVI tangent grade 7.99 % <= 8 %
+   PASS  R2-62 last PVI station 4005.3 m = line length 4002.2 m (tolerance 6.0 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-62       4002.2     402    59.40  109.07        8.07      59.4 / 128.7   22     20
+   PASS  R2-62 max sampled grade 8.07 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-62 start level = PVI start level
+   PASS  R2-62 end level = PVI end level
+   R2-62     bridge ranges [[0,45],[1466,1586],[3777,4002.2]]
+   PASS  R2-64 is a new, not dropped, class 2 line
+   PASS  R2-64 max PVI tangent grade 2.73 % <= 8 %
+   PASS  R2-64 last PVI station 942.7 m = line length 942.4 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-64        942.4      96    33.26   21.19        2.83      21.2 / 33.3   5     3
+   PASS  R2-64 max sampled grade 2.83 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-64 start level = PVI start level
+   PASS  R2-64 end level = PVI end level
+   PASS  R2-67 is a new, not dropped, class 2 line
+   PASS  R2-67 max PVI tangent grade 7.19 % <= 8 %
+   PASS  R2-67 last PVI station 547.6 m = line length 547.3 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-67        547.3      56    41.25   33.70        7.27      26.0 / 41.3   5     3
+   PASS  R2-67 max sampled grade 7.27 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-67 start level = PVI start level
+   PASS  R2-67 end level = PVI end level
+   PASS  R2-68 is a new, not dropped, class 2 line
+   PASS  R2-68 max PVI tangent grade 7.83 % <= 8 %
+   PASS  R2-68 last PVI station 182.8 m = line length 182.5 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-68        182.5      20    26.25   29.67        7.70      23.5 / 29.7   3     1
+   PASS  R2-68 max sampled grade 7.70 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-68 start level = PVI start level
+   PASS  R2-68 end level = PVI end level
+   R2-68     bridge ranges [[20,110]]
+   PASS  R2-70 is a new, not dropped, class 2 line
+   PASS  R2-70 max PVI tangent grade 7.99 % <= 8 %
+   PASS  R2-70 last PVI station 820.8 m = line length 821.7 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-70        821.7      84    29.67   28.02        7.89      23.3 / 33.1   8     6
+   PASS  R2-70 max sampled grade 7.89 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-70 start level = PVI start level
+   PASS  R2-70 end level = PVI end level
+   R2-70     bridge ranges [[485,535]]
+   PASS  R2-71 is a new, not dropped, class 2 line
+   PASS  R2-71 max PVI tangent grade 8.00 % <= 8 %
+   PASS  R2-71 last PVI station 975.6 m = line length 975.4 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-71        975.4      99    96.25  174.25        8.08      96.3 / 174.3   2     0
+   PASS  R2-71 max sampled grade 8.08 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-71 start level = PVI start level
+   PASS  R2-71 end level = PVI end level
+   PASS  R2-72 is a new, not dropped, class 2 line
+   PASS  R2-72 max PVI tangent grade 8.00 % <= 8 %
+   PASS  R2-72 last PVI station 1248.0 m = line length 1247.3 m (tolerance 1.9 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-72       1247.3     126    96.25   35.22        8.08      32.9 / 96.3   6     4
+   PASS  R2-72 max sampled grade 8.08 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-72 start level = PVI start level
+   PASS  R2-72 end level = PVI end level
+   R2-72     bridge ranges [[95,435]]
+   PASS  R2-73 is a new, not dropped, class 2 line
+   PASS  R2-73 max PVI tangent grade 7.97 % <= 8 %
+   PASS  R2-73 last PVI station 199.6 m = line length 199.7 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   R2-73        199.7      21   421.60  420.10        8.09      420.1 / 427.8   3     1
+   PASS  R2-73 max sampled grade 8.09 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-73 start level = PVI start level
+   PASS  R2-73 end level = PVI end level
+   R2-73     bridge ranges [[0,45],[125,195]]
+   PASS  R2-74 is a new, not dropped, class 2 line
+   PASS  R2-74 max PVI tangent grade 7.20 % <= 8 %
+   PASS  R2-74 last PVI station 2470.2 m = line length 2468.1 m (tolerance 3.7 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-74 start trimmed 9.4 m at the centre line of R4-9; level 83.03 pinned to 83.71 (offset 0.68 m, fades over 80 m)
+   R2-74       2458.7     247    83.71   32.50        8.09      24.1 / 83.7   8     6
+   PASS  R2-74 max sampled grade 8.09 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-74 end level = PVI end level
+   R2-74     bridge ranges [[295.6,406.6]]
+   PASS  R2-76 is a new, not dropped, class 2 line
+   PASS  R2-76 max PVI tangent grade 7.99 % <= 8 %
+   PASS  R2-76 last PVI station 814.6 m = line length 814.1 m (tolerance 1.5 m: max(1.5 m, 0.15 % of the length), 21.65)
+   PASS  R2-76 end trimmed 8.3 m at the centre line of R6-15; level 46.12 pinned to 46.09 (offset -0.03 m, fades over 80 m)
+   R2-76        805.9      82    22.50   46.09        8.08      22.5 / 49.3   6     4
+   PASS  R2-76 max sampled grade 8.08 % <= 8 % + 0.2 % (heights rounded to 0.01 m at both ends of a 10 m step = up to 0.2 %)
+   PASS  R2-76 start level = PVI start level
+   PASS  node N129: R2-34 14.18 m = R2-37 14.19 m (within 0.1 m)
+   PASS  node N130: R2-34 14.27 m = R2-36 14.28 m (within 0.1 m)
+   PASS  node N131: R2-34 15.01 m = R2-35 15.01 m (within 0.1 m)
+   PASS  node N132: R2-40 15.01 m = R2-42 15.02 m (within 0.1 m)
+   TUNNEL / DEEP-CUT CANDIDATES (placed as open cut, the USER decides, R12): 32
+     R2-1 deep open cut with walls 65-85 m (max 12.6 m)
+     R2-1 deep open cut with walls 486-516 m (max 12.9 m)
+     R2-1 cut-and-cover tunnel 1126-1166 m (max 20.6 m)
+     R2-5 deep open cut with walls 465-570 m (max 18.9 m)
+     R2-7 cut-and-cover tunnel 45-265 m (max 24 m)
+     R2-9 deep open cut with walls 0-25 m (max 17.7 m)
+     R2-10 deep open cut with walls 0-3 m (max 14.1 m)
+     R2-11 deep open cut with walls 0-3 m (max 13.3 m)
+     R2-11 cut-and-cover tunnel 766-836 m (max 23 m)
+     R2-19 deep open cut with walls 2136-2166 m (max 12.6 m)
+     R2-52 deep open cut with walls 956-986 m (max 12.7 m)
+     R2-53 cut-and-cover tunnel 466-622 m (max 35.6 m)
+     R2-54 deep open cut with walls 285-325 m (max 12.7 m)
+     R2-54 deep open cut with walls 375-415 m (max 13 m)
+     R2-55 deep open cut with walls 325-365 m (max 15.1 m)
+     R2-55 deep open cut with walls 786-796 m (max 12 m)
+     R2-57 deep open cut with walls 45-55 m (max 13 m)
+     R2-58 deep open cut with walls 445-465 m (max 12.1 m)
+     R2-59 deep open cut with walls 95-175 m (max 15.7 m)
+     R2-60 deep open cut with walls 0-15 m (max 13.5 m)
+     R2-61 deep open cut with walls 145-155 m (max 12 m)
+     R2-61 deep open cut with walls 465-496 m (max 16.1 m)
+     R2-61 deep open cut with walls 856-866 m (max 12 m)
+     R2-61 deep open cut with walls 1156-1186 m (max 14.9 m)
+     R2-62 deep open cut with walls 475-505 m (max 12.3 m)
+     R2-62 deep open cut with walls 1716-1726 m (max 12.7 m)
+     R2-71 cut-and-cover tunnel 145-345 m (max 23.8 m)
+     R2-71 deep open cut with walls 655-676 m (max 12.4 m)
+     R2-71 cut-and-cover tunnel 935-978 m (max 27.7 m)
+     R2-73 deep open cut with walls 55-65 m (max 13 m)
+     R2-73 cut-and-cover tunnel 75-115 m (max 27.4 m)
+     R2-74 cut-and-cover tunnel 0-165 m (max 21.9 m)
+   total length of the batch 60628.6 m
+   NOT in this file: structures (no wet run; L-1 / L-2 / retaining wall entries of 25 / 55 m are walls, not bridges; checked again in scripts/b7-lnew-check.ts on the game terrain).
+   RESULT 466 PASS 0 FAIL
